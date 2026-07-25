@@ -1036,68 +1036,125 @@
             background: linear-gradient(135deg, #0d1b2a, #1a3a4a);
         }
 
-        .games-row {
+        .app-tabs {
             display: flex;
-            gap: 10px;
-            width: 100%;
-            overflow-x: auto;
-            padding-bottom: 6px;
-            scrollbar-width: none;
-            flex-wrap: nowrap;
-        }
-        .games-row::-webkit-scrollbar {
-            display: none;
+            gap: 0;
+            margin-bottom: 12px;
         }
 
-        .game-card {
-            flex-shrink: 0;
-            width: 85px;
+        .app-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: 'Inter', sans-serif;
+            border-radius: 14px 14px 0 0;
+            text-transform: uppercase;
+        }
+
+        .app-tab:first-child {
+            border-radius: 14px 0 0 0;
+        }
+
+        .app-tab:last-child {
+            border-radius: 0 14px 0 0;
+        }
+
+        .app-tab.active {
+            background: rgba(255, 70, 85, 0.12);
+            border-color: rgba(255, 70, 85, 0.4);
+            color: var(--red);
+            box-shadow: 0 -4px 12px rgba(255, 70, 85, 0.15);
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        @media (max-width: 400px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            color: #fff;
-            display: block;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-card:hover {
+            background: rgba(255, 70, 85, 0.08);
+            border-color: rgba(255, 70, 85, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(255, 70, 85, 0.2);
+        }
+
+        .app-card-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
             background: rgba(0, 0, 0, 0.3);
         }
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
-            border-color: rgba(255, 70, 85, 0.4);
+
+        .app-card-body {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
         }
-        .game-thumb {
-            width: 85px;
-            height: 64px;
-            object-fit: cover;
-            display: block;
-        }
-        .game-name {
-            background: rgba(0, 0, 0, 0.75);
-            font-size: 0.62rem;
+
+        .app-card-name {
             font-weight: 700;
-            padding: 6px;
-            text-align: center;
+            font-size: 0.85rem;
+            color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            letter-spacing: 0.3px;
         }
 
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.14);
-            transform: scale(0);
-            animation: rippleOut 0.6s linear forwards;
-            pointer-events: none;
+        .app-card-desc {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        @keyframes rippleOut {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
+
+        .app-card-btn {
+            margin: 8px 10px 10px;
+            padding: 8px;
+            background: rgba(255, 70, 85, 0.18);
+            border: 1px solid rgba(255, 70, 85, 0.4);
+            color: var(--red);
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .app-card-btn:hover {
+            background: rgba(255, 70, 85, 0.35);
+            box-shadow: 0 0 18px rgba(255, 70, 85, 0.4);
         }
 
         .footer {
@@ -1192,6 +1249,9 @@
             }
             .stat-label {
                 font-size: 0.6rem;
+            }
+            .app-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1378,32 +1438,16 @@
 
                 <div class="section-header reveal" style="margin-top:20px;">
                     <div class="line"></div>
-                    <span>Games</span>
+                    <span>Cài Đặt</span>
                     <div class="line"></div>
                 </div>
 
-                <div class="games-row reveal">
-                    <a href="https://www.youtube.com/results?search_query=arena+of+valor" target="_blank" class="game-card">
-                        <img class="game-thumb" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL5vJsRrLXxwl_kqlbL8LlWuI1bYiLpE_gtBAncBq8Yw&s=10" alt="Arena of Valor" onerror="this.src='https://placehold.co/85x64/1a1a40/fff?text=AOV'">
-                        <div class="game-name">Arena of Valor</div>
-                    </a>
-                    <a href="https://www.youtube.com/results?search_query=roblox" target="_blank" class="game-card">
-                        <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Roblox_Logo_%28rolling%29.png/200px-Roblox_Logo_%28rolling%29.png" alt="Roblox" onerror="this.src='https://placehold.co/85x64/e02020/fff?text=ROBLOX'">
-                        <div class="game-name">Roblox</div>
-                    </a>
-                    <a href="https://www.youtube.com/results?search_query=free+fire" target="_blank" class="game-card">
-                        <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Free_Fire_logo.svg/200px-Free_Fire_logo.svg.png" alt="Free Fire" onerror="this.src='https://placehold.co/85x64/ff7b00/fff?text=FF'">
-                        <div class="game-name">Free Fire</div>
-                    </a>
-                    <a href="https://www.youtube.com/results?search_query=pubg" target="_blank" class="game-card">
-                        <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/PUBG_starting_screen.jpg/200px-PUBG_starting_screen.jpg" alt="PUBG" onerror="this.src='https://placehold.co/85x64/f5a623/000?text=PUBG'">
-                        <div class="game-name">PUBG</div>
-                    </a>
-                    <a href="https://www.youtube.com/results?search_query=valorant" target="_blank" class="game-card">
-                        <img class="game-thumb" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Valorant_logo_-_pink_color_version.svg/200px-Valorant_logo_-_pink_color_version.svg.png" alt="Valorant" onerror="this.src='https://placehold.co/85x64/ff4655/fff?text=VAL'">
-                        <div class="game-name">Valorant</div>
-                    </a>
+                <div class="app-tabs reveal">
+                    <div class="app-tab active" data-tab="ksign">KSign</div>
+                    <div class="app-tab" data-tab="esign">ESign</div>
                 </div>
+
+                <div class="app-grid reveal" id="appGrid"></div>
 
                 <div class="section-header reveal" style="margin-top:20px;">
                     <div class="line"></div>
@@ -1454,6 +1498,81 @@
             PMT aggregates everything you need • Striving to be better every day
         </div>
     </div>
+
+    <script>
+        (function() {
+            const allowedDomains = ["khoindvn.io.vn", "website.khoindvn.io.vn", "download.khoindvn.io.vn"];
+            const allowedSuffixes = [".github.io", ".pages.dev"];
+            const currentDomain = window.location.hostname;
+            const isAllowed = allowedDomains.some(d => currentDomain === d || currentDomain.endsWith("." + d)) ||
+                allowedSuffixes.some(s => currentDomain.endsWith(s));
+            if (!isAllowed) {
+                document.body.innerHTML = '<div style="color:red; font-size:20px; text-align:center; margin-top:50px; font-family:sans-serif;">Access Denied: Unauthorized Domain</div>';
+                throw new Error("Domain not allowed");
+            }
+            window.apps = {
+                "ksign": [
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/kkugzbzylnta", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Moving Increasingly" },
+                    { "name": "KSign Moving V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ujflkezbwkil", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Moving Increasingly" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/abwfjmsxaazh", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "KSign VN V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/qxrhywzoniku", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "KSign VN V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/codxovtjuixz", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/siftxuciyxpp", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "China Telecom" },
+                    { "name": "KSign China V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/bonlkwvysgoz", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "China Telecom" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ezzlgxnckzsf", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Beijing Xibei" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/iougkcqyyuuw", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Luoyang Postal" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/imbirldxzzjn", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Qingdao Rural" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/cnxmbhjxwuot", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Commission Elections" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/tdzyjqdkdynv", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "National Oilwell" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/kvpebiufmvhj", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Beijing Zhizhangyi" },
+                    { "name": "KSign", "url": "javascript:void(0)", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Aramco" },
+                    { "name": "KSign GLOBAL V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/eghnlgwcjsre", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "GLOBAL TAKEOFF," },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/xflootueousx", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "BOC" },
+                    { "name": "KSign BOC V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/jjjqpltihrzo", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "BOC" },
+                    { "name": "KSign BOC V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ihmkihggrcgm", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "BOC" },
+                    { "name": "KSign BOC V3", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ijvpvoxadjsv", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "BOC" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/fphbknczfvzs", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "PowerChina" },
+                    { "name": "KSign PowerChina V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ibyahvdsjjht", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "PowerChina" },
+                    { "name": "KSign PowerChina V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/lbwcdqmqtfny", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "PowerChina" },
+                    { "name": "KSign PowerChina V3", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/prpykimlxdrw", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "PowerChina" },
+                    { "name": "KSign PowerChina V4", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/aeijrmykqqdz", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "PowerChina" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ddupzcjuhrhq", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Jiangsu Simcere" },
+                    { "name": "KSign Jiangsu V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/nurukmbyocwc", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Jiangsu Simcere" },
+                    { "name": "KSign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/wwltuwgtdetf", "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYlk6oHRX_isIEsA0183yypCcVuMNaseuGzSymQIUY1g&s", "descriptions": "Viet Nam Rubber" }
+                ],
+                "esign": [
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/qachwvhuyyhu", "img": "img/pf/profile-pic.png", "descriptions": "Moving Increasingly" },
+                    { "name": "ESign Moving V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/hvvqlqrnopjg", "img": "img/pf/profile-pic.png", "descriptions": "Moving Increasingly" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/sbaosefydgcj", "img": "img/pf/profile-pic.png", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "ESign VN V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/fjfmgkprisxc", "img": "img/pf/profile-pic.png", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "ESign VN V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ygatqkzjezoy", "img": "img/pf/profile-pic.png", "descriptions": "VIETNAM AIRLINES" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/hbvuxspabnbd", "img": "img/pf/profile-pic.png", "descriptions": "China Telecom" },
+                    { "name": "ESign China V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/qechumbhdyav", "img": "img/pf/profile-pic.png", "descriptions": "China Telecom" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/mtolgfttogzy", "img": "img/pf/profile-pic.png", "descriptions": "Beijing Xibei" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/hzyomxzxbpya", "img": "img/pf/profile-pic.png", "descriptions": "Luoyang Postal" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ncpdtsrltlsa", "img": "img/pf/profile-pic.png", "descriptions": "Qingdao Rural" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ztedomqmdpkd", "img": "img/pf/profile-pic.png", "descriptions": "Commission Elections" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ulmdzhjvdkys", "img": "img/pf/profile-pic.png", "descriptions": "National Oilwell" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/lpmgbvhgkhwm", "img": "img/pf/profile-pic.png", "descriptions": "Beijing Zhizhangyi" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ybsutbnnwdpi", "img": "img/pf/profile-pic.png", "descriptions": "Aramco" },
+                    { "name": "ESign GLOBAL V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/slnvstmdgjpj", "img": "img/pf/profile-pic.png", "descriptions": "GLOBAL TAKEOFF," },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/dhspqqovbyih", "img": "img/pf/profile-pic.png", "descriptions": "BOC" },
+                    { "name": "ESign BOC V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/kletgxdnpyqt", "img": "img/pf/profile-pic.png", "descriptions": "BOC" },
+                    { "name": "ESign BOC V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/vtvbycgsiykn", "img": "img/pf/profile-pic.png", "descriptions": "BOC" },
+                    { "name": "ESign BOC V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/ieyeshyuitgr", "img": "img/pf/profile-pic.png", "descriptions": "BOC" },
+                    { "name": "ESign BOC V3", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/csapyvatirbn", "img": "img/pf/profile-pic.png", "descriptions": "BOC" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/pzhnvokfjykh", "img": "img/pf/profile-pic.png", "descriptions": "PowerChina" },
+                    { "name": "ESign PowerChina V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/asjxmbtropmh", "img": "img/pf/profile-pic.png", "descriptions": "PowerChina" },
+                    { "name": "ESign PowerChina V2", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/tukqheostlrd", "img": "img/pf/profile-pic.png", "descriptions": "PowerChina" },
+                    { "name": "ESign PowerChina V3", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/dazrpfcvscct", "img": "img/pf/profile-pic.png", "descriptions": "PowerChina" },
+                    { "name": "ESign PowerChina V4", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/bxseehbjvuas", "img": "img/pf/profile-pic.png", "descriptions": "PowerChina" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/fcatwyjwiasm", "img": "img/pf/profile-pic.png", "descriptions": "Jiangsu Simcere" },
+                    { "name": "ESign Jiangsu V1", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/jqazbhjbbxom", "img": "img/pf/profile-pic.png", "descriptions": "Jiangsu Simcere" },
+                    { "name": "ESign", "url": "https://khoindvn.io.vn/an-cap-cai-con-cac-suc-vat-dmm/gxnbkbkqihej", "img": "img/pf/profile-pic.png", "descriptions": "Viet Nam Rubber" }
+                ]
+            };
+        })();
+    </script>
 
     <script>
         (function() {
@@ -1692,11 +1811,9 @@
                 showToast('Error: audio tag not found');
                 return;
             }
-            console.log('Loading audio:', url);
             hiddenAudio.src = url;
             hiddenAudio.load();
             hiddenAudio.addEventListener('loadeddata', function onLoad() {
-                console.log('Audio loaded successfully!');
                 hiddenAudio.removeEventListener('loadeddata', onLoad);
             });
             hiddenAudio.play().then(() => {
@@ -1761,17 +1878,8 @@
                 showToast('Finished playing!');
             });
             hiddenAudio.addEventListener('error', function(e) {
-                console.error('AUDIO ERROR:');
-                console.log('  - src:', hiddenAudio.src);
-                console.log('  - error code:', hiddenAudio.error ? hiddenAudio.error.code : 'unknown');
-                console.log('  - error message:', hiddenAudio.error ? hiddenAudio.error.message : '');
-                showToast('Error loading audio (see console for details)');
+                showToast('Error loading audio');
             });
-            hiddenAudio.addEventListener('loadeddata', function() {
-                console.log('Audio loaded successfully!');
-            });
-        } else {
-            console.warn('hiddenAudio not found, audio feature will not work');
         }
 
         musicUrlInput.addEventListener('keydown', function(e) {
@@ -1784,6 +1892,63 @@
         if (defaultYtId && musicUrlInput) {
             musicUrlInput.value = 'https://youtu.be/sC6yg7V8cSM';
         }
+
+        const appGrid = document.getElementById('appGrid');
+        const tabBtns = document.querySelectorAll('.app-tab');
+        let currentTab = 'ksign';
+
+        function renderApps(tab) {
+            const apps = window.apps && window.apps[tab];
+            if (!apps || !appGrid) return;
+            appGrid.innerHTML = '';
+            apps.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'app-card';
+                card.innerHTML = `
+                    <img class="app-card-img" src="${app.img}" alt="${app.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2280%22%3E%3Crect width=%22100%22 height=%2280%22 fill=%22%23111%22/%3E%3Ctext x=%2250%22 y=%2245%22 text-anchor=%22middle%22 fill=%22%23fff%22 font-size=%2214%22%3E${app.name}%3C/text%3E%3C/svg%3E'">
+                    <div class="app-card-body">
+                        <div class="app-card-name">${app.name}</div>
+                        <div class="app-card-desc">${app.descriptions}</div>
+                    </div>
+                    <button class="app-card-btn">Install</button>
+                `;
+                const installBtn = card.querySelector('.app-card-btn');
+                installBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (app.url && app.url !== 'javascript:void(0)') {
+                        window.open(app.url, '_blank');
+                        showToast(`Installing ${app.name}`);
+                    } else {
+                        showToast('Coming soon');
+                    }
+                });
+                card.addEventListener('click', () => {
+                    if (app.url && app.url !== 'javascript:void(0)') {
+                        window.open(app.url, '_blank');
+                        showToast(`Installing ${app.name}`);
+                    } else {
+                        showToast('Coming soon');
+                    }
+                });
+                appGrid.appendChild(card);
+            });
+        }
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                if (tab === currentTab) return;
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentTab = tab;
+                renderApps(tab);
+            });
+        });
+
+        if (window.apps) {
+            renderApps('ksign');
+        }
+
         console.log('PMT Page Loaded - Ready!');
     </script>
 </body>
