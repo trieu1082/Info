@@ -865,6 +865,22 @@
     .btn.website:hover { background: rgba(0, 245, 255, 0.14); box-shadow: 0 10px 35px rgba(0, 245, 255, 0.2); }
     .btn.website .btn-img { background: linear-gradient(135deg, #0d1b2a, #1a3a4a); }
 
+    .btn.antirevoke {
+      background: rgba(255, 165, 0, 0.08);
+      border-color: rgba(255, 165, 0, 0.35);
+      color: #ffa500;
+    }
+    .btn.antirevoke:hover {
+      background: rgba(255, 165, 0, 0.18);
+      box-shadow: 0 10px 35px rgba(255, 165, 0, 0.25);
+    }
+    .btn.antirevoke .btn-img {
+      background: rgba(255, 165, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .app-tabs {
       display: flex;
       gap: 12px;
@@ -1185,6 +1201,20 @@
           </div>
         </div>
         <div class="app-grid reveal" id="appGrid"></div>
+
+        <div class="section-header reveal" style="margin-top:20px;"><div class="line"></div><span>Anti-Revoke</span><div class="line"></div></div>
+        <div class="links">
+          <a href="https://github.com/trieu1082/Info/releases/download/1.0.0/pmt.mobileconfig" target="_blank" rel="noopener" class="btn antirevoke reveal" data-toast="Download Anti-Revoke Profile">
+            <div class="btn-img">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="btn-info">
+              <span class="btn-title">Tải Anti-Revoke</span>
+              <span class="btn-sub">Chặn thu hồi chứng chỉ Apple</span>
+            </div>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
 
         <div class="section-header reveal" style="margin-top:20px;"><div class="line"></div><span>Other</span><div class="line"></div></div>
         <div class="links">
