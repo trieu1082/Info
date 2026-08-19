@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://i.ibb.co">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #d4af37;
@@ -18,12 +18,10 @@
       --gold3: #a67c2d;
       --gold4: #fff1b8;
       --wine: #3a0c1c;
-      --velvet: #14080e;
       --night: #07040a;
       --ivory: #f6e7c3;
-      --rose: #e8b4b8;
       --crimson: #c43b5a;
-      --card: rgba(16, 8, 12, 0.82);
+      --card: rgba(16, 8, 12, 0.84);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -34,205 +32,101 @@
       color: var(--ivory);
       overflow-x: hidden;
       -webkit-tap-highlight-color: transparent;
-      perspective: 1800px;
     }
-    body.shake { animation: shake .45s linear; }
+    body.shake { animation: shake .4s linear; }
     @keyframes shake {
-      0%,100% { transform: translate(0,0); }
-      15% { transform: translate(-7px,3px); }
-      30% { transform: translate(8px,-4px); }
-      45% { transform: translate(-6px,-3px); }
-      60% { transform: translate(5px,4px); }
-      80% { transform: translate(-3px,2px); }
+      0%,100% { transform: translate3d(0,0,0); }
+      20% { transform: translate3d(-6px,3px,0); }
+      40% { transform: translate3d(7px,-3px,0); }
+      60% { transform: translate3d(-5px,-2px,0); }
+      80% { transform: translate3d(4px,3px,0); }
     }
     #particles-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background:
-        linear-gradient(180deg, rgba(7,4,10,.35), rgba(7,4,10,.72)),
-        url("https://i.ibb.co/4H1qSVy/nebula-jpg.jpg") center/cover no-repeat;
-      filter: brightness(.55) saturate(1.2);
+      background: linear-gradient(180deg, rgba(7,4,10,.4), rgba(7,4,10,.78)), url("https://i.ibb.co/4H1qSVy/nebula-jpg.jpg") center/cover no-repeat;
+      filter: brightness(.58) saturate(1.15);
     }
     .velvet {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background: url("https://i.ibb.co/vx96K86s/velvet-jpg.jpg") center/cover;
-      opacity: .18; mix-blend-mode: multiply;
+      opacity: .16; mix-blend-mode: multiply;
     }
     .vignette {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 36%, rgba(0,0,0,.68) 100%);
+      background: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,.66) 100%);
     }
-    #fx {
-      position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden;
-      perspective: 1600px;
-    }
-    .gates {
-      position: fixed; inset: 0; z-index: 220; pointer-events: none; display: flex;
-    }
+    #fx { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+    .gates { position: fixed; inset: 0; z-index: 220; pointer-events: none; display: flex; }
     .gates.done { display: none; }
     .gate {
       flex: 1; height: 100%;
-      background:
-        linear-gradient(180deg, rgba(20,8,12,.35), rgba(10,4,8,.55)),
-        url("https://i.ibb.co/vx96K86s/velvet-jpg.jpg") center/cover;
-      position: relative;
-      transition: transform 1.5s cubic-bezier(.77,0,.18,1);
+      background: linear-gradient(180deg, rgba(20,8,12,.4), rgba(10,4,8,.6)), url("https://i.ibb.co/vx96K86s/velvet-jpg.jpg") center/cover;
+      transition: transform 1.45s cubic-bezier(.77,0,.18,1);
     }
     .gate.l { border-right: 2px solid var(--gold); }
     .gate.r { border-left: 2px solid var(--gold); }
-    .gates.open .gate.l { transform: translateX(-105%); }
-    .gates.open .gate.r { transform: translateX(105%); }
+    .gates.open .gate.l { transform: translate3d(-105%,0,0); }
+    .gates.open .gate.r { transform: translate3d(105%,0,0); }
     .gate-crest {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       text-align: center; z-index: 221; width: 100%;
-      transition: opacity .5s ease .15s, transform .85s ease;
+      transition: opacity .45s ease .12s, transform .8s ease;
     }
     .gates.open .gate-crest { opacity: 0; transform: translate(-50%,-64%) scale(.88); }
-    .gate-crest img {
-      width: 110px; height: auto;
-      filter: drop-shadow(0 0 22px rgba(212,175,55,.85));
-      animation: bob 2s ease-in-out infinite;
-    }
-    .gate-title {
-      font-family: Cinzel, Georgia, serif; font-weight: 900; letter-spacing: 12px;
-      font-size: 2.2rem; color: var(--gold2); text-shadow: 0 0 28px rgba(212,175,55,.7);
-    }
-    .gate-sub {
-      font-family: "Cormorant Garamond", serif; font-style: italic;
-      color: rgba(246,231,195,.6); letter-spacing: 4px; margin-top: 8px; font-size: 1.15rem;
-    }
-    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
-    .wrap {
-      position: relative; z-index: 1;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 16px 12px 100px; min-height: 100vh; gap: 16px;
-    }
+    .gate-crest img { width: 150px; height: auto; filter: drop-shadow(0 0 20px rgba(212,175,55,.8)); animation: bob 2s ease-in-out infinite; }
+    .gate-title { font-family: Cinzel, Georgia, serif; font-weight: 900; letter-spacing: 12px; font-size: 2.2rem; color: var(--gold2); text-shadow: 0 0 26px rgba(212,175,55,.7); }
+    .gate-sub { font-family: "Cormorant Garamond", serif; font-style: italic; color: rgba(246,231,195,.62); letter-spacing: 4px; margin-top: 8px; font-size: 1.15rem; }
+    @keyframes bob { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-8px,0); } }
+    .wrap { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 12px 100px; min-height: 100vh; gap: 16px; }
     .topnav {
-      position: sticky; top: 10px; z-index: 50;
-      width: 100%; max-width: 620px;
+      position: sticky; top: 10px; z-index: 50; width: 100%; max-width: 640px;
       display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
-      padding: 7px; border-radius: 999px;
-      background: rgba(12,6,10,.78);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(212,175,55,.32);
-      box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(212,175,55,.08);
+      padding: 7px; border-radius: 999px; background: rgba(12,6,10,.8);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(212,175,55,.32); box-shadow: 0 12px 30px rgba(0,0,0,.5);
     }
     .topnav::-webkit-scrollbar { display: none; }
     .topnav a {
-      flex: 0 0 auto; text-decoration: none;
-      padding: 9px 15px; border-radius: 999px;
+      flex: 0 0 auto; text-decoration: none; padding: 9px 15px; border-radius: 999px;
       font-family: Cinzel, Georgia, serif; font-size: .64rem; font-weight: 700;
-      letter-spacing: 1.15px; text-transform: uppercase;
-      color: rgba(246,231,195,.46);
-      transition: all .4s cubic-bezier(.22,1,.36,1);
+      letter-spacing: 1.1px; text-transform: uppercase; color: rgba(246,231,195,.46);
+      transition: background .35s, color .35s, box-shadow .35s;
       white-space: nowrap;
     }
     .topnav a:hover { color: var(--gold2); background: rgba(212,175,55,.1); }
-    .topnav a.on {
-      color: #1a1008;
-      background: linear-gradient(180deg, var(--gold4), var(--gold));
-      box-shadow: 0 6px 18px rgba(212,175,55,.38);
-    }
+    .topnav a.on { color: #1a1008; background: linear-gradient(180deg, var(--gold4), var(--gold)); box-shadow: 0 6px 16px rgba(212,175,55,.36); }
     .card {
-      width: 100%; max-width: 620px;
-      background: var(--card);
-      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
-      border-radius: 30px;
-      border: 1px solid rgba(212,175,55,.3);
-      box-shadow:
-        0 0 0 6px rgba(7,4,10,.55),
-        0 0 0 7px rgba(212,175,55,.34),
-        0 30px 80px rgba(0,0,0,.72);
-      overflow: hidden;
-      transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
-      transition: transform .16s ease-out;
-      animation: rise 1.05s cubic-bezier(.22,1.2,.36,1) both;
+      width: 100%; max-width: 640px; background: var(--card);
+      backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
+      border-radius: 30px; border: 1px solid rgba(212,175,55,.3);
+      box-shadow: 0 0 0 6px rgba(7,4,10,.55), 0 0 0 7px rgba(212,175,55,.34), 0 30px 80px rgba(0,0,0,.72);
+      overflow: hidden; transform: rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+      transition: transform .14s linear; animation: rise 1s cubic-bezier(.22,1.2,.36,1) both;
     }
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(54px) scale(.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    .hero { position: relative; height: 240px; overflow: hidden; }
-    .hero-img {
-      position: absolute; inset: 0; width: 100%; height: 128%;
-      object-fit: cover; object-position: center 40%;
-      transform: translateY(var(--py,0));
-      filter: brightness(.78) saturate(1.15);
-    }
-    .hero-veil {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(7,4,10,.12) 10%, rgba(16,8,12,.97) 100%);
-    }
-    .hero-live {
-      position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
-    }
-    .hero-live img {
-      position: absolute; mix-blend-mode: lighten;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.55));
-    }
-    .hero-float {
-      position: absolute; inset: 0; z-index: 3;
-      display: flex; align-items: flex-end; justify-content: space-between;
-      padding: 16px 20px 20px;
-    }
-    .hero-kicker {
-      font-family: Cinzel, Georgia, serif; font-size: 11px; letter-spacing: 5px;
-      color: rgba(240,215,140,.78); text-transform: uppercase;
-      text-shadow: 0 2px 10px #000;
-    }
-    .hero-crown {
-      width: 62px; height: 92px; object-fit: contain;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,.7));
-      animation: bob 3s ease-in-out infinite;
-    }
-    .profile {
-      display: flex; flex-direction: column; align-items: center;
-      padding: 0 22px 12px; margin-top: -62px; position: relative; z-index: 4;
-    }
+    @keyframes rise { from { opacity: 0; transform: translate3d(0,50px,0) scale(.96); } to { opacity: 1; transform: none; } }
+    .hero { position: relative; height: 248px; overflow: hidden; }
+    .hero-img { position: absolute; inset: 0; width: 100%; height: 128%; object-fit: cover; object-position: center 40%; transform: translate3d(0,var(--py,0),0); filter: brightness(.8) saturate(1.12); }
+    .hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,4,10,.1) 8%, rgba(16,8,12,.97) 100%); }
+    .hero-live { position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .hero-live img { position: absolute; filter: drop-shadow(0 10px 12px rgba(0,0,0,.5)); }
+    .hero-float { position: absolute; inset: 0; z-index: 3; display: flex; align-items: flex-end; justify-content: space-between; padding: 16px 20px 18px; }
+    .hero-kicker { font-family: Cinzel, Georgia, serif; font-size: 11px; letter-spacing: 5px; color: rgba(240,215,140,.8); text-transform: uppercase; text-shadow: 0 2px 10px #000; }
+    .hero-flag { width: 92px; height: auto; filter: drop-shadow(0 8px 14px rgba(0,0,0,.65)); animation: bob 2.6s ease-in-out infinite; }
+    .profile { display: flex; flex-direction: column; align-items: center; padding: 0 22px 12px; margin-top: -62px; position: relative; z-index: 4; }
     .avatar-wrap { position: relative; width: 128px; height: 128px; margin-bottom: 14px; }
-    .avatar-ring {
-      position: absolute; inset: -8px; border-radius: 50%;
-      background: conic-gradient(var(--gold), var(--gold4), var(--crimson), var(--gold2), var(--gold));
-      animation: spin 7s linear infinite;
-    }
+    .avatar-ring { position: absolute; inset: -8px; border-radius: 50%; background: conic-gradient(var(--gold), var(--gold4), var(--crimson), var(--gold2), var(--gold)); animation: spin 7s linear infinite; }
     .avatar-ring::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: #12060c; }
-    .avatar-blur {
-      position: absolute; inset: -14px; border-radius: 50%;
-      background: conic-gradient(var(--gold), var(--crimson), var(--gold2), var(--gold));
-      filter: blur(16px); opacity: .55; animation: spin 7s linear infinite reverse; z-index: -1;
-    }
+    .avatar-blur { position: absolute; inset: -14px; border-radius: 50%; background: conic-gradient(var(--gold), var(--crimson), var(--gold2), var(--gold)); filter: blur(16px); opacity: .5; animation: spin 7s linear infinite reverse; z-index: -1; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .avatar-inner {
-      position: relative; z-index: 2; width: 100%; height: 100%; border-radius: 50%;
-      overflow: hidden; border: 3px solid #12060c; background: #1a1014;
-    }
+    .avatar-inner { position: relative; z-index: 2; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 3px solid #12060c; background: #1a1014; }
     .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
-    .online {
-      position: absolute; bottom: 8px; right: 8px; width: 18px; height: 18px;
-      background: #2ecc71; border: 3px solid #12060c; border-radius: 50%; z-index: 5;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,.7); }
-      50% { box-shadow: 0 0 0 9px rgba(46,204,113,0); }
-    }
-    .name {
-      font-family: Cinzel, Georgia, serif; font-size: 2.25rem; font-weight: 900; letter-spacing: 5px;
-      background: linear-gradient(135deg,#fff1b8,#d4af37 45%,#f0d78c 70%,#a67c2d);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      filter: drop-shadow(0 0 14px rgba(212,175,55,.45));
-    }
-    .tagline {
-      font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.1rem;
-      color: rgba(246,231,195,.55); letter-spacing: 1.5px;
-    }
+    .online { position: absolute; bottom: 8px; right: 8px; width: 18px; height: 18px; background: #2ecc71; border: 3px solid #12060c; border-radius: 50%; z-index: 5; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,.7); } 50% { box-shadow: 0 0 0 8px rgba(46,204,113,0); } }
+    .name { font-family: Cinzel, Georgia, serif; font-size: 2.25rem; font-weight: 900; letter-spacing: 5px; background: linear-gradient(135deg,#fff1b8,#d4af37 45%,#f0d78c 70%,#a67c2d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 12px rgba(212,175,55,.4)); }
+    .tagline { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.1rem; color: rgba(246,231,195,.55); letter-spacing: 1.4px; }
     .badges { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 13px; border-radius: 999px;
-      font-family: Cinzel, Georgia, serif; font-size: .62rem; font-weight: 700; letter-spacing: .8px;
-      text-transform: uppercase; border: 1px solid rgba(212,175,55,.28); background: rgba(212,175,55,.08);
-    }
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 13px; border-radius: 999px; font-family: Cinzel, Georgia, serif; font-size: .62rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; border: 1px solid rgba(212,175,55,.28); background: rgba(212,175,55,.08); }
     .badge.live { color: #f0a0b0; border-color: rgba(196,59,90,.45); background: rgba(196,59,90,.16); }
     .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #c43b5a; animation: pulse 1.5s ease-in-out infinite; }
     .badge.age { color: var(--gold2); }
@@ -241,112 +135,42 @@
     .block { width: 100%; padding: 0 22px 26px; }
     .hd { display: flex; align-items: center; gap: 10px; width: 100%; margin: 12px 0 16px; }
     .hd .ln { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,.4), transparent); }
-    .hd span {
-      font-family: Cinzel, Georgia, serif; font-size: .64rem; font-weight: 700;
-      letter-spacing: 2.5px; text-transform: uppercase; color: rgba(240,215,140,.5); white-space: nowrap;
-    }
-    .about {
-      width: 100%; background: rgba(212,175,55,.055); border: 1px solid rgba(212,175,55,.18);
-      border-radius: 20px; padding: 18px 20px; position: relative; overflow: hidden;
-    }
-    .about::before {
-      content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      background: linear-gradient(180deg, var(--gold2), var(--crimson)); border-radius: 3px;
-    }
+    .hd span { font-family: Cinzel, Georgia, serif; font-size: .64rem; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(240,215,140,.5); white-space: nowrap; }
+    .about { width: 100%; background: rgba(212,175,55,.055); border: 1px solid rgba(212,175,55,.18); border-radius: 20px; padding: 18px 20px; position: relative; overflow: hidden; }
+    .about::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--gold2), var(--crimson)); border-radius: 3px; }
     .about-k { font-family: Cinzel, Georgia, serif; font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(240,215,140,.48); margin-bottom: 6px; }
     .about-q { font-family: "Cormorant Garamond", serif; font-size: 1.28rem; font-style: italic; color: rgba(246,231,195,.92); }
     .about-m { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-size: .72rem; color: rgba(246,231,195,.42); }
-    .mosaic {
-      display: grid; grid-template-columns: 1.35fr .65fr; grid-template-rows: 96px 96px; gap: 9px; margin-top: 14px;
-    }
-    .mosaic img {
-      width: 100%; height: 100%; object-fit: cover; border-radius: 18px;
-      border: 1px solid rgba(212,175,55,.22);
-    }
-    .mosaic .a { grid-row: 1 / 3; }
-    .court {
-      position: relative; height: 210px; margin-top: 14px; border-radius: 20px; overflow: hidden;
-      border: 1px solid rgba(212,175,55,.22);
-      background: #0a0610;
-    }
-    .court-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.55); }
-    .court .pix {
-      position: absolute; bottom: 0; mix-blend-mode: lighten;
-      filter: drop-shadow(0 8px 10px rgba(0,0,0,.5));
-      image-rendering: auto;
-    }
-    .stats {
-      display: flex; width: 100%; margin-top: 14px; border: 1px solid rgba(212,175,55,.18);
-      border-radius: 20px; overflow: hidden;
-    }
-    .stat {
-      flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 6px;
-      background: rgba(212,175,55,.035); border-right: 1px solid rgba(212,175,55,.1); transition: background .3s;
-    }
+    .mosaic { display: grid; grid-template-columns: 1.2fr .8fr; grid-template-rows: 100px 100px; gap: 9px; margin-top: 14px; }
+    .mosaic img { width: 100%; height: 100%; object-fit: contain; border-radius: 18px; border: 1px solid rgba(212,175,55,.22); background: rgba(0,0,0,.35); }
+    .mosaic .a { grid-row: 1 / 3; object-fit: cover; }
+    .court { position: relative; height: 230px; margin-top: 14px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,.22); background: #0a0610; }
+    .court-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(.58); }
+    .court .pix { position: absolute; bottom: 0; filter: drop-shadow(0 8px 10px rgba(0,0,0,.5)); }
+    .court-flag { position: absolute; top: 10px; right: 10px; width: 86px; height: auto; filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)); animation: bob 2.8s ease-in-out infinite; }
+    .stats { display: flex; width: 100%; margin-top: 14px; border: 1px solid rgba(212,175,55,.18); border-radius: 20px; overflow: hidden; }
+    .stat { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 16px 6px; background: rgba(212,175,55,.035); border-right: 1px solid rgba(212,175,55,.1); }
     .stat:last-child { border-right: none; }
     .stat:hover { background: rgba(212,175,55,.1); }
-    .stat-n {
-      font-family: Cinzel, Georgia, serif; font-weight: 800; font-size: 1.16rem;
-      background: linear-gradient(135deg, var(--gold4), var(--gold));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    .stat-n { font-family: Cinzel, Georgia, serif; font-weight: 800; font-size: 1.16rem; background: linear-gradient(135deg, var(--gold4), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .stat-l { font-size: .6rem; color: rgba(246,231,195,.4); text-transform: uppercase; letter-spacing: .7px; margin-top: 3px; }
-    .lore {
-      margin-top: 12px; padding: 15px 17px; border-radius: 18px;
-      border: 1px solid rgba(212,175,55,.18); background: rgba(212,175,55,.045);
-      font-family: "Cormorant Garamond", serif; font-size: 1.08rem; line-height: 1.5;
-      color: rgba(246,231,195,.74); font-style: italic;
-    }
-    .strip {
-      display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
-      padding: 4px 0 8px; margin-top: 12px;
-    }
+    .lore { margin-top: 12px; padding: 15px 17px; border-radius: 18px; border: 1px solid rgba(212,175,55,.18); background: rgba(212,175,55,.045); font-family: "Cormorant Garamond", serif; font-size: 1.08rem; line-height: 1.5; color: rgba(246,231,195,.74); font-style: italic; }
+    .strip { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 4px 0 8px; margin-top: 12px; }
     .strip::-webkit-scrollbar { display: none; }
-    .strip img {
-      width: 88px; height: 110px; object-fit: cover; object-position: top;
-      border-radius: 14px; border: 1px solid rgba(212,175,55,.25);
-      background: #0a0610; flex-shrink: 0;
-      mix-blend-mode: lighten;
-    }
+    .strip img { height: 108px; width: auto; object-fit: contain; border-radius: 14px; border: 1px solid rgba(212,175,55,.22); background: rgba(8,4,8,.55); flex-shrink: 0; padding: 4px; }
     .dd { width: 100%; margin-top: 10px; }
-    .dd-btn {
-      width: 100%; display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px; border-radius: 16px; cursor: pointer;
-      background: rgba(212,175,55,.08); border: 1px solid rgba(212,175,55,.24);
-      color: var(--gold2); font-family: Cinzel, Georgia, serif; font-size: .72rem;
-      letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700;
-      transition: all .3s;
-    }
-    .dd-btn:hover { background: rgba(212,175,55,.15); }
+    .dd-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 16px; cursor: pointer; background: rgba(212,175,55,.08); border: 1px solid rgba(212,175,55,.24); color: var(--gold2); font-family: Cinzel, Georgia, serif; font-size: .72rem; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
     .dd-btn svg { width: 16px; height: 16px; transition: transform .35s; }
     .dd.open .dd-btn svg { transform: rotate(180deg); }
-    .dd-menu {
-      max-height: 0; overflow: hidden; opacity: 0;
-      transition: max-height .55s cubic-bezier(.22,1,.36,1), opacity .35s, margin .35s;
-    }
+    .dd-menu { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .5s cubic-bezier(.22,1,.36,1), opacity .3s, margin .3s; }
     .dd.open .dd-menu { max-height: 720px; opacity: 1; margin-top: 8px; }
     .links { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-    .btn {
-      display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ivory);
-      padding: 14px 16px; border-radius: 18px; font-weight: 600;
-      transition: transform .28s cubic-bezier(.22,1.2,.36,1), box-shadow .3s, background .3s, border-color .3s;
-      position: relative; overflow: hidden;
-      border: 1px solid rgba(212,175,55,.16); background: rgba(212,175,55,.045); cursor: pointer;
-    }
-    .btn::before {
-      content: ""; position: absolute; inset: 0; opacity: 0;
-      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(212,175,55,.16), transparent 60%);
-      transition: opacity .3s;
-    }
+    .btn { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ivory); padding: 14px 16px; border-radius: 18px; font-weight: 600; transition: transform .25s cubic-bezier(.22,1.2,.36,1), box-shadow .3s, border-color .3s; position: relative; overflow: hidden; border: 1px solid rgba(212,175,55,.16); background: rgba(212,175,55,.045); cursor: pointer; }
+    .btn::before { content: ""; position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(212,175,55,.16), transparent 60%); transition: opacity .3s; }
     .btn:hover::before { opacity: 1; }
-    .btn:hover { transform: translateY(-3px); border-color: rgba(212,175,55,.42); box-shadow: 0 12px 26px rgba(0,0,0,.35); }
-    .btn:active { transform: scale(.975); }
+    .btn:hover { transform: translate3d(0,-3px,0); border-color: rgba(212,175,55,.42); box-shadow: 0 12px 26px rgba(0,0,0,.35); }
     .btn > * { position: relative; z-index: 1; }
-    .btn-img {
-      width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
-      background: rgba(212,175,55,.1); display: flex; align-items: center; justify-content: center;
-      overflow: hidden; border: 1px solid rgba(212,175,55,.2);
-    }
+    .btn-img { width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0; background: rgba(212,175,55,.1); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(212,175,55,.2); }
     .btn-img img { width: 100%; height: 100%; object-fit: cover; }
     .btn-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .btn-title { font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: .88rem; }
@@ -368,21 +192,10 @@
     .btn.github .btn-img { background: #161b22; }
     .btn.web { background: rgba(212,175,55,.06); border-color: rgba(212,175,55,.28); }
     .btn.anti { background: rgba(212,175,55,.08); border-color: rgba(212,175,55,.35); color: var(--gold2); }
-    .music {
-      width: 100%; border-radius: 22px; padding: 16px;
-      background: linear-gradient(135deg, rgba(212,175,55,.09), rgba(90,18,40,.18));
-      border: 1px solid rgba(212,175,55,.3);
-      display: flex; flex-direction: column; gap: 12px;
-    }
+    .music { width: 100%; border-radius: 22px; padding: 16px; background: linear-gradient(135deg, rgba(212,175,55,.09), rgba(90,18,40,.18)); border: 1px solid rgba(212,175,55,.3); display: flex; flex-direction: column; gap: 12px; }
     .music-row { display: flex; align-items: center; gap: 12px; }
-    .cover {
-      width: 58px; height: 58px; border-radius: 16px; overflow: hidden; flex-shrink: 0;
-      background: linear-gradient(135deg,#d4af37,#5a1228);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 22px rgba(212,175,55,.35); border: 1px solid rgba(255,241,184,.3);
-    }
+    .cover { width: 58px; height: 58px; border-radius: 16px; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg,#d4af37,#5a1228); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(212,175,55,.32); }
     .cover img { width: 100%; height: 100%; object-fit: cover; }
-    .cover svg { width: 22px; height: 22px; fill: #fff1b8; }
     .minfo { flex: 1; min-width: 0; }
     .mlabel { font-family: Cinzel, Georgia, serif; font-size: .56rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
     .mtitle { font-size: .92rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -392,253 +205,113 @@
     .bar:nth-child(1){height:9px} .bar:nth-child(2){height:16px;animation-delay:.14s} .bar:nth-child(3){height:22px;animation-delay:.28s} .bar:nth-child(4){height:13px;animation-delay:.42s} .bar:nth-child(5){height:7px;animation-delay:.56s}
     @keyframes dance { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
     .minput { display: flex; gap: 8px; }
-    .minput input {
-      flex: 1; padding: 11px 14px; border-radius: 14px;
-      border: 1px solid rgba(212,175,55,.22); background: rgba(0,0,0,.45); color: var(--ivory);
-      font-size: .75rem; outline: none;
-    }
-    .minput input:focus { border-color: var(--gold); box-shadow: 0 0 16px rgba(212,175,55,.2); }
-    .pbtn {
-      padding: 11px 16px; border-radius: 14px; border: 1px solid rgba(212,175,55,.45);
-      background: rgba(212,175,55,.16); color: var(--gold2); font-family: Cinzel, Georgia, serif;
-      font-weight: 700; font-size: .7rem; letter-spacing: 1px; cursor: pointer;
-    }
+    .minput input { flex: 1; padding: 11px 14px; border-radius: 14px; border: 1px solid rgba(212,175,55,.22); background: rgba(0,0,0,.45); color: var(--ivory); font-size: .75rem; outline: none; }
+    .pbtn { padding: 11px 16px; border-radius: 14px; border: 1px solid rgba(212,175,55,.45); background: rgba(212,175,55,.16); color: var(--gold2); font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: .7rem; letter-spacing: 1px; cursor: pointer; }
     .pbtn.playing { background: rgba(196,59,90,.22); border-color: rgba(196,59,90,.5); color: #f0a0b0; }
     .yt { width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; display: none; border: 1px solid rgba(212,175,55,.2); }
     .yt.on { display: block; }
     .yt iframe { width: 100%; height: 100%; border: none; }
     .hidden-audio { display: none; }
-    .app-card {
-      background: rgba(212,175,55,.05); border: 1px solid rgba(212,175,55,.18);
-      border-radius: 18px; overflow: hidden; cursor: pointer; transition: .35s; margin-bottom: 10px;
-    }
-    .app-card:hover { transform: translateY(-3px); border-color: rgba(212,175,55,.42); box-shadow: 0 12px 24px rgba(212,175,55,.14); }
+    .app-card { background: rgba(212,175,55,.05); border: 1px solid rgba(212,175,55,.18); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform .3s, box-shadow .3s; margin-bottom: 10px; }
+    .app-card:hover { transform: translate3d(0,-3px,0); box-shadow: 0 12px 24px rgba(212,175,55,.14); }
     .app-card img { width: 100%; height: 92px; object-fit: cover; }
     .app-card .bd { padding: 12px 14px; }
     .app-card h4 { font-family: Cinzel, Georgia, serif; font-size: .92rem; }
     .app-card p { font-size: .74rem; color: rgba(246,231,195,.5); }
-    .app-card .ib {
-      margin: 0 12px 12px; padding: 11px; border-radius: 12px; text-align: center;
-      background: rgba(212,175,55,.16); border: 1px solid rgba(212,175,55,.4);
-      color: var(--gold2); font-family: Cinzel, Georgia, serif; font-size: .72rem;
-      letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700;
-    }
+    .app-card .ib { margin: 0 12px 12px; padding: 11px; border-radius: 12px; text-align: center; background: rgba(212,175,55,.16); border: 1px solid rgba(212,175,55,.4); color: var(--gold2); font-family: Cinzel, Georgia, serif; font-size: .72rem; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
     .theater { display: flex; flex-direction: column; gap: 12px; }
     .th-intro { text-align: center; }
-    .th-intro h3 {
-      font-family: Cinzel, Georgia, serif; font-size: 1.12rem; letter-spacing: 3px;
-      background: linear-gradient(135deg,#fff1b8,#d4af37);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    .th-intro h3 { font-family: Cinzel, Georgia, serif; font-size: 1.12rem; letter-spacing: 3px; background: linear-gradient(135deg,#fff1b8,#d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .th-intro p { font-family: "Cormorant Garamond", serif; font-style: italic; color: rgba(246,231,195,.52); font-size: 1.05rem; }
-    .stage-frame {
-      position: relative; padding: 11px; border-radius: 24px;
-      background:
-        linear-gradient(180deg, rgba(20,12,8,.55), rgba(10,6,4,.7)),
-        url("https://i.ibb.co/Jjynk8S5/frame-jpg.jpg") center/cover;
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 0 5px #12060c, 0 0 0 6px rgba(212,175,55,.42), 0 18px 40px rgba(0,0,0,.55);
-    }
-    .stage {
-      position: relative; width: 100%; aspect-ratio: 16/11; overflow: hidden;
-      background: #07040c; border-radius: 16px; border: 1px solid rgba(212,175,55,.25);
-    }
-    .scene { position: absolute; inset: 0; opacity: 0; transition: opacity .7s ease; }
+    .stage-frame { position: relative; padding: 11px; border-radius: 24px; background: linear-gradient(180deg, rgba(20,12,8,.55), rgba(10,6,4,.7)), url("https://i.ibb.co/Jjynk8S5/frame-jpg.jpg") center/cover; border: 2px solid var(--gold); box-shadow: 0 0 0 5px #12060c, 0 0 0 6px rgba(212,175,55,.42), 0 18px 40px rgba(0,0,0,.55); }
+    .stage { position: relative; width: 100%; aspect-ratio: 16/11; overflow: hidden; background: #07040c; border-radius: 16px; }
+    .scene { position: absolute; inset: 0; opacity: 0; transition: opacity .65s ease; }
     .scene.on { opacity: 1; }
     .sky { position: absolute; inset: 0; }
     .sky img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.72); }
-    .actor {
-      position: absolute; transform-origin: bottom center;
-      mix-blend-mode: lighten; filter: drop-shadow(0 8px 10px rgba(0,0,0,.45));
-    }
+    .actor { position: absolute; transform-origin: bottom center; filter: drop-shadow(0 8px 10px rgba(0,0,0,.45)); }
     .actor img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .bob { animation: bob 2.3s ease-in-out infinite; }
     .walk { animation: walk .46s ease-in-out infinite; }
-    .fly { animation: fly 2.3s ease-in-out infinite; }
-    .gallop { animation: gallop .36s ease-in-out infinite; }
+    .fly { animation: fly 2.2s ease-in-out infinite; }
+    .gallop { animation: gallop .34s ease-in-out infinite; }
     .slash-a { animation: slashA .7s ease-in-out infinite; }
-    @keyframes walk {
-      0%,100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-4px) rotate(2deg); }
-    }
-    @keyframes fly {
-      0%,100% { transform: translate(0,0) rotate(-6deg); }
-      50% { transform: translate(8px,-10px) rotate(5deg); }
-    }
-    @keyframes gallop {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    @keyframes slashA {
-      0% { transform: rotate(0); }
-      30% { transform: rotate(-22deg); }
-      55% { transform: rotate(38deg); }
-      100% { transform: rotate(0); }
-    }
-    .tcard {
-      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 4; text-align: center; padding: 12px; pointer-events: none;
-    }
+    @keyframes walk { 0%,100% { transform: translate3d(0,0,0) rotate(-2deg); } 50% { transform: translate3d(0,-4px,0) rotate(2deg); } }
+    @keyframes fly { 0%,100% { transform: translate3d(0,0,0) rotate(-5deg); } 50% { transform: translate3d(8px,-10px,0) rotate(4deg); } }
+    @keyframes gallop { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-6px,0); } }
+    @keyframes slashA { 0% { transform: rotate(0); } 30% { transform: rotate(-20deg); } 55% { transform: rotate(36deg); } 100% { transform: rotate(0); } }
+    .tcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 4; text-align: center; padding: 12px; pointer-events: none; }
     .tcard .k { font-family: Cinzel, Georgia, serif; font-size: 9px; letter-spacing: 5px; color: var(--gold2); text-transform: uppercase; }
-    .tcard .n {
-      font-family: Cinzel, Georgia, serif; font-size: 1.55rem; font-weight: 900; letter-spacing: 5px;
-      background: linear-gradient(180deg,#fff8d0,#d4af37);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      filter: drop-shadow(0 2px 8px rgba(0,0,0,.65));
-    }
+    .tcard .n { font-family: Cinzel, Georgia, serif; font-size: 1.55rem; font-weight: 900; letter-spacing: 5px; background: linear-gradient(180deg,#fff8d0,#d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 2px 8px rgba(0,0,0,.65)); }
     .tcard .s { font-family: "Cormorant Garamond", serif; font-style: italic; color: rgba(255,241,184,.82); margin-top: 6px; font-size: 1.05rem; }
-    .dialogue {
-      position: relative; background: linear-gradient(180deg, rgba(24,12,18,.97), rgba(12,6,10,.98));
-      border: 2px solid var(--gold); border-radius: 18px;
-      box-shadow: inset 0 0 0 3px #12060c; padding: 10px 12px 10px 76px; min-height: 80px;
-    }
-    .dlg-art {
-      position: absolute; left: 8px; top: 8px; width: 58px; height: 58px; border-radius: 14px;
-      background: #0a0610; border: 2px solid var(--gold); overflow: hidden;
-    }
-    .dlg-art img { width: 100%; height: 100%; object-fit: cover; object-position: top; mix-blend-mode: lighten; }
+    .dialogue { position: relative; background: linear-gradient(180deg, rgba(24,12,18,.97), rgba(12,6,10,.98)); border: 2px solid var(--gold); border-radius: 18px; box-shadow: inset 0 0 0 3px #12060c; padding: 10px 12px 10px 76px; min-height: 80px; }
+    .dlg-art { position: absolute; left: 8px; top: 8px; width: 58px; height: 58px; border-radius: 14px; background: #0a0610; border: 2px solid var(--gold); overflow: hidden; }
+    .dlg-art img { width: 100%; height: 100%; object-fit: contain; }
     .dlg-name { font-family: Cinzel, Georgia, serif; font-size: .66rem; letter-spacing: 1.4px; color: var(--gold2); margin-bottom: 3px; }
     .dlg-text { font-family: "Cormorant Garamond", serif; font-size: 1.08rem; line-height: 1.35; min-height: 2.5em; }
     .cur { display: inline-block; width: 8px; height: .9em; background: var(--gold); margin-left: 2px; animation: blink .8s step-end infinite; vertical-align: text-bottom; }
     @keyframes blink { 50% { opacity: 0; } }
     .tbar { display: flex; align-items: center; gap: 10px; }
-    .playf {
-      width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--gold);
-      background: radial-gradient(circle at 40% 35%, #3a2410, #12080c);
-      color: var(--gold4); cursor: pointer; font-size: 11px; letter-spacing: .5px;
-      font-family: Cinzel, Georgia, serif; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 16px rgba(212,175,55,.3);
-    }
-    .playf:hover { transform: scale(1.07); }
+    .playf { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--gold); background: radial-gradient(circle at 40% 35%, #3a2410, #12080c); color: var(--gold4); cursor: pointer; font-size: 11px; font-family: Cinzel, Georgia, serif; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 16px rgba(212,175,55,.3); }
     .track { flex: 1; height: 7px; background: rgba(212,175,55,.12); border: 1px solid rgba(212,175,55,.3); border-radius: 99px; overflow: hidden; }
-    .fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold3), var(--gold2), var(--gold4)); box-shadow: 0 0 10px rgba(212,175,55,.6); }
+    .fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold3), var(--gold2), var(--gold4)); }
     .tm { font-family: Cinzel, Georgia, serif; font-size: .6rem; color: var(--gold2); min-width: 74px; text-align: right; }
     .dots { display: flex; justify-content: center; gap: 7px; }
     .sdot { width: 8px; height: 8px; border-radius: 50%; background: rgba(212,175,55,.25); border: 1px solid rgba(212,175,55,.4); cursor: pointer; }
     .sdot.on { background: var(--gold2); box-shadow: 0 0 8px var(--gold); transform: scale(1.2); }
     .cast { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
-    .cc {
-      background: rgba(212,175,55,.05); border: 1px solid rgba(212,175,55,.2);
-      border-radius: 16px; padding: 8px 4px; text-align: center; cursor: pointer;
-      transition: .35s cubic-bezier(.22,1,.36,1);
-    }
-    .cc:hover { transform: translateY(-5px); background: rgba(212,175,55,.12); border-color: rgba(212,175,55,.5); box-shadow: 0 12px 22px rgba(212,175,55,.16); }
-    .cc img { width: 56px; height: 72px; object-fit: contain; mix-blend-mode: lighten; }
-    .cc b { display: block; font-family: Cinzel, Georgia, serif; font-size: .52rem; color: var(--gold2); letter-spacing: .4px; }
+    .cc { background: rgba(212,175,55,.05); border: 1px solid rgba(212,175,55,.2); border-radius: 16px; padding: 8px 4px; text-align: center; cursor: pointer; transition: transform .3s, box-shadow .3s; }
+    .cc:hover { transform: translate3d(0,-5px,0); box-shadow: 0 12px 22px rgba(212,175,55,.16); }
+    .cc img { width: 56px; height: 72px; object-fit: contain; }
+    .cc b { display: block; font-family: Cinzel, Georgia, serif; font-size: .52rem; color: var(--gold2); }
     .cc i { font-family: "Cormorant Garamond", serif; font-size: .66rem; color: rgba(246,231,195,.45); font-style: italic; }
-    .footer {
-      text-align: center; color: rgba(246,231,195,.26);
-      font-family: "Cormorant Garamond", serif; font-size: .95rem; line-height: 1.75;
-    }
+    .footer { text-align: center; color: rgba(246,231,195,.26); font-family: "Cormorant Garamond", serif; font-size: .95rem; line-height: 1.75; }
     .footer strong { color: rgba(212,175,55,.68); font-family: Cinzel, Georgia, serif; font-size: .76rem; }
-    .toast {
-      position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(110px);
-      background: rgba(18,8,14,.96); border: 1px solid rgba(212,175,55,.42); color: var(--ivory);
-      padding: 11px 22px; border-radius: 999px; font-family: Cinzel, Georgia, serif; font-size: .72rem;
-      letter-spacing: 1px; z-index: 9999; opacity: 0;
-      transition: transform .45s cubic-bezier(.22,1.2,.36,1), opacity .35s;
-      box-shadow: 0 10px 30px rgba(0,0,0,.5);
-    }
+    .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(110px); background: rgba(18,8,14,.96); border: 1px solid rgba(212,175,55,.42); color: var(--ivory); padding: 11px 22px; border-radius: 999px; font-family: Cinzel, Georgia, serif; font-size: .72rem; letter-spacing: 1px; z-index: 9999; opacity: 0; transition: transform .4s cubic-bezier(.22,1.2,.36,1), opacity .3s; }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .ripple { position: absolute; border-radius: 50%; background: rgba(212,175,55,.25); transform: scale(0); animation: rip .7s ease-out forwards; pointer-events: none; }
-    @keyframes rip { to { transform: scale(2.4); opacity: 0; } }
-    .fx-slash {
-      position: absolute; left: -20%; top: 50%; height: 8px; width: 140%;
-      background: linear-gradient(90deg, transparent, #fff 20%, #ff3b4a 50%, #fff 80%, transparent);
-      box-shadow: 0 0 14px #fff, 0 0 28px #ff2040, 0 0 48px #ff2040;
-      transform: rotate(var(--r, -28deg)) scaleX(0);
-      animation: slashOut .38s cubic-bezier(.2,.8,.2,1) forwards;
-      transform-origin: center;
-    }
-    @keyframes slashOut {
-      0% { transform: rotate(var(--r,-28deg)) scaleX(0); opacity: 1; }
-      45% { transform: rotate(var(--r,-28deg)) scaleX(1); opacity: 1; }
-      100% { transform: rotate(var(--r,-28deg)) scaleX(1); opacity: 0; }
-    }
-    .fx-chain {
-      position: absolute; height: 48px; width: 160vw; left: -20vw;
-      background: url("https://i.ibb.co/vvTmK8q4/chain-jpg.jpg") repeat-x center/auto 48px;
-      filter: drop-shadow(0 0 10px rgba(212,175,55,.85)) saturate(1.35);
-      mix-blend-mode: screen;
-      animation: chainGo 2.55s ease-in-out forwards;
-      transform: rotate(var(--rot, -8deg));
-    }
-    @keyframes chainGo {
-      0% { transform: translateX(-18%) rotate(var(--rot,-8deg)); opacity: 0; }
-      18% { opacity: 1; }
-      82% { opacity: 1; }
-      100% { transform: translateX(18%) rotate(var(--rot,-8deg)); opacity: 0; }
-    }
-    .fx-wyrm {
-      position: absolute; top: 10%; right: -75vw; width: min(82vw, 780px); height: auto;
-      mix-blend-mode: lighten; filter: drop-shadow(0 22px 26px rgba(0,0,0,.65));
-      animation: wyrmGo 3.6s cubic-bezier(.22,.7,.2,1) forwards;
-    }
-    @keyframes wyrmGo {
-      0% { transform: translateX(0) translateY(0) rotate(-6deg) scale(.82); opacity: 0; }
-      10% { opacity: 1; }
-      50% { transform: translateX(-72vw) translateY(20px) rotate(4deg) scale(1.08); opacity: 1; }
-      100% { transform: translateX(-158vw) translateY(-12px) rotate(-8deg) scale(.88); opacity: 0; }
-    }
-    .fx-hydra {
-      position: absolute; left: 50%; top: 46%; width: min(78vw, 560px);
-      transform: translate(-50%,-50%) scale(.2) rotateY(70deg);
-      mix-blend-mode: lighten; filter: drop-shadow(0 0 30px rgba(196,59,90,.5));
-      animation: hydraLook 4.4s cubic-bezier(.22,1,.36,1) forwards;
-    }
+    .fx-slash { position: absolute; left: -20%; top: 50%; height: 8px; width: 140%; background: linear-gradient(90deg, transparent, #fff 20%, #ff3b4a 50%, #fff 80%, transparent); box-shadow: 0 0 14px #fff, 0 0 28px #ff2040; transform: rotate(var(--r,-28deg)) scaleX(0); animation: slashOut .36s cubic-bezier(.2,.8,.2,1) forwards; will-change: transform, opacity; }
+    @keyframes slashOut { 0% { transform: rotate(var(--r,-28deg)) scaleX(0); opacity: 1; } 45% { transform: rotate(var(--r,-28deg)) scaleX(1); opacity: 1; } 100% { transform: rotate(var(--r,-28deg)) scaleX(1); opacity: 0; } }
+    .fx-chain { position: absolute; height: 46px; width: 160vw; left: -20vw; background: url("https://i.ibb.co/vvTmK8q4/chain-jpg.jpg") repeat-x center/auto 46px; filter: drop-shadow(0 0 10px rgba(212,175,55,.8)); mix-blend-mode: screen; animation: chainGo 2.4s ease-in-out forwards; will-change: transform, opacity; }
+    @keyframes chainGo { 0% { transform: translate3d(-18%,0,0) rotate(var(--rot,-8deg)); opacity: 0; } 18% { opacity: 1; } 82% { opacity: 1; } 100% { transform: translate3d(18%,0,0) rotate(var(--rot,-8deg)); opacity: 0; } }
+    .fx-wyrm { position: absolute; top: 8%; right: -78vw; width: min(84vw, 800px); height: auto; filter: drop-shadow(0 18px 22px rgba(0,0,0,.55)); animation: wyrmGo 3.5s cubic-bezier(.22,.7,.2,1) forwards; will-change: transform, opacity; }
+    @keyframes wyrmGo { 0% { transform: translate3d(0,0,0) rotate(-6deg) scale(.84); opacity: 0; } 10% { opacity: 1; } 50% { transform: translate3d(-74vw,18px,0) rotate(3deg) scale(1.06); opacity: 1; } 100% { transform: translate3d(-160vw,-10px,0) rotate(-8deg) scale(.88); opacity: 0; } }
+    .fx-fire { position: absolute; height: auto; width: min(34vw, 280px); filter: drop-shadow(0 0 16px rgba(255,80,0,.75)); animation: fireGo 3.5s cubic-bezier(.22,.7,.2,1) forwards; will-change: transform, opacity; }
+    @keyframes fireGo { 0% { opacity: 0; transform: translate3d(0,0,0) scale(.7); } 12% { opacity: 1; } 55% { opacity: 1; } 100% { opacity: 0; transform: translate3d(-90vw,10px,0) scale(1.1); } }
+    .fx-hydra { position: absolute; left: 50%; top: 46%; width: min(76vw, 540px); transform: translate(-50%,-50%); filter: drop-shadow(0 0 26px rgba(196,59,90,.45)); animation: hydraLook 4.2s cubic-bezier(.22,1,.36,1) forwards; will-change: transform, opacity; }
     @keyframes hydraLook {
-      0% { transform: translate(-50%,-50%) scale(.12) rotateY(80deg); opacity: 0; }
-      16% { transform: translate(-50%,-50%) scale(1) rotateY(0deg); opacity: 1; }
-      36% { transform: translate(-50%,-52%) scale(1.07) rotateY(-10deg); opacity: 1; }
-      54% { transform: translate(-50%,-48%) scale(1.05) rotateY(12deg); opacity: 1; }
-      70% { transform: translate(-50%,-50%) scale(1) rotateY(0deg); opacity: 1; }
-      100% { transform: translate(85%,-72%) scale(.38) rotateY(-52deg) rotate(-12deg); opacity: 0; }
+      0% { transform: translate(-50%,-50%) scale(.14) rotateY(70deg); opacity: 0; }
+      16% { transform: translate(-50%,-50%) scale(1) rotateY(0); opacity: 1; }
+      38% { transform: translate(-50%,-52%) scale(1.05) rotateY(-8deg); opacity: 1; }
+      56% { transform: translate(-50%,-48%) scale(1.04) rotateY(10deg); opacity: 1; }
+      72% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      100% { transform: translate(80%,-70%) scale(.36) rotate(-12deg); opacity: 0; }
     }
-    .seal {
-      position: absolute; left: 50%; top: 48%; width: min(72vw, 380px); height: min(72vw, 380px);
-      transform: translate(-50%,-50%);
-      animation: sealBreak 3.05s ease-out forwards;
-    }
-    .seal svg { width: 100%; height: 100%; filter: drop-shadow(0 0 16px rgba(212,175,55,.85)); }
-    @keyframes sealBreak {
-      0% { transform: translate(-50%,-50%) scale(.18) rotate(0); opacity: 0; }
-      20% { transform: translate(-50%,-50%) scale(1) rotate(180deg); opacity: 1; }
-      55% { transform: translate(-50%,-50%) scale(1.06) rotate(360deg); opacity: 1; }
-      70% { transform: translate(-50%,-50%) scale(1.45) rotate(400deg); opacity: .9; filter: brightness(2); }
-      100% { transform: translate(-50%,-50%) scale(2.5) rotate(490deg); opacity: 0; }
-    }
-    .flash { position: absolute; inset: 0; background: #fff; opacity: 0; animation: flash .5s ease-out forwards; }
-    @keyframes flash { 0%{opacity:0} 20%{opacity:.72} 40%{opacity:.14} 55%{opacity:.48} 100%{opacity:0} }
-    .fx-hero, .fx-heroine {
-      position: absolute; bottom: 0; height: min(66vh, 560px); width: auto;
-      mix-blend-mode: lighten; filter: drop-shadow(0 12px 18px rgba(0,0,0,.55));
-    }
-    .fx-hero { left: -32vw; animation: heroIn 3.3s ease-in-out forwards; }
-    .fx-heroine { right: -32vw; animation: heroineIn 3.3s ease-in-out forwards; }
-    @keyframes heroIn {
-      0% { transform: translateX(0) rotate(-4deg); opacity: 0; }
-      16% { opacity: 1; }
-      44% { transform: translateX(30vw) rotate(0); opacity: 1; }
-      68% { transform: translateX(34vw) rotate(-8deg); opacity: 1; }
-      100% { transform: translateX(112vw) rotate(6deg); opacity: 0; }
-    }
-    @keyframes heroineIn {
-      0% { transform: translateX(0); opacity: 0; }
-      16% { opacity: 1; }
-      50% { transform: translateX(-28vw); opacity: 1; }
-      100% { transform: translateX(-112vw); opacity: 0; }
-    }
+    .seal { position: absolute; left: 50%; top: 48%; width: min(70vw, 360px); height: min(70vw, 360px); transform: translate(-50%,-50%); animation: sealBreak 2.9s ease-out forwards; }
+    .seal svg { width: 100%; height: 100%; filter: drop-shadow(0 0 14px rgba(212,175,55,.8)); }
+    @keyframes sealBreak { 0% { transform: translate(-50%,-50%) scale(.18) rotate(0); opacity: 0; } 22% { transform: translate(-50%,-50%) scale(1) rotate(180deg); opacity: 1; } 58% { transform: translate(-50%,-50%) scale(1.05) rotate(360deg); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(2.4) rotate(480deg); opacity: 0; } }
+    .flash { position: absolute; inset: 0; background: #fff; opacity: 0; animation: flash .46s ease-out forwards; }
+    @keyframes flash { 0%{opacity:0} 18%{opacity:.68} 40%{opacity:.12} 55%{opacity:.4} 100%{opacity:0} }
+    .fx-hero, .fx-heroine { position: absolute; bottom: 0; height: min(64vh, 540px); width: auto; filter: drop-shadow(0 12px 16px rgba(0,0,0,.5)); }
+    .fx-hero { left: -32vw; animation: heroIn 3.1s ease-in-out forwards; }
+    .fx-heroine { right: -32vw; animation: heroineIn 3.1s ease-in-out forwards; }
+    @keyframes heroIn { 0% { transform: translate3d(0,0,0); opacity: 0; } 16% { opacity: 1; } 46% { transform: translate3d(30vw,0,0); opacity: 1; } 100% { transform: translate3d(112vw,0,0); opacity: 0; } }
+    @keyframes heroineIn { 0% { transform: translate3d(0,0,0); opacity: 0; } 16% { opacity: 1; } 50% { transform: translate3d(-28vw,0,0); opacity: 1; } 100% { transform: translate3d(-112vw,0,0); opacity: 0; } }
+    .army { position: absolute; left: 0; bottom: 6%; height: 150px; width: 240vw; animation: armyGo 6.2s linear forwards; will-change: transform; }
+    @keyframes armyGo { from { transform: translate3d(-70vw,0,0); } to { transform: translate3d(55vw,0,0); } }
+    .unit { position: absolute; bottom: 0; height: 118px; width: auto; filter: drop-shadow(0 6px 6px rgba(0,0,0,.4)); }
+    .unit.back { height: 88px; opacity: .82; bottom: 18px; }
+    .dust { position: absolute; bottom: 4px; width: 18px; height: 8px; border-radius: 50%; background: rgba(212,175,55,.18); filter: blur(2px); animation: dust .5s ease-out infinite; }
+    @keyframes dust { from { transform: scale(.4); opacity: .6; } to { transform: scale(1.6) translateY(-8px); opacity: 0; } }
     @media (max-width: 540px) {
       .name { font-size: 1.75rem; }
-      .hero { height: 188px; }
+      .hero { height: 190px; }
       .avatar-wrap { width: 108px; height: 108px; }
       .profile { margin-top: -50px; }
       .block { padding: 0 14px 20px; }
       .cast { grid-template-columns: repeat(5,1fr); gap: 6px; }
       .cc img { width: 44px; height: 58px; }
       .topnav a { padding: 8px 11px; font-size: .56rem; }
-      .court { height: 170px; }
+      .court { height: 180px; }
     }
   </style>
 </head>
@@ -652,7 +325,7 @@
     <div class="gate l"></div>
     <div class="gate r"></div>
     <div class="gate-crest">
-      <img src="https://i.ibb.co/LdKpSfk7/crown-jpg.jpg" alt="">
+      <img src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="">
       <div class="gate-title">PMT</div>
       <div class="gate-sub">Palace of Aurelia</div>
     </div>
@@ -675,12 +348,12 @@
         <img class="hero-img" id="heroImg" src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="">
         <div class="hero-veil"></div>
         <div class="hero-live">
-          <img id="heroDragon" src="https://i.ibb.co/93TYm2Bp/anim-dragon-1-png.png" alt="" style="width:46%;right:-8%;top:4%">
-          <img id="heroFairy" src="https://i.ibb.co/v47fm91J/pix-fairy-png.png" alt="" style="width:16%;left:8%;bottom:18%">
+          <img id="heroDragon" src="https://i.ibb.co/ymB6S0Ph/pmt-anim-dragon-1-png.png" alt="" style="width:48%;right:-6%;top:2%">
+          <img id="heroFairy" src="https://i.ibb.co/VYXzRqpB/pmt-pix-fairy-png.png" alt="" style="width:15%;left:7%;bottom:16%">
         </div>
         <div class="hero-float">
-          <div class="hero-kicker">Palace of Aurelia</div>
-          <img class="hero-crown" src="https://i.ibb.co/LdKpSfk7/crown-jpg.jpg" alt="">
+          <div class="hero-kicker">Kingdom of PMT</div>
+          <img class="hero-flag" src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="PMT">
         </div>
       </div>
 
@@ -711,29 +384,32 @@
           </div>
           <div class="mosaic">
             <img class="a" src="https://i.ibb.co/21bJ5y73/castle2-jpg.jpg" alt="">
-            <img src="https://i.ibb.co/vvTmK8q4/chain-jpg.jpg" alt="">
-            <img src="https://i.ibb.co/4H1qSVy/nebula-jpg.jpg" alt="">
+            <img src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="PMT flag">
+            <img src="https://i.ibb.co/LdKpSfk7/crown-jpg.jpg" alt="">
           </div>
           <div class="court">
             <img class="court-bg" src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="">
-            <img class="pix" id="courtPrince" src="https://i.ibb.co/3Yp56Nbr/pix-prince-png.png" alt="" style="height:92%;left:6%">
-            <img class="pix" id="courtPrincess" src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt="" style="height:92%;left:34%">
-            <img class="pix" id="courtHorse" src="https://i.ibb.co/nqPr7bL7/pix-horse-png.png" alt="" style="height:48%;left:58%;bottom:4%">
-            <img class="pix" id="courtKnight" src="https://i.ibb.co/ksxtD4Xy/pix-knight-png.png" alt="" style="height:70%;right:4%">
+            <img class="court-flag" src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="PMT">
+            <img class="pix" id="courtPrince" src="https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png" alt="" style="height:90%;left:4%">
+            <img class="pix" id="courtPrincess" src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt="" style="height:90%;left:32%">
+            <img class="pix" id="courtHorse" src="https://i.ibb.co/Gvz7hjrJ/pmt-pix-horse-png.png" alt="" style="height:46%;left:58%;bottom:4%">
+            <img class="pix" id="courtKnight" src="https://i.ibb.co/tMMvH0qT/pmt-pix-knight-png.png" alt="" style="height:68%;right:3%">
           </div>
           <div class="strip">
-            <img src="https://i.ibb.co/3Yp56Nbr/pix-prince-png.png" alt="">
-            <img src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt="">
-            <img src="https://i.ibb.co/VpzLLJmw/pix-dragon-png.png" alt="">
-            <img src="https://i.ibb.co/cc5xXgnx/pix-hydra-png.png" alt="">
-            <img src="https://i.ibb.co/tM0bwTKc/pix-wizard-png.png" alt="">
-            <img src="https://i.ibb.co/v47fm91J/pix-fairy-png.png" alt="">
-            <img src="https://i.ibb.co/ksxtD4Xy/pix-knight-png.png" alt="">
-            <img src="https://i.ibb.co/S7yTH9tP/pix-king-png.png" alt="">
-            <img src="https://i.ibb.co/hJmcX3Qg/pix-queen-png.png" alt="">
-            <img src="https://i.ibb.co/nqPr7bL7/pix-horse-png.png" alt="">
-            <img src="https://i.ibb.co/LdKpSfk7/crown-jpg.jpg" alt="">
-            <img src="https://i.ibb.co/5h2t0PRt/chain2-jpg.jpg" alt="">
+            <img src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="">
+            <img src="https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png" alt="">
+            <img src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt="">
+            <img src="https://i.ibb.co/Kpvfysdx/pmt-pix-dragon-png.png" alt="">
+            <img src="https://i.ibb.co/JW6PRJJq/pmt-pix-hydra-png.png" alt="">
+            <img src="https://i.ibb.co/Y7M6LM7V/pmt-pix-wizard-png.png" alt="">
+            <img src="https://i.ibb.co/VYXzRqpB/pmt-pix-fairy-png.png" alt="">
+            <img src="https://i.ibb.co/tMMvH0qT/pmt-pix-knight-png.png" alt="">
+            <img src="https://i.ibb.co/My1vLMCD/pmt-pix-king-png.png" alt="">
+            <img src="https://i.ibb.co/xZPZDm7/pmt-pix-queen-png.png" alt="">
+            <img src="https://i.ibb.co/fdKhf1rh/pmt-spear-png.png" alt="">
+            <img src="https://i.ibb.co/v4xk1D25/pmt-sword-png.png" alt="">
+            <img src="https://i.ibb.co/wmvLJLn/pmt-archer-png.png" alt="">
+            <img src="https://i.ibb.co/23xL00rZ/pmt-bearer-png.png" alt="">
           </div>
           <div class="stats">
             <div class="stat"><span class="stat-n" data-target="12" data-suffix="K+">0</span><span class="stat-l">Followers</span></div>
@@ -741,10 +417,10 @@
             <div class="stat"><span class="stat-n" data-target="3.2" data-suffix="M">0</span><span class="stat-l">Views</span></div>
             <div class="stat"><span class="stat-n">#1</span><span class="stat-l">Rank</span></div>
           </div>
-          <div class="dd" id="ddLore">
+          <div class="dd">
             <button class="dd-btn" type="button">Royal Brief <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>
             <div class="dd-menu">
-              <div class="lore" style="margin-top:0">Between velvet night and gold, PMT opens the palace gates — scripts, clients, and the legend of Aurelia in one hall. Pixel souls walk the court. Better than yesterday. Always.</div>
+              <div class="lore" style="margin-top:0">The banner of PMT flies over Aurelia — crown and gold letters on burgundy silk. Dragons cross the sky. The royal host marches with spear, bow, and blade. Better than yesterday. Always.</div>
             </div>
           </div>
         </div>
@@ -781,7 +457,7 @@
       <section id="music">
         <div class="block">
           <div class="hd"><div class="ln"></div><span>Music Player</span><div class="ln"></div></div>
-          <div class="music" id="musicPlayer">
+          <div class="music">
             <div class="music-row">
               <div class="cover" id="musicCover"><img src="https://i.ibb.co/LdKpSfk7/crown-jpg.jpg" alt=""></div>
               <div class="minfo">
@@ -791,7 +467,7 @@
               </div>
               <div class="bars" id="musicBars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
             </div>
-            <div class="dd" id="ddTracks">
+            <div class="dd">
               <button class="dd-btn" type="button">Hall Playlist <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>
               <div class="dd-menu">
                 <div class="links">
@@ -826,11 +502,11 @@
       <section id="install">
         <div class="block">
           <div class="hd"><div class="ln"></div><span>Install</span><div class="ln"></div></div>
-          <div class="dd open" id="ddK">
+          <div class="dd open">
             <button class="dd-btn" type="button">KSign <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>
             <div class="dd-menu" id="gridK"></div>
           </div>
-          <div class="dd" id="ddE">
+          <div class="dd">
             <button class="dd-btn" type="button">ESign <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button>
             <div class="dd-menu" id="gridE"></div>
           </div>
@@ -843,55 +519,56 @@
           <div class="theater">
             <div class="th-intro">
               <h3>THE CROWN OF AURELIA</h3>
-              <p>A thirty-second pixel film — prince, princess, and the three-headed night</p>
+              <p>A thirty-second pixel film under the banner of PMT</p>
             </div>
             <div class="stage-frame">
               <div class="stage" id="stage">
                 <div class="scene on" data-scene="0">
                   <div class="sky"><img src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt=""></div>
-                  <div class="actor fly" style="width:42%;right:-4%;top:2%"><img class="spr-dragon" src="https://i.ibb.co/93TYm2Bp/anim-dragon-1-png.png" alt=""></div>
-                  <div class="tcard"><div class="k">Pixel Theater</div><div class="n">AURELIA</div><div class="s">The Crown and the Rose</div></div>
+                  <div class="actor fly" style="width:42%;right:-4%;top:2%"><img class="spr-dragon" src="https://i.ibb.co/ymB6S0Ph/pmt-anim-dragon-1-png.png" alt=""></div>
+                  <img src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="" style="position:absolute;left:8%;top:10%;width:18%;filter:drop-shadow(0 6px 8px #000)">
+                  <div class="tcard"><div class="k">Pixel Theater</div><div class="n">AURELIA</div><div class="s">Kingdom of PMT</div></div>
                 </div>
                 <div class="scene" data-scene="1">
                   <div class="sky"><img src="https://i.ibb.co/4H1qSVy/nebula-jpg.jpg" alt=""></div>
-                  <div class="actor bob" style="width:26%;left:6%;bottom:8%;animation-duration:2.8s"><img src="https://i.ibb.co/v47fm91J/pix-fairy-png.png" alt=""></div>
-                  <div class="actor bob" style="width:48%;left:28%;bottom:0;animation-duration:2.5s"><img class="spr-princess" src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt=""></div>
+                  <div class="actor bob" style="width:24%;left:6%;bottom:8%"><img src="https://i.ibb.co/VYXzRqpB/pmt-pix-fairy-png.png" alt=""></div>
+                  <div class="actor bob" style="width:46%;left:28%;bottom:0"><img class="spr-princess" src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt=""></div>
                 </div>
                 <div class="scene" data-scene="2">
-                  <div class="sky"><img src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="" style="filter:brightness(.42) saturate(1.2)"></div>
-                  <div class="actor fly" style="width:64%;right:-6%;top:-8%"><img class="spr-hydra" src="https://i.ibb.co/cc5xXgnx/pix-hydra-png.png" alt=""></div>
-                  <div class="actor" style="width:28%;left:4%;bottom:2%"><img class="spr-princess" src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt=""></div>
-                  <div class="actor bob" style="width:22%;left:30%;bottom:2%"><img src="https://i.ibb.co/S7yTH9tP/pix-king-png.png" alt=""></div>
+                  <div class="sky"><img src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="" style="filter:brightness(.42)"></div>
+                  <div class="actor fly" style="width:62%;right:-6%;top:-8%"><img class="spr-hydra" src="https://i.ibb.co/JW6PRJJq/pmt-pix-hydra-png.png" alt=""></div>
+                  <div class="actor" style="width:26%;left:4%;bottom:2%"><img class="spr-princess" src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt=""></div>
+                  <div class="actor bob" style="width:20%;left:30%;bottom:2%"><img src="https://i.ibb.co/My1vLMCD/pmt-pix-king-png.png" alt=""></div>
                 </div>
                 <div class="scene" data-scene="3">
                   <div class="sky"><img src="https://i.ibb.co/21bJ5y73/castle2-jpg.jpg" alt="" style="filter:brightness(.52)"></div>
-                  <div class="actor gallop" style="width:50%;left:16%;bottom:4%"><img class="spr-horse" src="https://i.ibb.co/nqPr7bL7/pix-horse-png.png" alt=""></div>
-                  <div class="actor walk" style="width:26%;left:34%;bottom:12%"><img class="spr-prince" src="https://i.ibb.co/3Yp56Nbr/pix-prince-png.png" alt=""></div>
-                  <div class="actor walk" style="width:20%;left:2%;bottom:4%"><img src="https://i.ibb.co/ksxtD4Xy/pix-knight-png.png" alt=""></div>
-                  <div class="actor bob" style="width:20%;right:2%;bottom:4%"><img src="https://i.ibb.co/tM0bwTKc/pix-wizard-png.png" alt=""></div>
+                  <div class="actor gallop" style="width:48%;left:16%;bottom:4%"><img class="spr-horse" src="https://i.ibb.co/Gvz7hjrJ/pmt-pix-horse-png.png" alt=""></div>
+                  <div class="actor walk" style="width:24%;left:34%;bottom:12%"><img class="spr-prince" src="https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png" alt=""></div>
+                  <div class="actor walk" style="width:18%;left:2%;bottom:4%"><img src="https://i.ibb.co/tMMvH0qT/pmt-pix-knight-png.png" alt=""></div>
+                  <div class="actor bob" style="width:18%;right:2%;bottom:4%"><img src="https://i.ibb.co/Y7M6LM7V/pmt-pix-wizard-png.png" alt=""></div>
                 </div>
                 <div class="scene" data-scene="4">
-                  <div class="sky"><img src="https://i.ibb.co/4H1qSVy/nebula-jpg.jpg" alt="" style="filter:hue-rotate(-18deg) brightness(.58)"></div>
-                  <div class="actor slash-a" style="width:40%;left:2%;bottom:0"><img class="spr-prince" src="https://i.ibb.co/VWYgNqJJ/anim-prince-slash-png.png" alt=""></div>
-                  <div class="actor fly" style="width:60%;right:-10%;top:0"><img class="spr-dragon" src="https://i.ibb.co/VpzLLJmw/pix-dragon-png.png" alt=""></div>
-                  <div class="actor bob" style="width:18%;left:40%;top:6%"><img src="https://i.ibb.co/v47fm91J/pix-fairy-png.png" alt=""></div>
-                  <div class="actor" style="width:22%;right:20%;bottom:2%;opacity:.88"><img class="spr-princess" src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt=""></div>
+                  <div class="sky"><img src="https://i.ibb.co/4H1qSVy/nebula-jpg.jpg" alt="" style="filter:hue-rotate(-18deg) brightness(.55)"></div>
+                  <div class="actor slash-a" style="width:38%;left:2%;bottom:0"><img class="spr-prince" src="https://i.ibb.co/rfyrThhN/pmt-anim-prince-slash-png.png" alt=""></div>
+                  <div class="actor fly" style="width:58%;right:-10%;top:0"><img class="spr-dragon" src="https://i.ibb.co/Kpvfysdx/pmt-pix-dragon-png.png" alt=""></div>
+                  <div class="actor bob" style="width:16%;left:40%;top:6%"><img src="https://i.ibb.co/VYXzRqpB/pmt-pix-fairy-png.png" alt=""></div>
+                  <div class="actor" style="width:20%;right:20%;bottom:2%"><img class="spr-princess" src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt=""></div>
                 </div>
                 <div class="scene" data-scene="5">
-                  <div class="sky"><img src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="" style="filter:brightness(.88) saturate(1.2)"></div>
-                  <div class="actor bob" style="width:32%;left:16%;bottom:0"><img class="spr-prince" src="https://i.ibb.co/3Yp56Nbr/pix-prince-png.png" alt=""></div>
-                  <div class="actor bob" style="width:32%;left:46%;bottom:0;animation-delay:.25s"><img class="spr-princess" src="https://i.ibb.co/NdDRK7XG/pix-princess-png.png" alt=""></div>
-                  <div class="actor bob" style="width:16%;left:1%;bottom:2%"><img src="https://i.ibb.co/S7yTH9tP/pix-king-png.png" alt=""></div>
-                  <div class="actor bob" style="width:16%;left:12%;bottom:2%;animation-delay:.2s"><img src="https://i.ibb.co/hJmcX3Qg/pix-queen-png.png" alt=""></div>
-                  <div class="actor bob" style="width:15%;right:16%;bottom:2%"><img src="https://i.ibb.co/ksxtD4Xy/pix-knight-png.png" alt=""></div>
-                  <div class="actor bob" style="width:15%;right:1%;bottom:2%"><img src="https://i.ibb.co/tM0bwTKc/pix-wizard-png.png" alt=""></div>
-                  <div class="actor fly" style="width:16%;right:28%;top:4%"><img src="https://i.ibb.co/v47fm91J/pix-fairy-png.png" alt=""></div>
-                  <div class="tcard" style="justify-content:flex-start;padding-top:10px"><div class="k">The End</div><div class="n" style="font-size:1.08rem">FOREVER</div></div>
+                  <div class="sky"><img src="https://i.ibb.co/rG9mftp7/castle-jpg.jpg" alt="" style="filter:brightness(.88)"></div>
+                  <img src="https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png" alt="" style="position:absolute;left:42%;top:6%;width:16%">
+                  <div class="actor bob" style="width:30%;left:16%;bottom:0"><img class="spr-prince" src="https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png" alt=""></div>
+                  <div class="actor bob" style="width:30%;left:46%;bottom:0"><img class="spr-princess" src="https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png" alt=""></div>
+                  <div class="actor bob" style="width:15%;left:1%;bottom:2%"><img src="https://i.ibb.co/My1vLMCD/pmt-pix-king-png.png" alt=""></div>
+                  <div class="actor bob" style="width:15%;left:12%;bottom:2%"><img src="https://i.ibb.co/xZPZDm7/pmt-pix-queen-png.png" alt=""></div>
+                  <div class="actor bob" style="width:14%;right:16%;bottom:2%"><img src="https://i.ibb.co/tMMvH0qT/pmt-pix-knight-png.png" alt=""></div>
+                  <div class="actor bob" style="width:14%;right:1%;bottom:2%"><img src="https://i.ibb.co/Y7M6LM7V/pmt-pix-wizard-png.png" alt=""></div>
+                  <div class="tcard" style="justify-content:flex-start;padding-top:10px"><div class="k">The End</div><div class="n" style="font-size:1.05rem">FOREVER</div></div>
                 </div>
               </div>
             </div>
             <div class="dialogue">
-              <div class="dlg-art" id="dlgArt"><img src="https://i.ibb.co/S7yTH9tP/pix-king-png.png" alt=""></div>
+              <div class="dlg-art" id="dlgArt"><img src="https://i.ibb.co/My1vLMCD/pmt-pix-king-png.png" alt=""></div>
               <div class="dlg-name" id="dlgName">Narrator</div>
               <div class="dlg-text" id="dlgText">Press play to open the thirty-second chronicle.<span class="cur"></span></div>
             </div>
@@ -900,7 +577,7 @@
               <div class="track"><div class="fill" id="tlFill"></div></div>
               <div class="tm" id="tlTime">0:00 / 0:30</div>
             </div>
-            <div class="dots" id="sceneDots">
+            <div class="dots">
               <div class="sdot on" data-s="0"></div><div class="sdot" data-s="1"></div><div class="sdot" data-s="2"></div>
               <div class="sdot" data-s="3"></div><div class="sdot" data-s="4"></div><div class="sdot" data-s="5"></div>
             </div>
@@ -916,9 +593,7 @@
           <div class="hd"><div class="ln"></div><span>Anti-Revoke</span><div class="ln"></div></div>
           <div class="links">
             <a href="https://github.com/trieu1082/Info/releases/download/1.0.0/pmt.mobileconfig" target="_blank" rel="noopener" class="btn anti" data-toast="Download Anti-Revoke Profile">
-              <div class="btn-img">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              </div>
+              <div class="btn-img"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
               <div class="btn-info"><span class="btn-title">Get Anti-Revoke</span><span class="btn-sub">Block Apple certificate revoke</span></div>
               <svg class="btn-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
@@ -944,29 +619,14 @@
         </div>
       </section>
     </div>
-
-    <div class="footer">
-      © 2026 <strong>PMT</strong> — All vibes reserved.<br>
-      Palace of Aurelia • Better than yesterday
-    </div>
+    <div class="footer">© 2026 <strong>PMT</strong> — All vibes reserved.<br>Kingdom of PMT • Palace of Aurelia</div>
   </div>
 
   <script>
-    (function () {
-      const allowedDomains = ["khoindvn.io.vn", "website.khoindvn.io.vn", "download.khoindvn.io.vn"];
-      const allowedSuffixes = [".github.io", ".pages.dev", ".e2b.app", ".e2b.dev"];
-      const host = window.location.hostname || "";
-      const local = !host || host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0";
-      const ok = local || allowedDomains.some(d => host === d || host.endsWith("." + d)) || allowedSuffixes.some(s => host.endsWith(s));
-      if (!ok) {
-        document.body.innerHTML = '<div style="color:#d4af37;font-size:18px;text-align:center;margin-top:50px;font-family:Cinzel,serif;letter-spacing:2px">Access Denied: Unauthorized Domain</div>';
-        throw new Error("Domain not allowed");
-      }
-      window.apps = {
-        ksign: [{ name: "KSign App", url: "itms-services://?action=download-manifest&url=https://ipa.ipasign.cc/manifest/ed5bd0281684.plist", img: "https://i.ibb.co/LdKpSfk7/crown-jpg.jpg", descriptions: "Install directly via itms-services" }],
-        esign: [{ name: "ESign App", url: "itms-services://?action=download-manifest&url=https://ipa.ipasign.cc/manifest/e4b196ad09a9.plist", img: "https://i.ibb.co/vx96K86s/velvet-jpg.jpg", descriptions: "Tap to install your custom ESign app" }]
-      };
-    })();
+    window.apps = {
+      ksign: [{ name: "KSign App", url: "itms-services://?action=download-manifest&url=https://ipa.ipasign.cc/manifest/ed5bd0281684.plist", img: "https://i.ibb.co/LdKpSfk7/crown-jpg.jpg", descriptions: "Install directly via itms-services" }],
+      esign: [{ name: "ESign App", url: "itms-services://?action=download-manifest&url=https://ipa.ipasign.cc/manifest/e4b196ad09a9.plist", img: "https://i.ibb.co/vx96K86s/velvet-jpg.jpg", descriptions: "Tap to install your custom ESign app" }]
+    };
 
     const IMG = {
       castle: "https://i.ibb.co/rG9mftp7/castle-jpg.jpg",
@@ -974,45 +634,34 @@
       chain: "https://i.ibb.co/vvTmK8q4/chain-jpg.jpg",
       chain2: "https://i.ibb.co/5h2t0PRt/chain2-jpg.jpg",
       crown: "https://i.ibb.co/LdKpSfk7/crown-jpg.jpg",
-      frame: "https://i.ibb.co/Jjynk8S5/frame-jpg.jpg",
-      nebula: "https://i.ibb.co/4H1qSVy/nebula-jpg.jpg",
-      velvet: "https://i.ibb.co/vx96K86s/velvet-jpg.jpg",
+      flag: "https://i.ibb.co/KxL0Q3xS/pmt-flag-pmt-png.png",
+      fire: "https://i.ibb.co/j98mqr5V/pmt-fireball-png.png",
       dragon: [
-        "https://i.ibb.co/93TYm2Bp/anim-dragon-1-png.png",
-        "https://i.ibb.co/GQFRGPSD/anim-dragon-2-png.png",
-        "https://i.ibb.co/5XTwHnQf/anim-dragon-3-png.png",
-        "https://i.ibb.co/HRpfcsZ/anim-dragon-4-png.png",
-        "https://i.ibb.co/VpzLLJmw/pix-dragon-png.png"
+        "https://i.ibb.co/ymB6S0Ph/pmt-anim-dragon-1-png.png",
+        "https://i.ibb.co/S750bKmR/pmt-anim-dragon-2-png.png",
+        "https://i.ibb.co/VpT8L4hP/pmt-anim-dragon-3-png.png",
+        "https://i.ibb.co/F4Sn6WSw/pmt-anim-dragon-4-png.png",
+        "https://i.ibb.co/Kpvfysdx/pmt-pix-dragon-png.png"
       ],
       hydra: [
-        "https://i.ibb.co/zWtD3TB5/anim-hydra-l-png.png",
-        "https://i.ibb.co/cc5xXgnx/pix-hydra-png.png",
-        "https://i.ibb.co/6RNrWWkG/anim-hydra-r-png.png",
-        "https://i.ibb.co/cc5xXgnx/pix-hydra-png.png"
+        "https://i.ibb.co/Nd7ZyG03/pmt-anim-hydra-l-png.png",
+        "https://i.ibb.co/JW6PRJJq/pmt-pix-hydra-png.png",
+        "https://i.ibb.co/GbTZyN5/pmt-anim-hydra-r-png.png",
+        "https://i.ibb.co/JW6PRJJq/pmt-pix-hydra-png.png"
       ],
-      prince: [
-        "https://i.ibb.co/3Yp56Nbr/pix-prince-png.png",
-        "https://i.ibb.co/Lzr8PMZZ/anim-prince-idle2-png.png"
-      ],
-      princeSlash: [
-        "https://i.ibb.co/3Yp56Nbr/pix-prince-png.png",
-        "https://i.ibb.co/VWYgNqJJ/anim-prince-slash-png.png",
-        "https://i.ibb.co/Lzr8PMZZ/anim-prince-idle2-png.png",
-        "https://i.ibb.co/VWYgNqJJ/anim-prince-slash-png.png"
-      ],
-      princess: [
-        "https://i.ibb.co/NdDRK7XG/pix-princess-png.png",
-        "https://i.ibb.co/xqTsbhmK/anim-princess-2-png.png"
-      ],
-      horse: [
-        "https://i.ibb.co/nqPr7bL7/pix-horse-png.png",
-        "https://i.ibb.co/n8CQ7X0q/anim-horse-2-png.png"
-      ],
-      fairy: "https://i.ibb.co/v47fm91J/pix-fairy-png.png",
-      wizard: "https://i.ibb.co/tM0bwTKc/pix-wizard-png.png",
-      knight: "https://i.ibb.co/ksxtD4Xy/pix-knight-png.png",
-      king: "https://i.ibb.co/S7yTH9tP/pix-king-png.png",
-      queen: "https://i.ibb.co/hJmcX3Qg/pix-queen-png.png"
+      prince: ["https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png", "https://i.ibb.co/r2Jw7WCT/pmt-anim-prince-idle2-png.png"],
+      princeSlash: ["https://i.ibb.co/RpbQMypy/pmt-pix-prince-png.png", "https://i.ibb.co/rfyrThhN/pmt-anim-prince-slash-png.png"],
+      princess: ["https://i.ibb.co/21cjhX0n/pmt-pix-princess-png.png", "https://i.ibb.co/mrmSGXtS/pmt-anim-princess-2-png.png"],
+      horse: ["https://i.ibb.co/Gvz7hjrJ/pmt-pix-horse-png.png", "https://i.ibb.co/4nc6tPh3/pmt-anim-horse-2-png.png"],
+      spear: ["https://i.ibb.co/fdKhf1rh/pmt-spear-png.png", "https://i.ibb.co/Cp8fHC6L/pmt-spear2-png.png"],
+      sword: ["https://i.ibb.co/v4xk1D25/pmt-sword-png.png", "https://i.ibb.co/kV9vJHFS/pmt-sword2-png.png"],
+      archer: ["https://i.ibb.co/wmvLJLn/pmt-archer-png.png", "https://i.ibb.co/tTBs14X4/pmt-archer2-png.png"],
+      bearer: ["https://i.ibb.co/23xL00rZ/pmt-bearer-png.png", "https://i.ibb.co/YBXmNP8y/pmt-bearer2-png.png"],
+      fairy: "https://i.ibb.co/VYXzRqpB/pmt-pix-fairy-png.png",
+      wizard: "https://i.ibb.co/Y7M6LM7V/pmt-pix-wizard-png.png",
+      knight: "https://i.ibb.co/tMMvH0qT/pmt-pix-knight-png.png",
+      king: "https://i.ibb.co/My1vLMCD/pmt-pix-king-png.png",
+      queen: "https://i.ibb.co/xZPZDm7/pmt-pix-queen-png.png"
     };
 
     const $ = (s, r = document) => r.querySelector(s);
@@ -1024,61 +673,80 @@
       clearTimeout(toastT);
       toastEl.textContent = m;
       toastEl.classList.add("show");
-      toastT = setTimeout(() => toastEl.classList.remove("show"), 2400);
+      toastT = setTimeout(() => toastEl.classList.remove("show"), 2200);
     }
 
-    function preload(list) {
-      list.forEach(src => { const i = new Image(); i.src = src; });
-    }
-    preload([].concat(
-      IMG.dragon, IMG.hydra, IMG.prince, IMG.princeSlash, IMG.princess, IMG.horse,
-      [IMG.fairy, IMG.wizard, IMG.knight, IMG.king, IMG.queen, IMG.castle, IMG.castle2, IMG.chain, IMG.chain2, IMG.crown, IMG.frame, IMG.nebula, IMG.velvet]
-    ));
+    const Ticker = {
+      items: [],
+      add(el, frames, fps) {
+        if (!el || !frames || !frames.length) return;
+        this.items.push({ el, frames, fps, i: 0, acc: 0 });
+      },
+      start() {
+        let last = performance.now();
+        const loop = now => {
+          const dt = now - last;
+          last = now;
+          if (!document.hidden) {
+            for (let n = this.items.length - 1; n >= 0; n--) {
+              const it = this.items[n];
+              if (!it.el.isConnected) { this.items.splice(n, 1); continue; }
+              it.acc += dt;
+              const step = 1000 / it.fps;
+              if (it.acc >= step) {
+                it.acc %= step;
+                it.i = (it.i + 1) % it.frames.length;
+                it.el.src = it.frames[it.i];
+              }
+            }
+          }
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+    };
 
-    function flip(els, frames, fps) {
-      if (!els.length || !frames.length) return 0;
-      let i = 0;
-      return setInterval(() => {
-        i = (i + 1) % frames.length;
-        els.forEach(el => { el.src = frames[i]; });
-      }, Math.max(40, 1000 / fps));
-    }
+    (function preload() {
+      const all = [].concat(IMG.dragon, IMG.hydra, IMG.prince, IMG.princeSlash, IMG.princess, IMG.horse, IMG.spear, IMG.sword, IMG.archer, IMG.bearer, [IMG.fairy, IMG.wizard, IMG.knight, IMG.king, IMG.queen, IMG.flag, IMG.fire, IMG.castle, IMG.castle2, IMG.crown]);
+      all.forEach(src => { const i = new Image(); i.src = src; });
+    })();
 
-    flip($$("#heroDragon"), IMG.dragon, 8);
-    flip($$("#courtPrince"), IMG.prince, 3);
-    flip($$("#courtPrincess"), IMG.princess, 2.4);
-    flip($$("#courtHorse"), IMG.horse, 6);
-    flip($$(".spr-dragon"), IMG.dragon, 9);
-    flip($$(".spr-hydra"), IMG.hydra, 4);
-    flip($$(".spr-prince"), IMG.princeSlash, 4);
-    flip($$(".spr-princess"), IMG.princess, 2.6);
-    flip($$(".spr-horse"), IMG.horse, 7);
+    Ticker.add($("#heroDragon"), IMG.dragon, 8);
+    Ticker.add($("#courtPrince"), IMG.prince, 2.6);
+    Ticker.add($("#courtPrincess"), IMG.princess, 2.2);
+    Ticker.add($("#courtHorse"), IMG.horse, 6);
+    $$(".spr-dragon").forEach(el => Ticker.add(el, IMG.dragon, 9));
+    $$(".spr-hydra").forEach(el => Ticker.add(el, IMG.hydra, 4));
+    $$(".spr-prince").forEach(el => Ticker.add(el, IMG.princeSlash, 3.5));
+    $$(".spr-princess").forEach(el => Ticker.add(el, IMG.princess, 2.4));
+    $$(".spr-horse").forEach(el => Ticker.add(el, IMG.horse, 7));
+    Ticker.start();
 
     const CAST = [
-      { id: "prince", name: "Caelum", role: "Prince", img: IMG.prince[0], frames: IMG.princeSlash, lore: "Prince Caelum — a gold blade and a heart that does not fear the dark. He rides the wind to find the rose of Aurelia." },
-      { id: "princess", name: "Liora", role: "Princess", img: IMG.princess[0], frames: IMG.princess, lore: "Princess Liora — moonlight on the ivory tower. She dreamed of a love larger than the walls." },
-      { id: "dragon", name: "Umbra", role: "Night Wyrm", img: IMG.dragon[4], frames: IMG.dragon, lore: "Umbra — the night-wyrm that swallows stars. He steals light not for gold, but for a thousand years of loneliness." },
-      { id: "hydra", name: "Triarch", role: "Three-Head", img: IMG.hydra[1], frames: IMG.hydra, lore: "Triarch — three crowns of fire. When the heads turn toward you, the kingdom holds its breath." },
-      { id: "wizard", name: "Eldrin", role: "Wizard", img: IMG.wizard, frames: [IMG.wizard], lore: "Wizard Eldrin — an old star in a violet robe. His staff cuts a path through the deep wood." },
-      { id: "fairy", name: "Nyx", role: "Sprite", img: IMG.fairy, frames: [IMG.fairy], lore: "Nyx — a dew sprite. Small wings, enough light for the longest night." },
-      { id: "knight", name: "Rowan", role: "Knight", img: IMG.knight, frames: [IMG.knight], lore: "Sir Rowan — iron shield, gold oath. He follows the prince like a shadow that never leaves." },
-      { id: "king", name: "Aldric", role: "King", img: IMG.king, frames: [IMG.king], lore: "King Aldric — a crown heavier than any sword. He lost the light, then was given it back." },
-      { id: "queen", name: "Seraphine", role: "Queen", img: IMG.queen, frames: [IMG.queen], lore: "Queen Seraphine — a voice like velvet, keeping the heartbeat of the realm." },
-      { id: "horse", name: "Solace", role: "Steed", img: IMG.horse[0], frames: IMG.horse, lore: "Solace — gold-barded warhorse. Hooves that write thunder on the forest road." }
+      { id: "prince", name: "Caelum", role: "Prince", img: IMG.prince[0], frames: IMG.princeSlash, lore: "Prince Caelum — gold blade, unshaken heart. He rides for the rose of Aurelia." },
+      { id: "princess", name: "Liora", role: "Princess", img: IMG.princess[0], frames: IMG.princess, lore: "Princess Liora — moonlight on the ivory tower." },
+      { id: "dragon", name: "Umbra", role: "Night Wyrm", img: IMG.dragon[4], frames: IMG.dragon, lore: "Umbra — night-wyrm that swallows stars and breathes a river of fire." },
+      { id: "hydra", name: "Triarch", role: "Three-Head", img: IMG.hydra[1], frames: IMG.hydra, lore: "Triarch — three crowns of fire. When the heads turn, the realm holds its breath." },
+      { id: "wizard", name: "Eldrin", role: "Wizard", img: IMG.wizard, frames: [IMG.wizard], lore: "Wizard Eldrin — an old star in a violet robe." },
+      { id: "fairy", name: "Nyx", role: "Sprite", img: IMG.fairy, frames: [IMG.fairy], lore: "Nyx — dew sprite. Small wings, enough light for the longest night." },
+      { id: "knight", name: "Rowan", role: "Knight", img: IMG.knight, frames: [IMG.knight], lore: "Sir Rowan — iron shield, gold oath." },
+      { id: "king", name: "Aldric", role: "King", img: IMG.king, frames: [IMG.king], lore: "King Aldric — a crown heavier than any sword." },
+      { id: "queen", name: "Seraphine", role: "Queen", img: IMG.queen, frames: [IMG.queen], lore: "Queen Seraphine — velvet voice of the realm." },
+      { id: "horse", name: "Solace", role: "Steed", img: IMG.horse[0], frames: IMG.horse, lore: "Solace — gold-barded warhorse of PMT." }
     ];
 
     const FILM = [
-      { t: 0, s: 0, who: "Narrator", img: IMG.king, text: "In the kingdom of Aurelia, gold never slept..." },
-      { t: 4, s: 0, who: "Narrator", img: IMG.queen, text: "Beneath one crown, a legend was about to open." },
+      { t: 0, s: 0, who: "Narrator", img: IMG.king, text: "Under the banner of PMT, gold never slept..." },
+      { t: 4, s: 0, who: "Narrator", img: IMG.queen, text: "The crown and the letters flew above Aurelia." },
       { t: 5, s: 1, who: "Liora", img: IMG.princess[0], text: "Princess Liora — the rose of the palace." },
       { t: 8, s: 1, who: "Nyx", img: IMG.fairy, text: "She whispered with a sprite under the moon." },
       { t: 10, s: 2, who: "Triarch", img: IMG.hydra[1], text: "Then the three-headed night stole the light..." },
       { t: 13, s: 2, who: "Aldric", img: IMG.king, text: "Triarch tore her from the tower!" },
       { t: 15, s: 3, who: "Caelum", img: IMG.prince[0], text: "Prince Caelum rode through night and fire." },
-      { t: 18, s: 3, who: "Eldrin", img: IMG.wizard, text: "The wizard cut the path. The knight kept the oath." },
-      { t: 20, s: 4, who: "Caelum", img: IMG.princeSlash[1], text: "A golden blade split the dragon's shadow!" },
+      { t: 18, s: 3, who: "Eldrin", img: IMG.wizard, text: "The wizard cut the path. The host kept the oath." },
+      { t: 20, s: 4, who: "Caelum", img: IMG.princeSlash[1], text: "A golden blade split the dragon's fire!" },
       { t: 23, s: 4, who: "Liora", img: IMG.princess[0], text: "Light returned — she was free." },
-      { t: 25, s: 5, who: "Caelum", img: IMG.prince[0], text: "Two hearts met beneath one crown." },
+      { t: 25, s: 5, who: "Caelum", img: IMG.prince[0], text: "Two hearts met beneath the flag of PMT." },
       { t: 28, s: 5, who: "Narrator", img: IMG.queen, text: "And they lived... forever.  — PMT" }
     ];
     const FILM_LEN = 30000;
@@ -1108,10 +776,8 @@
     function filmTick(now) {
       if (!filmOn) return;
       const e = now - filmT0;
-      const p = Math.min(1, e / FILM_LEN);
-      $("#tlFill").style.width = p * 100 + "%";
-      const sec = Math.min(30, Math.floor(e / 1000));
-      $("#tlTime").textContent = "0:" + String(sec).padStart(2, "0") + " / 0:30";
+      $("#tlFill").style.width = Math.min(1, e / FILM_LEN) * 100 + "%";
+      $("#tlTime").textContent = "0:" + String(Math.min(30, Math.floor(e / 1000))).padStart(2, "0") + " / 0:30";
       let idx = 0;
       for (let i = 0; i < FILM.length; i++) if (e >= FILM[i].t * 1000) idx = i;
       if (idx !== lastLine) { lastLine = idx; speak(FILM[idx]); }
@@ -1120,22 +786,15 @@
     }
     function playFilm() {
       if (filmOn) { stopFilm(false); return; }
-      filmOn = true;
-      filmT0 = performance.now();
-      lastLine = -1;
+      filmOn = true; filmT0 = performance.now(); lastLine = -1;
       $("#playFilm").textContent = "STOP";
       filmRaf = requestAnimationFrame(filmTick);
       showToast("The legend begins...");
     }
     function stopFilm(ended) {
-      filmOn = false;
-      cancelAnimationFrame(filmRaf);
+      filmOn = false; cancelAnimationFrame(filmRaf);
       $("#playFilm").textContent = "PLAY";
-      if (ended) {
-        $("#tlFill").style.width = "100%";
-        $("#tlTime").textContent = "0:30 / 0:30";
-        showToast("The end — forever");
-      }
+      if (ended) { $("#tlFill").style.width = "100%"; $("#tlTime").textContent = "0:30 / 0:30"; showToast("The end — forever"); }
     }
     function seekFilm(scene) {
       const first = FILM.find(f => f.s === scene) || FILM[0];
@@ -1149,46 +808,36 @@
 
     const fxRoot = $("#fx");
     function later(el, ms) { setTimeout(() => el.remove(), ms); }
-    function shake(ms = 420) {
+    function shake(ms = 400) {
       document.body.classList.remove("shake");
       void document.body.offsetWidth;
       document.body.classList.add("shake");
       setTimeout(() => document.body.classList.remove("shake"), ms);
     }
-    function attachFlip(img, frames, fps) {
-      let i = 0;
-      const id = setInterval(() => {
-        if (!img.isConnected) { clearInterval(id); return; }
-        i = (i + 1) % frames.length;
-        img.src = frames[i];
-      }, 1000 / fps);
-      return id;
-    }
     function fxSlash() {
-      const angles = [-34, -18, 16, 30, -7];
-      angles.forEach((a, i) => {
+      [-32, -16, 18, 30, -6].forEach((a, i) => {
         setTimeout(() => {
           const s = document.createElement("div");
           s.className = "fx-slash";
           s.style.setProperty("--r", a + "deg");
           s.style.top = 26 + i * 11 + "%";
           fxRoot.appendChild(s);
-          later(s, 520);
-        }, i * 70);
+          later(s, 480);
+        }, i * 65);
       });
       shake();
       showToast("Blade.");
     }
     function fxChains() {
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 6; i++) {
         const c = document.createElement("div");
         c.className = "fx-chain";
-        c.style.top = 6 + i * 13 + "%";
+        c.style.top = 8 + i * 14 + "%";
         c.style.setProperty("--rot", (i % 2 ? 8 : -10) + "deg");
-        c.style.animationDelay = i * 0.07 + "s";
+        c.style.animationDelay = i * 0.06 + "s";
         c.style.backgroundImage = "url('" + (i % 2 ? IMG.chain2 : IMG.chain) + "')";
         fxRoot.appendChild(c);
-        later(c, 2800);
+        later(c, 2600);
       }
       showToast("Gold chains.");
     }
@@ -1198,10 +847,29 @@
       img.className = "fx-wyrm";
       img.alt = "";
       fxRoot.appendChild(img);
-      attachFlip(img, IMG.dragon, 10);
-      later(img, 3700);
-      shake(280);
+      Ticker.add(img, IMG.dragon, 10);
+      later(img, 3600);
+      shake(260);
       showToast("Umbra crosses the sky.");
+    }
+    function fxFireWyrm() {
+      const img = document.createElement("img");
+      img.src = IMG.dragon[3];
+      img.className = "fx-wyrm";
+      img.alt = "";
+      fxRoot.appendChild(img);
+      Ticker.add(img, IMG.dragon, 11);
+      const fire = document.createElement("img");
+      fire.src = IMG.fire;
+      fire.className = "fx-fire";
+      fire.alt = "";
+      fire.style.top = "18%";
+      fire.style.right = "18vw";
+      fxRoot.appendChild(fire);
+      later(img, 3600);
+      later(fire, 3600);
+      shake(300);
+      showToast("Umbra breathes fire.");
     }
     function fxHydra() {
       const img = document.createElement("img");
@@ -1209,32 +877,32 @@
       img.className = "fx-hydra";
       img.alt = "";
       fxRoot.appendChild(img);
-      attachFlip(img, IMG.hydra, 5);
-      later(img, 4500);
-      setTimeout(() => shake(280), 700);
+      Ticker.add(img, IMG.hydra, 5);
+      later(img, 4300);
+      setTimeout(() => shake(260), 650);
       showToast("Triarch looks at you.");
     }
     function fxUnseal() {
       const wrap = document.createElement("div");
       wrap.className = "seal";
-      wrap.innerHTML = '<svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="88" stroke="#d4af37" stroke-width="3"/><circle cx="100" cy="100" r="70" stroke="#f0d78c" stroke-width="1.4"/><circle cx="100" cy="100" r="46" stroke="#fff1b8" stroke-width="1"/><path d="M100 18 L122 78 L186 78 L134 116 L154 180 L100 142 L46 180 L66 116 L14 78 L78 78 Z" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,.12)"/><path d="M100 40 L100 160 M40 100 L160 100 M58 58 L142 142 M142 58 L58 142" stroke="#a67c2d" stroke-width="1"/></svg>';
+      wrap.innerHTML = '<svg viewBox="0 0 200 200" fill="none"><circle cx="100" cy="100" r="88" stroke="#d4af37" stroke-width="3"/><circle cx="100" cy="100" r="70" stroke="#f0d78c" stroke-width="1.4"/><path d="M100 18 L122 78 L186 78 L134 116 L154 180 L100 142 L46 180 L66 116 L14 78 L78 78 Z" stroke="#d4af37" stroke-width="2" fill="rgba(212,175,55,.12)"/></svg>';
       fxRoot.appendChild(wrap);
       for (let i = 0; i < 4; i++) {
         const c = document.createElement("div");
         c.className = "fx-chain";
-        c.style.top = 20 + i * 16 + "%";
+        c.style.top = 22 + i * 15 + "%";
         c.style.setProperty("--rot", (i % 2 ? 12 : -12) + "deg");
         fxRoot.appendChild(c);
-        later(c, 2300);
+        later(c, 2200);
       }
       setTimeout(() => {
         const f = document.createElement("div");
         f.className = "flash";
         fxRoot.appendChild(f);
-        later(f, 600);
+        later(f, 520);
         shake();
-      }, 1700);
-      later(wrap, 3200);
+      }, 1600);
+      later(wrap, 3000);
       showToast("Seal broken.");
     }
     function fxPrinceSlash() {
@@ -1243,9 +911,9 @@
       img.className = "fx-hero";
       img.alt = "";
       fxRoot.appendChild(img);
-      attachFlip(img, IMG.princeSlash, 6);
-      setTimeout(fxSlash, 900);
-      later(img, 3400);
+      Ticker.add(img, IMG.princeSlash, 6);
+      setTimeout(fxSlash, 850);
+      later(img, 3200);
       showToast("Caelum.");
     }
     function fxPrincess() {
@@ -1254,11 +922,57 @@
       img.className = "fx-heroine";
       img.alt = "";
       fxRoot.appendChild(img);
-      attachFlip(img, IMG.princess, 3);
-      later(img, 3400);
+      Ticker.add(img, IMG.princess, 3);
+      later(img, 3200);
       showToast("Liora.");
     }
-    const FX_POOL = [fxSlash, fxChains, fxWyrm, fxHydra, fxUnseal, fxPrinceSlash, fxPrincess];
+    function fxArmy() {
+      const row = document.createElement("div");
+      row.className = "army";
+      const kit = [
+        { f: IMG.bearer, z: 20 },
+        { f: IMG.spear, z: 12 },
+        { f: IMG.sword, z: 12 },
+        { f: IMG.archer, z: 12 },
+        { f: IMG.spear, z: 12 },
+        { f: IMG.sword, z: 12 },
+        { f: IMG.bearer, z: 20 },
+        { f: IMG.archer, z: 12 },
+        { f: IMG.spear, z: 12 },
+        { f: IMG.sword, z: 12 },
+        { f: IMG.archer, z: 12 },
+        { f: IMG.bearer, z: 20 },
+        { f: IMG.spear, z: 12 },
+        { f: IMG.sword, z: 12 }
+      ];
+      kit.forEach((u, i) => {
+        const im = document.createElement("img");
+        im.src = u.f[0];
+        im.className = "unit" + (i % 4 === 0 ? " back" : "");
+        im.alt = "";
+        im.style.left = (i * 92 + (i % 3) * 10) + "px";
+        im.style.zIndex = String(u.z);
+        row.appendChild(im);
+        Ticker.add(im, u.f, 7);
+        const d = document.createElement("div");
+        d.className = "dust";
+        d.style.left = (i * 92 + 30) + "px";
+        d.style.animationDelay = (i % 5) * 0.08 + "s";
+        row.appendChild(d);
+      });
+      const flag = document.createElement("img");
+      flag.src = IMG.flag;
+      flag.className = "unit";
+      flag.alt = "PMT";
+      flag.style.left = "40px";
+      flag.style.height = "92px";
+      flag.style.bottom = "86px";
+      row.appendChild(flag);
+      fxRoot.appendChild(row);
+      later(row, 6400);
+      showToast("The host of PMT marches.");
+    }
+    const FX_POOL = [fxSlash, fxChains, fxWyrm, fxFireWyrm, fxHydra, fxUnseal, fxPrinceSlash, fxPrincess, fxArmy, fxFireWyrm, fxArmy];
     let lastFx = -1;
     function randomFx() {
       let i = Math.floor(Math.random() * FX_POOL.length);
@@ -1271,39 +985,30 @@
       const canvas = $("#particles-canvas");
       const ctx = canvas.getContext("2d");
       let W, H, ps = [];
-      const COL = ["#d4af37", "#f0d78c", "#fff1b8", "#c43b5a", "#e8b4b8", "#a67c2d", "#ffffff"];
+      const COL = ["#d4af37", "#f0d78c", "#fff1b8", "#c43b5a", "#a67c2d"];
       function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
       addEventListener("resize", resize); resize();
       function mk() {
-        const a = Math.random() * Math.PI * 2, sp = Math.random() * .45 + .08;
-        return { x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2 + .35, vx: Math.cos(a) * sp * .25, vy: Math.sin(a) * sp * .25 - Math.random() * .28, c: COL[Math.floor(Math.random() * COL.length)], a: Math.random() * .55 + .12, life: 1, dec: Math.random() * .0022 + .0006, p: Math.random() * 6.28, ps: Math.random() * .02 + .005 };
+        const a = Math.random() * Math.PI * 2, sp = Math.random() * .4 + .08;
+        return { x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.8 + .3, vx: Math.cos(a) * sp * .22, vy: Math.sin(a) * sp * .22 - Math.random() * .24, c: COL[(Math.random() * COL.length) | 0], a: Math.random() * .5 + .12, life: 1, dec: Math.random() * .002 + .0006, p: Math.random() * 6.28, ps: Math.random() * .02 + .005 };
       }
-      for (let i = 0; i < 140; i++) ps.push(mk());
+      for (let i = 0; i < 72; i++) ps.push(mk());
       (function draw() {
         ctx.clearRect(0, 0, W, H);
-        ps.forEach((p, i) => {
-          p.x += p.vx; p.y += p.vy; p.life -= p.dec; p.p += p.ps;
-          if (p.life <= 0 || p.y < -20 || p.x < -20 || p.x > W + 20) { ps[i] = mk(); ps[i].y = H + 10; ps[i].life = 1; }
-          const al = p.a * p.life * (.7 + .3 * Math.sin(p.p));
-          ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, al));
-          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.c; ctx.fill();
-          if (p.r > 1.1) { ctx.shadowColor = p.c; ctx.shadowBlur = 7 * p.life; ctx.fill(); }
-          ctx.restore();
-        });
+        if (!document.hidden) {
+          ps.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy; p.life -= p.dec; p.p += p.ps;
+            if (p.life <= 0 || p.y < -16 || p.x < -16 || p.x > W + 16) { ps[i] = mk(); ps[i].y = H + 8; ps[i].life = 1; }
+            ctx.globalAlpha = Math.max(0, p.a * p.life * (.7 + .3 * Math.sin(p.p)));
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.c; ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+        }
         requestAnimationFrame(draw);
       })();
     })();
 
     $$(".btn").forEach(btn => {
-      btn.addEventListener("click", e => {
-        const r = btn.getBoundingClientRect();
-        const rip = document.createElement("div");
-        rip.className = "ripple";
-        const s = Math.max(r.width, r.height);
-        rip.style.cssText = "width:" + s + "px;height:" + s + "px;left:" + (e.clientX - r.left - s / 2) + "px;top:" + (e.clientY - r.top - s / 2) + "px";
-        btn.appendChild(rip);
-        setTimeout(() => rip.remove(), 700);
-      });
       btn.addEventListener("mousemove", e => {
         const r = btn.getBoundingClientRect();
         btn.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
@@ -1312,21 +1017,20 @@
     });
     $$(".btn[data-toast]").forEach(b => b.addEventListener("click", () => showToast(b.dataset.toast)));
 
-    function animateCounter(el, target, suffix) {
-      let start = 0, step = 0, steps = 70, inc = target / steps;
-      const t = setInterval(() => {
-        step++; start += inc;
-        if (step >= steps) { start = target; clearInterval(t); }
-        el.textContent = (target >= 10 ? Math.floor(start) : start.toFixed(1)) + suffix;
-      }, 20);
-    }
     const statsEl = $(".stats");
     if (statsEl) {
       const o = new IntersectionObserver(ents => {
-        if (ents[0].isIntersecting) {
-          $$(".stat-n[data-target]", statsEl).forEach(el => animateCounter(el, parseFloat(el.dataset.target), el.dataset.suffix || ""));
-          o.unobserve(statsEl);
-        }
+        if (!ents[0].isIntersecting) return;
+        $$(".stat-n[data-target]", statsEl).forEach(el => {
+          const target = parseFloat(el.dataset.target), suffix = el.dataset.suffix || "";
+          let start = 0, step = 0;
+          const t = setInterval(() => {
+            step++; start += target / 70;
+            if (step >= 70) { start = target; clearInterval(t); }
+            el.textContent = (target >= 10 ? Math.floor(start) : start.toFixed(1)) + suffix;
+          }, 20);
+        });
+        o.unobserve(statsEl);
       }, { threshold: .4 });
       o.observe(statsEl);
     }
@@ -1395,7 +1099,7 @@
       hiddenAudio.addEventListener("error", () => showToast("Audio error"));
     }
     musicUrlInput.addEventListener("keydown", e => { if (e.key === "Enter") musicPlayBtn.click(); });
-    if (getYouTubeID("https://youtu.be/sC6yg7V8cSM")) musicUrlInput.value = "https://youtu.be/sC6yg7V8cSM";
+    musicUrlInput.value = "https://youtu.be/sC6yg7V8cSM";
     $$("[data-yt]").forEach(b => b.addEventListener("click", () => { musicUrlInput.value = b.dataset.yt; musicPlayBtn.click(); }));
 
     function renderApps(tab, mount) {
@@ -1406,12 +1110,11 @@
         const card = document.createElement("div");
         card.className = "app-card";
         card.innerHTML = '<img src="' + app.img + '" alt=""><div class="bd"><h4>' + app.name + "</h4><p>" + app.descriptions + '</p></div><div class="ib">Install</div>';
-        const go = () => {
-          if (!app.url || app.url === "javascript:void(0)") { showToast("Coming soon"); return; }
+        card.addEventListener("click", () => {
+          if (!app.url) { showToast("Coming soon"); return; }
           if (app.url.startsWith("itms-services://")) { location.href = app.url; showToast("Installing " + app.name + "..."); }
           else { open(app.url, "_blank"); showToast("Opening " + app.name + "..."); }
-        };
-        card.addEventListener("click", go);
+        });
         mount.appendChild(card);
       });
     }
@@ -1419,8 +1122,8 @@
     renderApps("esign", $("#gridE"));
     $$(".dd-btn").forEach(btn => btn.addEventListener("click", () => btn.parentElement.classList.toggle("open")));
 
-    const links = $$("#topnav a");
-    links.forEach(a => {
+    const navA = $$("#topnav a");
+    navA.forEach(a => {
       a.addEventListener("click", e => {
         e.preventDefault();
         const el = document.getElementById(a.getAttribute("href").slice(1));
@@ -1430,7 +1133,7 @@
     const spy = new IntersectionObserver(ents => {
       ents.forEach(ent => {
         if (!ent.isIntersecting) return;
-        links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + ent.target.id));
+        navA.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + ent.target.id));
       });
     }, { rootMargin: "-35% 0px -55% 0px", threshold: 0 });
     $$("section[id]").forEach(s => spy.observe(s));
@@ -1438,21 +1141,21 @@
     const card = $("#card");
     const heroImg = $("#heroImg");
     addEventListener("mousemove", e => {
-      const x = (e.clientX / innerWidth - .5);
-      const y = (e.clientY / innerHeight - .5);
-      card.style.setProperty("--ry", (x * 6.5).toFixed(2) + "deg");
-      card.style.setProperty("--rx", (-y * 5.5).toFixed(2) + "deg");
-      if (heroImg) heroImg.style.setProperty("--py", (y * 18).toFixed(1) + "px");
+      const x = e.clientX / innerWidth - .5;
+      const y = e.clientY / innerHeight - .5;
+      card.style.setProperty("--ry", (x * 5.5).toFixed(2) + "deg");
+      card.style.setProperty("--rx", (-y * 4.5).toFixed(2) + "deg");
+      if (heroImg) heroImg.style.setProperty("--py", (y * 14).toFixed(1) + "px");
     });
 
     function renderCast() {
       const grid = $("#castGrid");
       const lore = $("#castLore");
       grid.innerHTML = CAST.map(c => '<div class="cc" data-id="' + c.id + '"><img src="' + c.img + '" alt=""><b>' + c.name + "</b><i>" + c.role + "</i></div>").join("");
-      $$(".cc", grid).forEach(cardEl => {
-        const c = CAST.find(x => x.id === cardEl.dataset.id);
-        if (c && c.frames && c.frames.length > 1) flip([cardEl.querySelector("img")], c.frames, 4);
-        cardEl.addEventListener("click", () => {
+      $$(".cc", grid).forEach(el => {
+        const c = CAST.find(x => x.id === el.dataset.id);
+        if (c && c.frames.length > 1) Ticker.add(el.querySelector("img"), c.frames, 4);
+        el.addEventListener("click", () => {
           if (!c) return;
           lore.textContent = c.lore;
           $("#dlgArt").innerHTML = '<img src="' + c.img + '" alt="">';
@@ -1467,9 +1170,10 @@
       renderCast();
       setTimeout(() => {
         $("#gates").classList.add("open");
-        setTimeout(() => $("#gates").classList.add("done"), 1650);
-      }, 900);
-      setTimeout(randomFx, 4500);
+        setTimeout(() => $("#gates").classList.add("done"), 1600);
+      }, 850);
+      setTimeout(fxArmy, 2800);
+      setTimeout(randomFx, 9000);
       setInterval(randomFx, 10000);
     });
     $("#playFilm").addEventListener("click", playFilm);
