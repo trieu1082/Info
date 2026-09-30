@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TongTai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      max-width: 100vw;
+      overflow-x: hidden;
+      position: relative;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000000;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 16px;
+    }
+
+    .bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      pointer-events: none;
+      opacity: 1;
+      filter: none;
+    }
+
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.25) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #star-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .main-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .gun-card {
+      background: rgba(255, 255, 255, 0.52);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 32px;
+      padding: 28px 24px;
+      box-shadow: 
+        0 20px 40px -10px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .gun-card:hover {
+      background: rgba(255, 255, 255, 0.65);
+      box-shadow: 
+        0 25px 50px -10px rgba(0, 0, 0, 0.35),
+        0 0 25px rgba(255, 255, 255, 0.4);
+    }
+
+    .gun-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transition: 0.6s;
+      pointer-events: none;
+    }
+
+    .gun-card:hover::before {
+      left: 100%;
+    }
+
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin-bottom: 16px;
+    }
+
+    .avatar-glow {
+      position: absolute;
+      inset: -4px;
+      border-radius: 36px;
+      background: linear-gradient(135deg, #3b82f6, #ec4899, #8b5cf6, #06b6d4);
+      background-size: 300% 300%;
+      animation: gradientRotate 6s ease infinite;
+      filter: blur(8px);
+      opacity: 0.7;
+    }
+
+    @keyframes gradientRotate {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .avatar-img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 32px;
+      border: 3px solid #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background-color: #f1f5f9;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .avatar-wrapper:hover .avatar-img {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .verified-icon {
+      width: 20px;
+      height: 20px;
+      color: #2563eb;
+    }
+
+    .profile-tag {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      padding: 4px 14px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .typewriter-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      min-height: 20px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .stat-icon {
+      width: 14px;
+      height: 14px;
+      color: #d97706;
+    }
+
+    .music-player-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 22px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      margin-top: 4px;
+      width: 100%;
+    }
+
+    .music-disc {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0f172a, #334155);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      animation: spinDisc 8s linear infinite;
+      animation-play-state: paused;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .music-disc.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spinDisc {
+      100% { transform: rotate(360deg); }
+    }
+
+    .music-info {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .music-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .music-artist {
+      font-size: 11px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .music-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .music-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0f172a;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .music-btn:active {
+      transform: scale(0.9);
+      background: #ffffff;
+    }
+
+    .audio-visualizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+      padding: 0 4px;
+    }
+
+    .v-bar {
+      width: 3px;
+      background: #2563eb;
+      border-radius: 2px;
+      height: 4px;
+      transition: height 0.2s ease;
+    }
+
+    .playing .v-bar:nth-child(1) { animation: barPulse 0.6s ease-in-out infinite alternate; }
+    .playing .v-bar:nth-child(2) { animation: barPulse 0.8s ease-in-out infinite alternate 0.2s; }
+    .playing .v-bar:nth-child(3) { animation: barPulse 0.5s ease-in-out infinite alternate 0.4s; }
+    .playing .v-bar:nth-child(4) { animation: barPulse 0.7s ease-in-out infinite alternate 0.1s; }
+
+    @keyframes barPulse {
+      0% { height: 3px; }
+      100% { height: 14px; }
+    }
+
+    .links-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .link-card {
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: #0f172a;
+      box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .link-card:hover {
+      box-shadow: 
+        0 14px 30px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .link-card:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .link-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .link-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .link-card:hover .link-icon-box {
+      transform: scale(1.1) rotate(-4deg);
+    }
+
+    .icon-tiktok {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .icon-discord {
+      background: #5865F2;
+      color: #ffffff;
+    }
+
+    .icon-facebook {
+      background: #1877F2;
+      color: #ffffff;
+    }
+
+    .link-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .link-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .link-sub {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .link-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .action-btn:hover {
+      background: #3b82f6;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+
+    .arrow-icon {
+      width: 16px;
+      height: 16px;
+      color: #64748b;
+      transition: transform 0.3s ease;
+    }
+
+    .link-card:hover .arrow-icon {
+      transform: translateX(4px);
+      color: #2563eb;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .star-sparkle {
+      width: 14px;
+      height: 14px;
+      color: #f59e0b;
+      animation: spinStar 4s linear infinite;
+    }
+
+    @keyframes spinStar {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .click-star {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      animation: explodeStar 0.8s ease-out forwards;
+    }
+
+    @keyframes explodeStar {
+      0% {
+        transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.5) rotate(180deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <video id="bg-video" class="bg-video" autoplay loop muted playsinline>
+    <source src="https://files.catbox.moe/eidzkj.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+
+  <canvas id="star-canvas"></canvas>
+
+  <div class="main-container">
+    <div class="gun-card" id="main-card">
+      <div class="profile-header">
+        <div class="avatar-wrapper">
+          <div class="avatar-glow"></div>
+          <img class="avatar-img" src="https://i.ibb.co/jkrrqVjM/IMG-8575.png" alt="Triệu Avatar" onerror="this.onerror=null; this.src='https://ibb.co/60WWGvqP';">
+        </div>
+
+        <h1 class="profile-name">
+          Triệu
+          <svg class="verified-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.79-4-4-4-.495 0-.965.084-1.4.238C14.55 2.475 13.18 1.6 11.6 1.6c-1.58 0-2.95.875-3.6 2.148-.435-.154-.905-.238-1.4-.238-2.21 0-4 1.79-4 4 0 .495.084.965.238 1.4C1.575 9.55.7 10.92.7 12.5c0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.79 4 4 4 .495 0 .965-.084 1.4-.238 1.435 1.273 2.805 2.148 4.385 2.148 1.58 0 2.95-.875 3.6-2.148.435.154.905.238 1.4.238 2.21 0 4-1.79 4-4 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.71 4.29l-4.29-4.29 1.41-1.41 2.88 2.88 6.88-6.88 1.41 1.41-8.29 8.29z"/>
+          </svg>
+        </h1>
+
+        <div class="profile-tag">
+          <svg class="star-sparkle" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/>
+          </svg>
+          @trieu1082
+        </div>
+
+        <div class="typewriter-text" id="typewriter"></div>
+
+        <div class="music-player-card">
+          <div class="music-disc" id="music-disc">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+          </div>
+          <div class="music-info">
+            <span class="music-title">Chill Vibe Stream</span>
+            <span class="music-artist">Background Audio</span>
+          </div>
+          <div class="audio-visualizer" id="visualizer">
+            <div class="v-bar"></div>
+            <div class="v-bar"></div>
+            <div class="v-bar"></div>
+            <div class="v-bar"></div>
+          </div>
+          <div class="music-controls">
+            <button class="music-btn" id="play-btn" title="Phát nhạc">
+              <svg id="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-item">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            <span id="view-count">1,842</span> lượt xem
+          </div>
+          <div class="stat-item">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span>Verified</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="links-section">
+
+      <a href="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" target="_blank" class="link-card">
+        <div class="link-left">
+          <div class="link-icon-box icon-tiktok">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64c.29 0 .56.04.82.11V9.32a6.32 6.32 0 00-.82-.05A6.34 6.34 0 003.15 15.6a6.34 6.34 0 0010.83 4.47V11.5a8.28 8.28 0 005.28 1.88v-3.46a4.85 4.85 0 01-3.67-3.23z"/>
+            </svg>
+          </div>
+          <div class="link-details">
+            <span class="link-title">TikTok</span>
+            <span class="link-sub">@trieu1082</span>
+          </div>
+        </div>
+        <div class="link-actions">
+          <button class="action-btn copy-btn" data-url="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" title="Sao chép link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="https://discord.gg/ZCxWqy6gM" target="_blank" class="link-card">
+        <div class="link-left">
+          <div class="link-icon-box icon-discord">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+            </svg>
+          </div>
+          <div class="link-details">
+            <span class="link-title">Discord Community</span>
+            <span class="link-sub">Tham gia Server</span>
+          </div>
+        </div>
+        <div class="link-actions">
+          <button class="action-btn copy-btn" data-url="https://discord.gg/ZCxWqy6gM" title="Sao chép link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+
+      <a href="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" target="_blank" class="link-card">
+        <div class="link-left">
+          <div class="link-icon-box icon-facebook">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </div>
+          <div class="link-details">
+            <span class="link-title">Facebook Cá Nhân</span>
+            <span class="link-sub">Kết nối cùng tôi</span>
+          </div>
+        </div>
+        <div class="link-actions">
+          <button class="action-btn copy-btn" data-url="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" title="Sao chép link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+          </button>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="footer-text">
+      <svg class="star-sparkle" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/>
+      </svg>
+      <span>Designed with Gun Style • Smart Clean White</span>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+      <path d="M20 6L9 17l-5-5"/>
+    </svg>
+    <span id="toast-msg">Đã sao chép liên kết!</span>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('star-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let stars = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Star {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2.5 + 0.5;
+        this.maxOpacity = Math.random() * 0.7 + 0.3;
+        this.opacity = 0;
+        this.speed = Math.random() * 0.02 + 0.005;
+        this.phase = Math.random() * Math.PI * 2;
+        this.color = Math.random() > 0.3 ? '#6366f1' : (Math.random() > 0.5 ? '#f59e0b' : '#38bdf8');
+      }
+
+      update() {
+        this.phase += this.speed;
+        this.opacity = (Math.sin(this.phase) + 1) / 2 * this.maxOpacity;
+        this.y -= 0.15;
+        if (this.y < -10) this.y = height + 10;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = this.color;
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (this.size > 1.8) {
+          ctx.strokeStyle = this.color;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(this.x - this.size * 2.5, this.y);
+          ctx.lineTo(this.x + this.size * 2.5, this.y);
+          ctx.moveTo(this.x, this.y - this.size * 2.5);
+          ctx.lineTo(this.x, this.y + this.size * 2.5);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 70; i++) {
+      stars.push(new Star());
+    }
+
+    function animateStars() {
+      ctx.clearRect(0, 0, width, height);
+      stars.forEach(star => {
+        star.update();
+        star.draw();
+      });
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
+
+    window.addEventListener('pointerdown', (e) => {
+      createStarBurst(e.clientX, e.clientY);
+    });
+
+    function createStarBurst(x, y) {
+      const starCount = 10;
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'click-star';
+        
+        const angle = (Math.PI * 2 / starCount) * i + Math.random() * 0.5;
+        const dist = Math.random() * 60 + 30;
+        const dx = Math.cos(angle) * dist + 'px';
+        const dy = Math.sin(angle) * dist + 'px';
+        
+        star.style.setProperty('--dx', dx);
+        star.style.setProperty('--dy', dy);
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+
+        const size = Math.random() * 12 + 10;
+        const color = ['#f59e0b', '#3b82f6', '#ec4899', '#8b5cf6'][Math.floor(Math.random() * 4)];
+        
+        star.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">
+          <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/>
+        </svg>`;
+
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 800);
+      }
+    }
+
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let curRotX = 0;
+    let curRotY = 0;
+
+    const allCards = document.querySelectorAll('.gun-card, .link-card');
+
+    function applyTilt() {
+      curRotX += (targetRotX - curRotX) * 0.12;
+      curRotY += (targetRotY - curRotY) * 0.12;
+
+      allCards.forEach(c => {
+        c.style.transform = `perspective(1000px) rotateX(${curRotX.toFixed(2)}deg) rotateY(${curRotY.toFixed(2)}deg)`;
+      });
+
+      requestAnimationFrame(applyTilt);
+    }
+    applyTilt();
+
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        if (e.beta !== null && e.gamma !== null) {
+          const beta = Math.max(-30, Math.min(30, e.beta - 40));
+          const gamma = Math.max(-30, Math.min(30, e.gamma));
+          targetRotX = beta * 0.4;
+          targetRotY = gamma * 0.4;
+        }
+      }, true);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      targetRotX = (e.clientY - centerY) / 30;
+      targetRotY = -(e.clientX - centerX) / 30;
+    });
+
+    window.addEventListener('mouseleave', () => {
+      targetRotX = 0;
+      targetRotY = 0;
+    });
+
+    const phrases = [
+      "Chào mừng đến với trang thông tin của Triệu ✨",
+      "Gamer • Content Creator • Developer",
+      "Kết nối với mình qua các nền tảng bên dưới nhé! 🚀"
+    ];
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const typewriterEl = document.getElementById('typewriter');
+
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIdx];
+      
+      if (isDeleting) {
+        typewriterEl.textContent = currentPhrase.substring(0, charIdx - 1);
+        charIdx--;
+      } else {
+        typewriterEl.textContent = currentPhrase.substring(0, charIdx + 1);
+        charIdx++;
+      }
+
+      let speed = isDeleting ? 30 : 70;
+
+      if (!isDeleting && charIdx === currentPhrase.length) {
+        speed = 2200;
+        isDeleting = true;
+      } else if (isDeleting && charIdx === 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        speed = 400;
+      }
+
+      setTimeout(typeEffect, speed);
+    }
+    typeEffect();
+
+    let audioContext = null;
+    let isPlaying = false;
+    let timerId = null;
+
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const musicDisc = document.getElementById('music-disc');
+    const visualizer = document.getElementById('visualizer');
+
+    const chillNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playChillSequence() {
+      if (!isPlaying || !audioContext) return;
+      
+      const note = chillNotes[Math.floor(Math.random() * chillNotes.length)];
+      const osc = audioContext.createOscillator();
+      const g = audioContext.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(note, audioContext.currentTime);
+      
+      g.gain.setValueAtTime(0, audioContext.currentTime);
+      g.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
+      g.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.2);
+
+      osc.connect(g);
+      g.connect(audioContext.destination);
+
+      osc.start();
+      osc.stop(audioContext.currentTime + 1.2);
+
+      timerId = setTimeout(playChillSequence, Math.random() * 400 + 400);
+    }
+
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      initAudio();
+
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+
+      isPlaying = !isPlaying;
+
+      if (isPlaying) {
+        musicDisc.classList.add('playing');
+        visualizer.classList.add('playing');
+        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        playChillSequence();
+      } else {
+        musicDisc.classList.remove('playing');
+        visualizer.classList.remove('playing');
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        if (timerId) clearTimeout(timerId);
+      }
+    });
+
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const url = btn.getAttribute('data-url');
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('Đã sao chép liên kết vào bộ nhớ tạm!');
+        }).catch(() => {
+          showToast('Sao chép thất bại, thử lại!');
+        });
+      });
+    });
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
