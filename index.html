@@ -33,6 +33,58 @@
       padding: 24px 16px;
     }
 
+    .entry-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
+    }
+
+    .entry-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .entry-star-icon {
+      width: 24px;
+      height: 24px;
+      color: #f59e0b;
+      animation: spinStar 4s linear infinite;
+    }
+
+    .entry-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      animation: pulseText 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    video::-webkit-media-controls,
+    video::-webkit-media-controls-start-playback-button,
+    video::-webkit-media-controls-play-button,
+    video::-webkit-media-controls-panel {
+      display: none !important;
+      -webkit-appearance: none !important;
+      opacity: 0 !important;
+    }
+
     .bg-video {
       position: fixed;
       top: 50%;
@@ -569,22 +621,23 @@
 </head>
 <body>
 
-  <video id="bg-video" class="bg-video" autoplay loop muted playsinline webkit-playsinline preload="auto">
+  <div id="entry-overlay" class="entry-overlay">
+    <svg class="entry-star-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/>
+    </svg>
+    <span class="entry-text">Click anywhere to enter...</span>
+  </div>
+
+  <audio id="bg-audio" loop preload="auto">
+    <source src="bg.mp3" type="audio/mp3">
+    <source src="https://files.catbox.moe/ng6shs.mp3" type="audio/mp3">
+  </audio>
+
+  <video id="bg-video" class="bg-video" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback>
     <source src="bg.mp4" type="video/mp4">
     <source src="https://files.catbox.moe/eidzkj.mp4" type="video/mp4">
   </video>
   <div class="video-overlay"></div>
-
-  <script>
-    (function() {
-      const v = document.getElementById('bg-video');
-      if (v) {
-        v.defaultMuted = true;
-        v.muted = true;
-        v.play().catch(function() {});
-      }
-    })();
-  </script>
 
   <canvas id="star-canvas"></canvas>
 
@@ -619,7 +672,7 @@
             </svg>
           </div>
           <div class="music-info">
-            <span class="music-title">Chill Vibe Stream</span>
+            <span class="music-title">Custom Soundtrack</span>
             <span class="music-artist">Background Audio</span>
           </div>
           <div class="audio-visualizer" id="visualizer">
@@ -669,7 +722,7 @@
           </div>
         </div>
         <div class="link-actions">
-          <button class="action-btn copy-btn" data-url="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" title="Sao chép link">
+          <button class="action-btn copy-btn" data-url="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" title="Copy">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
@@ -689,11 +742,11 @@
           </div>
           <div class="link-details">
             <span class="link-title">Discord Community</span>
-            <span class="link-sub">Tham gia Server</span>
+            <span class="link-sub">Join Plz</span>
           </div>
         </div>
         <div class="link-actions">
-          <button class="action-btn copy-btn" data-url="https://discord.gg/ZCxWqy6gM" title="Sao chép link">
+          <button class="action-btn copy-btn" data-url="https://discord.gg/ZCxWqy6gM" title="Copy">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
@@ -712,12 +765,12 @@
             </svg>
           </div>
           <div class="link-details">
-            <span class="link-title">Facebook Cá Nhân</span>
-            <span class="link-sub">Kết nối cùng tôi</span>
+            <span class="link-title">Facebook</span>
+            <span class="link-sub">My facebook</span>
           </div>
         </div>
         <div class="link-actions">
-          <button class="action-btn copy-btn" data-url="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" title="Sao chép link">
+          <button class="action-btn copy-btn" data-url="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" title="Copy">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
@@ -734,7 +787,7 @@
       <svg class="star-sparkle" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/>
       </svg>
-      <span>Designed with Gun Style • Smart Clean Crystal</span>
+      <span>@Trieu1082🥀</span>
     </div>
   </div>
 
@@ -742,10 +795,60 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
       <path d="M20 6L9 17l-5-5"/>
     </svg>
-    <span id="toast-msg">Đã sao chép liên kết!</span>
+    <span id="toast-msg">Copy</span>
   </div>
 
   <script>
+    const bgVideo = document.getElementById('bg-video');
+    const bgAudio = document.getElementById('bg-audio');
+    const entryOverlay = document.getElementById('entry-overlay');
+
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const musicDisc = document.getElementById('music-disc');
+    const visualizer = document.getElementById('visualizer');
+
+    let isAudioPlaying = false;
+
+    function playAudio() {
+      if (!bgAudio) return;
+      bgAudio.play().then(() => {
+        isAudioPlaying = true;
+        musicDisc.classList.add('playing');
+        visualizer.classList.add('playing');
+        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+      }).catch(() => {});
+    }
+
+    function pauseAudio() {
+      if (!bgAudio) return;
+      bgAudio.pause();
+      isAudioPlaying = false;
+      musicDisc.classList.remove('playing');
+      visualizer.classList.remove('playing');
+      playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    }
+
+    function handleEnter() {
+      if (bgVideo) {
+        bgVideo.muted = true;
+        bgVideo.play().catch(() => {});
+      }
+      playAudio();
+      entryOverlay.classList.add('hidden');
+    }
+
+    entryOverlay.addEventListener('pointerdown', handleEnter);
+
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isAudioPlaying) {
+        pauseAudio();
+      } else {
+        playAudio();
+      }
+    });
+
     const canvas = document.getElementById('star-canvas');
     const ctx = canvas.getContext('2d');
     let width, height;
@@ -821,7 +924,6 @@
     animateStars();
 
     window.addEventListener('pointerdown', (e) => {
-      startAudioAuto();
       createStarBurst(e.clientX, e.clientY);
     });
 
@@ -896,9 +998,9 @@
     });
 
     const phrases = [
-      "Chào mừng đến với trang thông tin của Triệu ✨",
-      "Gamer • Content Creator • Developer",
-      "Kết nối với mình qua các nền tảng bên dưới nhé! 🚀"
+      "Hi!",
+      "Bo To Lop 9/6",
+      "Dev"
     ];
     let phraseIdx = 0;
     let charIdx = 0;
@@ -931,86 +1033,6 @@
     }
     typeEffect();
 
-    let audioContext = null;
-    let isPlaying = false;
-    let timerId = null;
-
-    const playBtn = document.getElementById('play-btn');
-    const playIcon = document.getElementById('play-icon');
-    const musicDisc = document.getElementById('music-disc');
-    const visualizer = document.getElementById('visualizer');
-
-    const chillNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
-
-    function initAudio() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function playChillSequence() {
-      if (!isPlaying || !audioContext) return;
-      
-      const note = chillNotes[Math.floor(Math.random() * chillNotes.length)];
-      const osc = audioContext.createOscillator();
-      const g = audioContext.createGain();
-      
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(note, audioContext.currentTime);
-      
-      g.gain.setValueAtTime(0, audioContext.currentTime);
-      g.gain.linearRampToValueAtTime(0.08, audioContext.currentTime + 0.1);
-      g.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.2);
-
-      osc.connect(g);
-      g.connect(audioContext.destination);
-
-      osc.start();
-      osc.stop(audioContext.currentTime + 1.2);
-
-      timerId = setTimeout(playChillSequence, Math.random() * 400 + 400);
-    }
-
-    function startAudioAuto() {
-      if (isPlaying) return;
-      initAudio();
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
-      isPlaying = true;
-      musicDisc.classList.add('playing');
-      visualizer.classList.add('playing');
-      playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-      playChillSequence();
-    }
-
-    window.addEventListener('load', () => {
-      startAudioAuto();
-    });
-
-    playBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      initAudio();
-
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
-
-      isPlaying = !isPlaying;
-
-      if (isPlaying) {
-        musicDisc.classList.add('playing');
-        visualizer.classList.add('playing');
-        playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-        playChillSequence();
-      } else {
-        musicDisc.classList.remove('playing');
-        visualizer.classList.remove('playing');
-        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-        if (timerId) clearTimeout(timerId);
-      }
-    });
-
     const copyBtns = document.querySelectorAll('.copy-btn');
     const toast = document.getElementById('toast');
     const toastMsg = document.getElementById('toast-msg');
@@ -1022,9 +1044,9 @@
 
         const url = btn.getAttribute('data-url');
         navigator.clipboard.writeText(url).then(() => {
-          showToast('Đã sao chép liên kết vào bộ nhớ tạm!');
+          showToast('Copy');
         }).catch(() => {
-          showToast('Sao chép thất bại, thử lại!');
+          showToast('Error!');
         });
       });
     });
