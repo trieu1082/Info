@@ -6,7 +6,7 @@
   <title>Trieu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -25,12 +25,12 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #000000;
-      color: #ffffff;
+      background: #05030f;
+      color: #ece9fb;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px 16px;
+      padding: 24px 16px 96px;
     }
 
     @property --ring-angle {
@@ -43,9 +43,7 @@
       position: fixed;
       inset: 0;
       z-index: 99999;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(5, 3, 15, 0.94);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -62,18 +60,18 @@
     }
 
     .entry-star-icon {
-      width: 24px;
-      height: 24px;
-      color: #f59e0b;
+      width: 26px;
+      height: 26px;
+      color: #c4b5fd;
       animation: spinStar 4s linear infinite;
     }
 
     .entry-text {
       font-size: 15px;
       font-weight: 700;
-      color: #ffffff;
+      color: #ece9fb;
       letter-spacing: 0.5px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+      text-shadow: 0 0 14px rgba(196, 181, 253, 0.7);
       animation: pulseText 1.8s ease-in-out infinite;
     }
 
@@ -104,16 +102,69 @@
       object-fit: cover;
       pointer-events: none;
       opacity: 1;
-      filter: none;
-      will-change: transform;
     }
 
     .video-overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0.3) 100%);
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 15%, rgba(124, 58, 237, 0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 55% at 85% 25%, rgba(56, 189, 248, 0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 70% at 50% 95%, rgba(236, 72, 153, 0.16) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(5, 3, 15, 0.45) 0%, rgba(5, 3, 15, 0.18) 45%, rgba(5, 3, 15, 0.55) 100%);
       z-index: 1;
       pointer-events: none;
+    }
+
+    .nebula {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.55;
+      will-change: transform;
+    }
+
+    .nebula-1 {
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, rgba(139, 92, 246, 0.12) 45%, transparent 70%);
+      top: -80px;
+      left: -100px;
+      animation: drift1 24s ease-in-out infinite alternate;
+    }
+
+    .nebula-2 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.36) 0%, rgba(56, 189, 248, 0.1) 45%, transparent 70%);
+      bottom: -60px;
+      right: -90px;
+      animation: drift2 28s ease-in-out infinite alternate;
+    }
+
+    .nebula-3 {
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.28) 0%, rgba(236, 72, 153, 0.08) 45%, transparent 70%);
+      top: 40%;
+      right: -110px;
+      animation: drift3 32s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift1 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(70px, 50px, 0) scale(1.15); }
+    }
+
+    @keyframes drift2 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-60px, -50px, 0) scale(1.1); }
+    }
+
+    @keyframes drift3 {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-50px, 60px, 0) scale(1.2); }
     }
 
     #star-canvas {
@@ -139,24 +190,38 @@
     }
 
     .gun-card {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(16, 12, 38, 0.55);
+      border: 1px solid rgba(200, 190, 255, 0.16);
       border-radius: 32px;
       padding: 28px 24px;
       box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.65),
-        0 8px 20px -6px rgba(0, 0, 0, 0.4),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+        0 25px 50px -12px rgba(0, 0, 0, 0.75),
+        inset 0 1px 0 rgba(220, 210, 255, 0.12);
       position: relative;
-      transition: background 0.2s ease;
       will-change: transform;
       transform-style: preserve-3d;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
 
-    .gun-card:hover {
-      background: rgba(255, 255, 255, 0.28);
+    .glow-behind {
+      position: absolute;
+      inset: -14px;
+      border-radius: 44px;
+      background: radial-gradient(ellipse at 50% 60%,
+        rgba(139, 92, 246, 0.4) 0%,
+        rgba(236, 72, 153, 0.14) 42%,
+        rgba(56, 189, 248, 0.1) 60%,
+        transparent 78%);
+      transform: translateZ(-55px) scale(1.08);
+      pointer-events: none;
+      will-change: opacity;
+      animation: glowBreathe 4.5s ease-in-out infinite;
+    }
+
+    @keyframes glowBreathe {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 0.95; }
     }
 
     .card-shine {
@@ -174,7 +239,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(220, 210, 255, 0.14), transparent);
       transition: 0.5s;
     }
 
@@ -196,38 +261,38 @@
       width: 116px;
       height: 116px;
       margin-bottom: 18px;
-      transform: translateZ(72px);
-      transform-style: preserve-3d;
+      transform: translateZ(50px);
       will-change: transform;
+    }
+
+    .avatar-glow-behind {
+      position: absolute;
+      inset: -18px;
+      border-radius: 50px;
+      background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.26) 0%,
+        rgba(139, 92, 246, 0.38) 36%,
+        rgba(236, 72, 153, 0.16) 56%,
+        transparent 74%);
+      transform: translateZ(-30px);
+      will-change: opacity;
+      animation: glowBreathe 3.5s ease-in-out infinite;
+      pointer-events: none;
     }
 
     .avatar-ring {
       position: absolute;
       inset: -5px;
       border-radius: 40px;
-      background: conic-gradient(from var(--ring-angle), #ffffff, rgba(255, 255, 255, 0.12) 25%, #ffffff 50%, rgba(255, 255, 255, 0.12) 75%, #ffffff);
+      background: conic-gradient(from var(--ring-angle), #ffffff, rgba(255, 255, 255, 0.08) 25%, #ffffff 50%, rgba(255, 255, 255, 0.08) 75%, #ffffff);
       animation: ringSpin 5s linear infinite;
       box-shadow:
-        0 0 14px rgba(255, 255, 255, 0.7),
-        0 0 36px rgba(255, 255, 255, 0.4);
+        0 0 14px rgba(255, 255, 255, 0.5),
+        0 0 36px rgba(139, 92, 246, 0.45);
     }
 
     @keyframes ringSpin {
       to { --ring-angle: 360deg; }
-    }
-
-    .avatar-neon-pulse {
-      position: absolute;
-      inset: -10px;
-      border-radius: 44px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      animation: neonPulse 2.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes neonPulse {
-      0%, 100% { opacity: 0.25; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.04); }
     }
 
     .avatar-img {
@@ -236,15 +301,9 @@
       height: 100%;
       object-fit: cover;
       border-radius: 36px;
-      border: 3px solid #ffffff;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
-      background-color: #f1f5f9;
-      transition: transform 0.3s ease;
-      image-rendering: auto;
-    }
-
-    .avatar-wrapper:hover .avatar-img {
-      transform: scale(1.05);
+      border: 3px solid #0d0a20;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.7);
+      background-color: #171233;
     }
 
     .profile-name {
@@ -256,41 +315,65 @@
       gap: 6px;
       margin-bottom: 4px;
       letter-spacing: -0.5px;
-      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
-      transform: translateZ(48px);
+      text-shadow: 0 2px 16px rgba(139, 92, 246, 0.65);
+      transform: translateZ(32px);
     }
 
     .verified-icon {
       width: 20px;
       height: 20px;
-      color: #38bdf8;
+      color: #7dd3fc;
     }
 
     .profile-tag {
       font-size: 13px;
       font-weight: 700;
-      color: #ffffff;
-      background: rgba(0, 0, 0, 0.35);
+      color: #ddd6fe;
+      background: rgba(139, 92, 246, 0.14);
       padding: 4px 14px;
       border-radius: 20px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       margin-bottom: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-      transform: translateZ(40px);
+      border: 1px solid rgba(196, 181, 253, 0.25);
+      transform: translateZ(26px);
     }
 
     .typewriter-text {
-      font-size: 14px;
-      font-weight: 600;
-      color: #ffffff;
-      min-height: 20px;
+      font-size: 15px;
+      font-weight: 800;
+      min-height: 22px;
       margin-bottom: 16px;
       line-height: 1.5;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
-      transform: translateZ(32px);
+      transform: translateZ(22px);
+      letter-spacing: 0.3px;
+    }
+
+    .tw-words {
+      background: linear-gradient(90deg, #c4b5fd, #7dd3fc, #f0abfc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      text-shadow: 0 0 14px rgba(167, 139, 250, 0.5);
+    }
+
+    .tw-caret {
+      display: inline-block;
+      width: 2px;
+      height: 15px;
+      margin-left: 2px;
+      vertical-align: -2px;
+      background: #c4b5fd;
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(196, 181, 253, 0.9);
+      animation: caretBlink 0.9s ease-in-out infinite;
+    }
+
+    @keyframes caretBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.15; }
     }
 
     .stats-row {
@@ -300,8 +383,8 @@
       gap: 16px;
       width: 100%;
       padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.25);
-      transform: translateZ(28px);
+      border-top: 1px solid rgba(200, 190, 255, 0.14);
+      transform: translateZ(20px);
     }
 
     .stat-item {
@@ -310,46 +393,50 @@
       gap: 6px;
       font-size: 12px;
       font-weight: 800;
-      color: #ffffff;
-      background: rgba(0, 0, 0, 0.35);
+      color: #ddd6fe;
+      background: rgba(139, 92, 246, 0.12);
       padding: 6px 14px;
       border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(196, 181, 253, 0.2);
     }
 
     .stat-icon {
       width: 14px;
       height: 14px;
-      color: #fbbf24;
+      color: #c4b5fd;
     }
 
     .music-player-card {
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 22px;
-      padding: 12px 16px;
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      width: min(420px, calc(100vw - 28px));
+      background: rgba(10, 7, 26, 0.78);
+      border-radius: 20px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      margin-top: 4px;
-      width: 100%;
-      transform: translateZ(52px);
-      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(200, 190, 255, 0.22);
+      box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.75), 0 0 24px rgba(139, 92, 246, 0.25);
     }
 
     .music-disc {
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #0f172a, #334155);
+      background: conic-gradient(from 0deg, #1e1b4b, #4c1d95, #1e1b4b, #312e81, #1e1b4b);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
+      color: #c4b5fd;
       flex-shrink: 0;
+      border: 1px solid rgba(196, 181, 253, 0.35);
       animation: spinDisc 8s linear infinite;
       animation-play-state: paused;
+      will-change: transform;
     }
 
     .music-disc.playing {
@@ -375,12 +462,11 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
     }
 
     .music-artist {
       font-size: 11px;
-      color: #cbd5e1;
+      color: #9d96c8;
       font-weight: 600;
     }
 
@@ -394,19 +480,19 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, #8b5cf6, #d946ef);
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0f172a;
+      color: #ffffff;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
+      transition: transform 0.2s ease;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.55);
     }
 
     .music-btn:active {
       transform: scale(0.9);
-      background: #ffffff;
     }
 
     .audio-visualizer {
@@ -419,10 +505,9 @@
 
     .v-bar {
       width: 3px;
-      background: #38bdf8;
+      background: #c4b5fd;
       border-radius: 2px;
       height: 4px;
-      transition: height 0.2s ease;
     }
 
     .playing .v-bar:nth-child(1) { animation: barPulse 0.6s ease-in-out infinite alternate; }
@@ -444,8 +529,8 @@
     }
 
     .link-card {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(16, 12, 38, 0.55);
+      border: 1px solid rgba(200, 190, 255, 0.16);
       border-radius: 20px;
       padding: 14px 18px;
       display: flex;
@@ -454,9 +539,8 @@
       text-decoration: none;
       color: #ffffff;
       box-shadow:
-        0 18px 35px -10px rgba(0, 0, 0, 0.55),
-        0 6px 14px -4px rgba(0, 0, 0, 0.35);
-      transition: background 0.2s ease;
+        0 18px 35px -10px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 rgba(220, 210, 255, 0.1);
       will-change: transform;
       transform-style: preserve-3d;
       backface-visibility: hidden;
@@ -464,15 +548,33 @@
       position: relative;
     }
 
-    .link-card:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .glow-behind-sm {
+      position: absolute;
+      inset: -10px;
+      border-radius: 28px;
+      transform: translateZ(-45px) scale(1.06);
+      pointer-events: none;
+      will-change: opacity;
+      animation: glowBreathe 4.5s ease-in-out infinite;
+    }
+
+    .glow-tiktok {
+      background: radial-gradient(ellipse at 50% 60%, rgba(56, 189, 248, 0.34) 0%, rgba(236, 72, 153, 0.14) 48%, transparent 74%);
+    }
+
+    .glow-discord {
+      background: radial-gradient(ellipse at 50% 60%, rgba(88, 101, 242, 0.42) 0%, rgba(139, 92, 246, 0.16) 48%, transparent 74%);
+    }
+
+    .glow-facebook {
+      background: radial-gradient(ellipse at 50% 60%, rgba(59, 130, 246, 0.4) 0%, rgba(125, 211, 252, 0.14) 48%, transparent 74%);
     }
 
     .link-left {
       display: flex;
       align-items: center;
       gap: 14px;
-      transform: translateZ(36px);
+      transform: translateZ(26px);
     }
 
     .link-icon-box {
@@ -482,13 +584,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
       flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-
-    .link-card:hover .link-icon-box {
-      transform: scale(1.08);
+      border: 1px solid rgba(200, 190, 255, 0.15);
     }
 
     .icon-tiktok {
@@ -519,61 +617,46 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .link-sub {
       font-size: 12px;
       font-weight: 600;
-      color: #e2e8f0;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+      color: #9d96c8;
     }
 
     .link-actions {
       display: flex;
       align-items: center;
       gap: 6px;
-      transform: translateZ(30px);
+      transform: translateZ(22px);
     }
 
     .action-btn {
       width: 32px;
       height: 32px;
       border-radius: 10px;
-      background: rgba(255, 255, 255, 0.85);
-      border: none;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(196, 181, 253, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #0f172a;
+      color: #ddd6fe;
       cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .action-btn:hover {
-      background: #38bdf8;
-      color: #ffffff;
     }
 
     .arrow-icon {
       width: 16px;
       height: 16px;
-      color: #ffffff;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
-      transition: transform 0.2s ease;
-    }
-
-    .link-card:hover .arrow-icon {
-      transform: translateX(3px);
-      color: #38bdf8;
+      color: #9d96c8;
     }
 
     .footer-text {
       text-align: center;
       font-size: 12px;
       font-weight: 700;
-      color: #ffffff;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+      color: #cfc8f0;
+      text-shadow: 0 1px 10px rgba(139, 92, 246, 0.5);
       margin-top: 8px;
       display: flex;
       align-items: center;
@@ -584,7 +667,7 @@
     .star-sparkle {
       width: 14px;
       height: 14px;
-      color: #f59e0b;
+      color: #c4b5fd;
       animation: spinStar 4s linear infinite;
     }
 
@@ -599,13 +682,14 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(13, 10, 32, 0.95);
       color: #ffffff;
       padding: 10px 20px;
       border-radius: 30px;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 1px solid rgba(196, 181, 253, 0.4);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       z-index: 999;
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -651,25 +735,30 @@
     <span class="entry-text">Click anywhere to enter...</span>
   </div>
 
-  <audio id="bg-audio" loop preload="auto" src="https://files.catbox.moe/ng6shs.mp3">
-    <source src="https://files.catbox.moe/ng6shs.mp3" type="audio/mp3">
-    <source src="bg.mp3" type="audio/mp3">
+  <audio id="bg-audio" loop preload="auto" src="snaptik.vn_7679666520871472405.mp3">
+    <source src="snaptik.vn_7679666520871472405.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/ng6shs.mp3" type="audio/mpeg">
   </audio>
 
-  <video id="bg-video" class="bg-video" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback src="https://files.catbox.moe/eidzkj.mp4">
+  <video id="bg-video" class="bg-video" autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback src="snaptik.vn_7607607974311333142.mp4">
+    <source src="snaptik.vn_7607607974311333142.mp4" type="video/mp4">
     <source src="https://files.catbox.moe/eidzkj.mp4" type="video/mp4">
-    <source src="bg.mp4" type="video/mp4">
   </video>
   <div class="video-overlay"></div>
+
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="nebula nebula-3"></div>
 
   <canvas id="star-canvas"></canvas>
 
   <div class="main-container">
     <div class="gun-card" data-depth="1">
+      <div class="glow-behind"></div>
       <div class="card-shine"></div>
       <div class="profile-header">
         <div class="avatar-wrapper">
-          <div class="avatar-neon-pulse"></div>
+          <div class="avatar-glow-behind"></div>
           <div class="avatar-ring"></div>
           <img class="avatar-img" src="https://i.ibb.co/jkrrqVjM/IMG-8575.png" alt="Trieu Avatar" onerror="this.onerror=null; this.src='https://ibb.co/60WWGvqP';">
         </div>
@@ -688,32 +777,7 @@
           @trieu1082
         </div>
 
-        <div class="typewriter-text" id="typewriter"></div>
-
-        <div class="music-player-card">
-          <div class="music-disc" id="music-disc">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-            </svg>
-          </div>
-          <div class="music-info">
-            <span class="music-title">Custom Soundtrack</span>
-            <span class="music-artist">Background Audio</span>
-          </div>
-          <div class="audio-visualizer" id="visualizer">
-            <div class="v-bar"></div>
-            <div class="v-bar"></div>
-            <div class="v-bar"></div>
-            <div class="v-bar"></div>
-          </div>
-          <div class="music-controls">
-            <button class="music-btn" id="play-btn" title="Phát nhạc">
-              <svg id="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
+        <div class="typewriter-text"><span class="tw-words" id="typewriter"></span><span class="tw-caret"></span></div>
 
         <div class="stats-row">
           <div class="stat-item">
@@ -734,7 +798,8 @@
 
     <div class="links-section">
 
-      <a href="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" target="_blank" class="link-card" data-depth="1.6">
+      <a href="https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy" target="_blank" class="link-card" data-depth="1.35">
+        <div class="glow-behind-sm glow-tiktok"></div>
         <div class="link-left">
           <div class="link-icon-box icon-tiktok">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -758,7 +823,8 @@
         </div>
       </a>
 
-      <a href="https://discord.gg/ZCxWqy6gM" target="_blank" class="link-card" data-depth="1.95">
+      <a href="https://discord.gg/ZCxWqy6gM" target="_blank" class="link-card" data-depth="1.6">
+        <div class="glow-behind-sm glow-discord"></div>
         <div class="link-left">
           <div class="link-icon-box icon-discord">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -782,7 +848,8 @@
         </div>
       </a>
 
-      <a href="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" target="_blank" class="link-card" data-depth="2.3">
+      <a href="https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr" target="_blank" class="link-card" data-depth="1.85">
+        <div class="glow-behind-sm glow-facebook"></div>
         <div class="link-left">
           <div class="link-icon-box icon-facebook">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -816,8 +883,33 @@
     </div>
   </div>
 
+  <div class="music-player-card">
+    <div class="music-disc" id="music-disc">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+    </div>
+    <div class="music-info">
+      <span class="music-title">My Prime Is Coming</span>
+      <span class="music-artist">Background Audio</span>
+    </div>
+    <div class="audio-visualizer" id="visualizer">
+      <div class="v-bar"></div>
+      <div class="v-bar"></div>
+      <div class="v-bar"></div>
+      <div class="v-bar"></div>
+    </div>
+    <div class="music-controls">
+      <button class="music-btn" id="play-btn" title="Phát nhạc">
+        <svg id="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <div class="toast" id="toast">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2.5">
       <path d="M20 6L9 17l-5-5"/>
     </svg>
     <span id="toast-msg">Copy</span>
@@ -877,90 +969,36 @@
     const canvas = document.getElementById('star-canvas');
     const ctx = canvas.getContext('2d', { alpha: true });
     let width, height;
-    let stars = [];
+    const stars = [];
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = Math.floor(window.innerWidth);
+      height = Math.floor(window.innerHeight);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    class Star {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = Math.random() * 2 + 0.5;
-        this.maxOpacity = Math.random() * 0.7 + 0.3;
-        this.opacity = 0;
-        this.speed = Math.random() * 0.02 + 0.005;
-        this.phase = Math.random() * Math.PI * 2;
-        this.color = Math.random() > 0.3 ? '#6366f1' : (Math.random() > 0.5 ? '#f59e0b' : '#38bdf8');
-      }
-
-      update() {
-        this.phase += this.speed;
-        this.opacity = (Math.sin(this.phase) + 1) / 2 * this.maxOpacity;
-        this.y -= 0.15;
-        if (this.y < -10) this.y = height + 10;
-      }
-
-      draw() {
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    function makeStar() {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        s: Math.random() * 2 + 1,
+        m: Math.random() * 0.6 + 0.25,
+        o: 0,
+        sp: Math.random() * 0.02 + 0.005,
+        ph: Math.random() * Math.PI * 2,
+        c: Math.random() > 0.4 ? '#c4b5fd' : (Math.random() > 0.5 ? '#7dd3fc' : '#ffffff')
+      };
     }
 
-    for (let i = 0; i < 40; i++) {
-      stars.push(new Star());
-    }
-
-    function animateStars() {
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < stars.length; i++) {
-        stars[i].update();
-        stars[i].draw();
-      }
-      requestAnimationFrame(animateStars);
-    }
-    animateStars();
-
-    window.addEventListener('pointerdown', (e) => {
-      createStarBurst(e.clientX, e.clientY);
-    });
-
-    function createStarBurst(x, y) {
-      const starCount = 8;
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'click-star';
-
-        const angle = (Math.PI * 2 / starCount) * i + Math.random() * 0.5;
-        const dist = Math.random() * 50 + 25;
-        const dx = Math.cos(angle) * dist + 'px';
-        const dy = Math.sin(angle) * dist + 'px';
-
-        star.style.setProperty('--dx', dx);
-        star.style.setProperty('--dy', dy);
-        star.style.left = x + 'px';
-        star.style.top = y + 'px';
-
-        const size = Math.random() * 10 + 8;
-        const color = ['#f59e0b', '#38bdf8', '#ec4899', '#8b5cf6'][Math.floor(Math.random() * 4)];
-
-        star.innerHTML = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="' + color + '"><path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/></svg>';
-
-        document.body.appendChild(star);
-        setTimeout(() => star.remove(), 800);
-      }
+    for (let i = 0; i < 34; i++) {
+      stars.push(makeStar());
     }
 
     let targetRotX = 0;
@@ -973,39 +1011,70 @@
     const MAX_TILT = 9;
 
     function clampTilt(v) {
-      return Math.max(-MAX_TILT, Math.min(MAX_TILT, v));
+      return v > MAX_TILT ? MAX_TILT : (v < -MAX_TILT ? -MAX_TILT : v);
     }
 
-    function applyTilt() {
-      idlePhase += 0.014;
+    function tick() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < stars.length; i++) {
+        const st = stars[i];
+        st.ph += st.sp;
+        st.o = (Math.sin(st.ph) + 1) * 0.5 * st.m;
+        st.y -= 0.1;
+        if (st.y < -4) st.y = height + 4;
+        ctx.globalAlpha = st.o;
+        ctx.fillStyle = st.c;
+        ctx.fillRect(st.x, st.y, st.s, st.s);
+      }
 
-      const idleX = Math.sin(idlePhase * 0.7) * 1.6;
-      const idleY = Math.cos(idlePhase * 0.5) * 1.9;
+      idlePhase += 0.014;
+      const tx = targetRotX + Math.sin(idlePhase * 0.7) * 1.6;
+      const ty = targetRotY + Math.cos(idlePhase * 0.5) * 1.9;
       const idleZ = Math.sin(idlePhase * 0.9) * 2;
 
-      const tx = targetRotX + idleX;
-      const ty = targetRotY + idleY;
-
-      const dx = tx - curRotX;
-      const dy = ty - curRotY;
-
-      curRotX += dx * 0.07;
-      curRotY += dy * 0.07;
+      curRotX += (tx - curRotX) * 0.085;
+      curRotY += (ty - curRotY) * 0.085;
 
       const rx = clampTilt(curRotX);
       const ry = clampTilt(curRotY);
 
       for (let i = 0; i < tiltCards.length; i++) {
         const depth = parseFloat(tiltCards[i].getAttribute('data-depth')) || 1;
-        const cardRx = (rx * depth).toFixed(2);
-        const cardRy = (ry * depth).toFixed(2);
-        const cardZ = ((depth - 1) * 20 + idleZ * depth).toFixed(1);
-        tiltCards[i].style.transform = 'translateZ(' + cardZ + 'px) rotateX(' + cardRx + 'deg) rotateY(' + cardRy + 'deg)';
+        tiltCards[i].style.transform =
+          'translateZ(' + ((depth - 1) * 30 + idleZ * depth).toFixed(1) + 'px) rotateX(' +
+          (rx * depth).toFixed(2) + 'deg) rotateY(' + (ry * depth).toFixed(2) + 'deg)';
       }
 
-      requestAnimationFrame(applyTilt);
+      requestAnimationFrame(tick);
     }
-    applyTilt();
+    tick();
+
+    window.addEventListener('pointerdown', (e) => {
+      createStarBurst(e.clientX, e.clientY);
+    });
+
+    function createStarBurst(x, y) {
+      const starCount = 6;
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'click-star';
+
+        const angle = (Math.PI * 2 / starCount) * i + Math.random() * 0.5;
+        const dist = Math.random() * 45 + 22;
+        star.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        star.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+
+        const size = Math.random() * 8 + 7;
+        const color = ['#c4b5fd', '#7dd3fc', '#f0abfc', '#ffffff'][i % 4];
+
+        star.innerHTML = '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="' + color + '"><path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/></svg>';
+
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 800);
+      }
+    }
 
     let baseBeta = null;
     let baseGamma = null;
@@ -1017,18 +1086,20 @@
           baseBeta = e.beta;
           baseGamma = e.gamma;
         }
-        const beta = Math.max(-25, Math.min(25, e.beta - baseBeta));
-        const gamma = Math.max(-25, Math.min(25, e.gamma - baseGamma));
-        targetRotX = -beta * 0.65;
-        targetRotY = gamma * 0.65;
+        let beta = e.beta - baseBeta;
+        let gamma = e.gamma - baseGamma;
+        beta = beta > 25 ? 25 : (beta < -25 ? -25 : beta);
+        gamma = gamma > 25 ? 25 : (gamma < -25 ? -25 : gamma);
+        targetRotX = -beta * 0.5;
+        targetRotY = gamma * 0.5;
       }, true);
     }
 
     window.addEventListener('mousemove', (e) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      targetRotX = (e.clientY - centerY) / 22;
-      targetRotY = -(e.clientX - centerX) / 22;
+      targetRotX = (e.clientY - centerY) / 26;
+      targetRotY = -(e.clientX - centerX) / 26;
     });
 
     window.addEventListener('mouseleave', () => {
@@ -1038,13 +1109,21 @@
 
     const phrases = [
       "Hi!",
-      "Bo To Lop 9/6",
-      "Dev"
+      "My name is PMT",
+      "I Have A Wish . . .",
+      "MY PRIME IS COMING"
+    ];
+    const phraseGradients = [
+      'linear-gradient(90deg, #7dd3fc, #c4b5fd)',
+      'linear-gradient(90deg, #c4b5fd, #f0abfc)',
+      'linear-gradient(90deg, #fbbf24, #f0abfc, #c4b5fd)',
+      'linear-gradient(90deg, #f0abfc, #7dd3fc)'
     ];
     let phraseIdx = 0;
     let charIdx = 0;
     let isDeleting = false;
     const typewriterEl = document.getElementById('typewriter');
+    typewriterEl.style.background = phraseGradients[0];
 
     function typeEffect() {
       const currentPhrase = phrases[phraseIdx];
@@ -1057,15 +1136,18 @@
         charIdx++;
       }
 
-      let speed = isDeleting ? 30 : 70;
+      let speed = isDeleting ? 26 : 55;
 
       if (!isDeleting && charIdx === currentPhrase.length) {
-        speed = 2200;
+        speed = 2000;
         isDeleting = true;
       } else if (isDeleting && charIdx === 0) {
         isDeleting = false;
         phraseIdx = (phraseIdx + 1) % phrases.length;
-        speed = 400;
+        typewriterEl.style.background = phraseGradients[phraseIdx];
+        typewriterEl.style.webkitBackgroundClip = 'text';
+        typewriterEl.style.backgroundClip = 'text';
+        speed = 350;
       }
 
       setTimeout(typeEffect, speed);
@@ -1075,6 +1157,7 @@
     const copyBtns = document.querySelectorAll('.copy-btn');
     const toast = document.getElementById('toast');
     const toastMsg = document.getElementById('toast-msg');
+    let toastTimer = null;
 
     copyBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1093,10 +1176,11 @@
     function showToast(msg) {
       toastMsg.textContent = msg;
       toast.classList.add('show');
-      setTimeout(() => {
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
         toast.classList.remove('show');
       }, 2500);
     }
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a444fca13a117e2e',t:'MTc5MDk1NzUyNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
