@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trieu Bio Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #08090f;
+      color: #e8eaf2;
+      min-height: 100vh;
+      padding: 22px 14px 70px;
+      overflow-x: hidden;
+      max-width: 100vw;
+      touch-action: manipulation;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 90% 10%, rgba(56, 189, 248, 0.09) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    .ed-wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    @media (min-width: 980px) {
+      .ed-wrap { grid-template-columns: 500px 1fr; align-items: start; }
+      .ed-preview { position: sticky; top: 20px; }
+    }
+
+    .ed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .ed-logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #c4b5fd, #7dd3fc, #f0abfc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ed-logo-sub {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b6890;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      -webkit-text-fill-color: #6b6890;
+    }
+
+    .ed-actions { display: flex; gap: 10px; }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-export {
+      background: linear-gradient(135deg, #8b5cf6, #d946ef);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.45);
+    }
+
+    .btn-export:hover { box-shadow: 0 10px 30px rgba(139, 92, 246, 0.6); }
+
+    .btn-copy {
+      background: rgba(139, 92, 246, 0.12);
+      color: #c4b5fd;
+      border: 1px solid rgba(196, 181, 253, 0.3);
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .panel-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #d8d3f6;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(180deg, #8b5cf6, #d946ef);
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+    }
+
+    .field { margin-bottom: 12px; }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #8f8ab5;
+      margin-bottom: 6px;
+    }
+
+    .field input[type="text"],
+    .field textarea,
+    .field select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 11px 13px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .field select {
+      background-image: linear-gradient(45deg, transparent 50%, #8f8ab5 50%), linear-gradient(135deg, #8f8ab5 50%, transparent 50%);
+      background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%;
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    .field textarea { resize: vertical; min-height: 76px; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .color-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .color-item { text-align: center; }
+
+    .color-item span {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #8f8ab5;
+      margin-top: 5px;
+      letter-spacing: 0.4px;
+    }
+
+    input[type="color"] {
+      width: 100%;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .range-row { display: flex; align-items: center; gap: 10px; }
+
+    input[type="range"] {
+      flex: 1;
+      accent-color: #8b5cf6;
+      height: 26px;
+    }
+
+    .range-val {
+      font-size: 12px;
+      font-weight: 800;
+      color: #c4b5fd;
+      min-width: 38px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .toggle-row:last-of-type { border-bottom: none; }
+
+    .toggle-row span { font-size: 13px; font-weight: 700; color: #d8d3f6; }
+
+    .switch {
+      position: relative;
+      width: 46px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+      padding: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      outline: none;
+    }
+
+    .switch.on {
+      background: linear-gradient(90deg, #8b5cf6, #d946ef);
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
+    }
+
+    .switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #ffffff;
+      border-radius: 50%;
+      transition: left 0.2s ease;
+    }
+
+    .switch.on::after { left: 23px; }
+
+    .link-row {
+      background: rgba(0, 0, 0, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .link-row-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .link-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: #7dd3fc;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .link-del {
+      border: none;
+      background: rgba(239, 68, 68, 0.14);
+      color: #f87171;
+      border-radius: 9px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-add-link {
+      width: 100%;
+      border: 1px dashed rgba(196, 181, 253, 0.4);
+      background: transparent;
+      color: #c4b5fd;
+      border-radius: 14px;
+      padding: 11px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-add-link:hover { background: rgba(139, 92, 246, 0.1); }
+
+    .ed-preview-frame {
+      width: 100%;
+      max-width: 420px;
+      height: 78vh;
+      min-height: 540px;
+      margin: 0 auto;
+      display: block;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 28px;
+      background: #000;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.15);
+    }
+
+    .ed-note {
+      font-size: 12px;
+      color: #8f8ab5;
+      text-align: center;
+      margin-top: 12px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.35); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="ed-wrap">
+    <div class="ed-controls">
+      <div class="ed-header">
+        <div>
+          <div class="ed-logo">TRIEU BIO BUILDER</div>
+          <span class="ed-logo-sub">Config once, export forever</span>
+        </div>
+        <div class="ed-actions">
+          <button class="btn btn-copy" id="btn-copy">Copy code</button>
+          <button class="btn btn-export" id="btn-export">Xuất HTML</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Hồ sơ</div>
+        <div class="row2">
+          <div class="field"><label>Tên hiển thị</label><input type="text" data-bind="name"></div>
+          <div class="field"><label>Tag</label><input type="text" data-bind="tag"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Footer</label><input type="text" data-bind="footer"></div>
+          <div class="field"><label>Lượt xem</label><input type="text" data-bind="views"></div>
+        </div>
+        <div class="field"><label>Tên bài nhạc hiển thị</label><input type="text" data-bind="musicTitle"></div>
+        <div class="field"><label>Avatar URL</label><input type="text" data-bind="avatar"></div>
+        <div class="field"><label>Avatar dự phòng</label><input type="text" data-bind="avatarFallback"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Nhạc & video nền</div>
+        <div class="field"><label>Link nhạc (.mp3)</label><input type="text" data-bind="music"></div>
+        <div class="field"><label>Link video (.mp4)</label><input type="text" data-bind="video"></div>
+        <div class="ed-note">Mẹo: up file vào repo GitHub rồi ghi tên file (vd: bg.mp3) để link bền vĩnh viễn.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Chữ gõ</div>
+        <div class="field"><label>Mỗi dòng một câu</label><textarea data-bind="phrases" rows="4"></textarea></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Hiệu ứng</div>
+        <div class="row2">
+          <div class="field">
+            <label>Hiệu ứng chạm</label>
+            <select data-bind="fx.click">
+              <option value="stars">Sao tỏa</option>
+              <option value="ripple">Sóng tròn</option>
+              <option value="rings">3 vòng sóng</option>
+              <option value="pixel">Pixel vỡ</option>
+              <option value="dots">Chấm sáng</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Hiệu ứng chữ gõ</label>
+            <select data-bind="fx.text">
+              <option value="type">Máy chữ</option>
+              <option value="pixel">Pixel</option>
+              <option value="glitch">Nhiễu loạn</option>
+              <option value="wave">Sóng chữ</option>
+              <option value="fade">Mờ dần</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Hiệu ứng nền</label>
+            <select data-bind="fx.bg">
+              <option value="galaxy">Thiên hà</option>
+              <option value="crt">TV xua</option>
+              <option value="grid">Lưới retro</option>
+              <option value="aurora">Cực quang</option>
+              <option value="matrix">Mưa mã</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Hiệu ứng xuất hiện</label>
+            <select data-bind="fx.enter">
+              <option value="fadeup">Trồi lên</option>
+              <option value="blurin">Mờ rõ dần</option>
+              <option value="glitchin">Nhiễu cắt</option>
+              <option value="pop">Phóng to</option>
+              <option value="slide">Trượt ngang</option>
+            </select>
+          </div>
+        </div>
+        <div class="toggle-row"><span>Gyro (nghiêng máy)</span><button type="button" class="switch" data-toggle="gyro"></button></div>
+        <div class="toggle-row"><span>Tự lắc nhẹ</span><button type="button" class="switch" data-toggle="sway"></button></div>
+        <div class="field" style="margin-top:10px">
+          <label>Số lượng sao (nền thiên hà)</label>
+          <div class="range-row">
+            <input type="range" min="10" max="80" data-bind="fx.stars">
+            <span class="range-val" id="stars-val">34</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Màu sắc</div>
+        <div class="color-row">
+          <div class="color-item"><input type="color" data-bind="colors.a1"><span>Nhan 1</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.a2"><span>Nhan 2</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.a3"><span>Nhan 3</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.name"><span>Ten</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.text"><span>Chu</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.sub"><span>Chữ mờ</span></div>
+          <div class="color-item"><input type="color" data-bind="colors.bg"><span>Nen</span></div>
+          <div class="color-item"><input type="color" data-bind="glassColor"><span>Kinh</span></div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Độ mờ kính</label>
+          <div class="range-row">
+            <input type="range" min="10" max="95" data-bind="glassOpacity">
+            <span class="range-val" id="glass-val">55%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Link mạng xã hội</div>
+        <div id="links-box"></div>
+        <button class="btn-add-link" id="btn-add-link">+ Thêm link</button>
+      </div>
+    </div>
+
+    <div class="ed-preview">
+      <iframe class="ed-preview-frame" id="preview" title="preview"></iframe>
+      <div class="ed-note">Preview trực tiếp: chỉnh bên trái là thấy bên phải.<br>Bấm "Xuất HTML" để tải file index.html hoàn chỉnh, up lên GitHub là chạy.</div>
+    </div>
+  </div>
+
+  <script>
+    const TEMPLATE = "<!DOCTYPE html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n  <title>Trieu</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">\n  <style>\n    *, *::before, *::after {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n      user-select: none;\n      -webkit-user-select: none;\n    }\n\n    :root {\n      --a1: #c4b5fd;\n      --a2: #7dd3fc;\n      --a3: #f0abfc;\n      --bg: #05030f;\n      --glass: rgba(16, 12, 38, 0.55);\n      --name: #ffffff;\n      --text: #ece9fb;\n      --sub: #9d96c8;\n    }\n\n    html, body {\n      width: 100%;\n      min-height: 100vh;\n      max-width: 100vw;\n      overflow-x: hidden;\n      position: relative;\n      touch-action: manipulation;\n      -webkit-tap-highlight-color: transparent;\n      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      padding: 24px 16px 96px;\n    }\n\n    @property --ring-angle {\n      syntax: '<angle>';\n      initial-value: 0deg;\n      inherits: false;\n    }\n\n    .entry-overlay {\n      position: fixed;\n      inset: 0;\n      z-index: 99999;\n      background: rgba(0, 0, 0, 0.94);\n      display: flex;\n      flex-direction: column;\n      justify-content: center;\n      align-items: center;\n      gap: 12px;\n      cursor: pointer;\n      transition: opacity 0.5s ease, visibility 0.5s ease;\n    }\n\n    .entry-overlay.hidden {\n      opacity: 0;\n      visibility: hidden;\n      pointer-events: none;\n    }\n\n    .entry-star-icon {\n      width: 26px;\n      height: 26px;\n      color: var(--a1);\n      animation: spinStar 4s linear infinite;\n    }\n\n    .entry-text {\n      font-size: 15px;\n      font-weight: 700;\n      color: var(--text);\n      letter-spacing: 0.5px;\n      animation: pulseText 1.8s ease-in-out infinite;\n    }\n\n    @keyframes pulseText {\n      0%, 100% { opacity: 0.6; }\n      50% { opacity: 1; }\n    }\n\n    video::-webkit-media-controls,\n    video::-webkit-media-controls-start-playback-button,\n    video::-webkit-media-controls-play-button,\n    video::-webkit-media-controls-panel {\n      display: none !important;\n      -webkit-appearance: none !important;\n      opacity: 0 !important;\n    }\n\n    .bg-video {\n      position: fixed;\n      top: 50%;\n      left: 50%;\n      min-width: 100%;\n      min-height: 100%;\n      width: auto;\n      height: auto;\n      z-index: 0;\n      transform: translate(-50%, -50%);\n      object-fit: cover;\n      pointer-events: none;\n      opacity: 1;\n    }\n\n    .video-overlay {\n      position: fixed;\n      inset: 0;\n      background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 45%, transparent) 0%, color-mix(in srgb, var(--bg) 18%, transparent) 45%, color-mix(in srgb, var(--bg) 55%, transparent) 100%);\n      z-index: 1;\n      pointer-events: none;\n    }\n\n    .fx-layer {\n      position: fixed;\n      inset: 0;\n      pointer-events: none;\n      z-index: 2;\n      display: none;\n      overflow: hidden;\n    }\n\n    body.bg-crt .fx-crt { display: block; }\n    body.bg-grid .fx-grid { display: block; }\n    body.bg-aurora .fx-aurora { display: block; }\n\n    .fx-crt {\n      background:\n        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0 1px, transparent 1px 3px),\n        radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.55) 100%);\n      animation: crtFlicker 3.5s steps(50) infinite;\n    }\n\n    .fx-crt::after {\n      content: '';\n      position: absolute;\n      left: 0;\n      right: 0;\n      height: 90px;\n      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent);\n      animation: scanMove 5s linear infinite;\n    }\n\n    @keyframes crtFlicker {\n      0%, 100% { opacity: 0.9; }\n      48% { opacity: 0.78; }\n      52% { opacity: 0.92; }\n      70% { opacity: 0.8; }\n    }\n\n    @keyframes scanMove {\n      0% { top: -25%; }\n      100% { top: 125%; }\n    }\n\n    .fx-grid::before {\n      content: '';\n      position: absolute;\n      left: -60%;\n      right: -60%;\n      bottom: -45%;\n      height: 90%;\n      background:\n        repeating-linear-gradient(90deg, color-mix(in srgb, var(--a1) 30%, transparent) 0 2px, transparent 2px 52px),\n        repeating-linear-gradient(0deg, color-mix(in srgb, var(--a1) 30%, transparent) 0 2px, transparent 2px 52px);\n      transform: rotateX(62deg);\n      animation: gridMove 1.4s linear infinite;\n    }\n\n    .fx-grid::after {\n      content: '';\n      position: absolute;\n      left: 0;\n      right: 0;\n      bottom: 42%;\n      height: 26%;\n      background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--a3) 22%, transparent), transparent);\n    }\n\n    @keyframes gridMove {\n      from { background-position: 0 0, 0 0; }\n      to { background-position: 0 0, 0 52px; }\n    }\n\n    .fx-aurora {\n      background: linear-gradient(120deg, var(--a1), var(--a2), var(--a3), var(--a1));\n      background-size: 300% 300%;\n      opacity: 0.22;\n      animation: auroraMove 14s ease infinite;\n    }\n\n    @keyframes auroraMove {\n      0%, 100% { background-position: 0% 50%; }\n      50% { background-position: 100% 50%; }\n    }\n\n    .nebula {\n      position: fixed;\n      border-radius: 50%;\n      pointer-events: none;\n      z-index: 1;\n      opacity: 0.55;\n      will-change: transform;\n      display: none;\n    }\n\n    body.bg-galaxy .nebula { display: block; }\n\n    .nebula-1 {\n      width: 340px;\n      height: 340px;\n      background: radial-gradient(circle, color-mix(in srgb, var(--a1) 50%, transparent) 0%, color-mix(in srgb, var(--a1) 12%, transparent) 45%, transparent 70%);\n      top: -80px;\n      left: -100px;\n      animation: drift1 24s ease-in-out infinite alternate;\n    }\n\n    .nebula-2 {\n      width: 300px;\n      height: 300px;\n      background: radial-gradient(circle, color-mix(in srgb, var(--a2) 36%, transparent) 0%, color-mix(in srgb, var(--a2) 10%, transparent) 45%, transparent 70%);\n      bottom: -60px;\n      right: -90px;\n      animation: drift2 28s ease-in-out infinite alternate;\n    }\n\n    .nebula-3 {\n      width: 260px;\n      height: 260px;\n      background: radial-gradient(circle, color-mix(in srgb, var(--a3) 28%, transparent) 0%, color-mix(in srgb, var(--a3) 8%, transparent) 45%, transparent 70%);\n      top: 40%;\n      right: -110px;\n      animation: drift3 32s ease-in-out infinite alternate;\n    }\n\n    @keyframes drift1 {\n      0% { transform: translate3d(0, 0, 0) scale(1); }\n      100% { transform: translate3d(70px, 50px, 0) scale(1.15); }\n    }\n\n    @keyframes drift2 {\n      0% { transform: translate3d(0, 0, 0) scale(1); }\n      100% { transform: translate3d(-60px, -50px, 0) scale(1.1); }\n    }\n\n    @keyframes drift3 {\n      0% { transform: translate3d(0, 0, 0) scale(1); }\n      100% { transform: translate3d(-50px, 60px, 0) scale(1.2); }\n    }\n\n    #star-canvas {\n      position: fixed;\n      top: 0;\n      left: 0;\n      width: 100%;\n      height: 100%;\n      pointer-events: none;\n      z-index: 2;\n    }\n\n    .main-container {\n      position: relative;\n      z-index: 10;\n      width: 100%;\n      max-width: 440px;\n      margin: 0 auto;\n      display: flex;\n      flex-direction: column;\n      gap: 18px;\n      perspective: 1700px;\n    }\n\n    body.enter-fadeup .main-container { animation: ctUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }\n    body.enter-pop .main-container { animation: ctPop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }\n    body.enter-slide .main-container { animation: ctSlide 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }\n\n    @keyframes ctUp {\n      from { opacity: 0; transform: translateY(26px); }\n      to { opacity: 1; transform: translateY(0); }\n    }\n\n    @keyframes ctPop {\n      from { opacity: 0; transform: scale(0.92); }\n      to { opacity: 1; transform: scale(1); }\n    }\n\n    @keyframes ctSlide {\n      from { opacity: 0; transform: translateX(-30px); }\n      to { opacity: 1; transform: translateX(0); }\n    }\n\n    .enter-item { animation: itFade 0.7s ease both; }\n    body.enter-blurin .enter-item { animation: itBlur 0.8s ease both; }\n    body.enter-glitchin .enter-item { animation: itGlitch 0.7s steps(8) both; }\n\n    @keyframes itFade {\n      from { opacity: 0; }\n      to { opacity: 1; }\n    }\n\n    @keyframes itBlur {\n      from { opacity: 0; filter: blur(10px); }\n      to { opacity: 1; filter: blur(0); }\n    }\n\n    @keyframes itGlitch {\n      0% { opacity: 0; clip-path: inset(40% 0 40% 0); }\n      25% { opacity: 1; clip-path: inset(10% 0 60% 0); }\n      50% { clip-path: inset(50% 0 10% 0); }\n      75% { clip-path: inset(20% 0 30% 0); }\n      100% { opacity: 1; clip-path: inset(0 0 0 0); }\n    }\n\n    .gun-card {\n      background: var(--glass);\n      border: 1px solid color-mix(in srgb, var(--a1) 16%, transparent);\n      border-radius: 32px;\n      padding: 28px 24px;\n      box-shadow:\n        0 25px 50px -12px rgba(0, 0, 0, 0.75),\n        inset 0 1px 0 color-mix(in srgb, var(--a1) 12%, transparent);\n      position: relative;\n      will-change: transform;\n      transform-style: preserve-3d;\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n    }\n\n    .glow-behind {\n      position: absolute;\n      inset: -14px;\n      border-radius: 44px;\n      background: radial-gradient(ellipse at 50% 60%,\n        color-mix(in srgb, var(--a1) 40%, transparent) 0%,\n        color-mix(in srgb, var(--a3) 14%, transparent) 42%,\n        color-mix(in srgb, var(--a2) 10%, transparent) 60%,\n        transparent 78%);\n      transform: translateZ(-55px) scale(1.08);\n      pointer-events: none;\n      will-change: opacity;\n      animation: glowBreathe 4.5s ease-in-out infinite;\n    }\n\n    @keyframes glowBreathe {\n      0%, 100% { opacity: 0.55; }\n      50% { opacity: 0.95; }\n    }\n\n    .card-shine {\n      position: absolute;\n      inset: 0;\n      border-radius: inherit;\n      overflow: hidden;\n      pointer-events: none;\n    }\n\n    .card-shine::before {\n      content: '';\n      position: absolute;\n      top: 0;\n      left: -100%;\n      width: 100%;\n      height: 100%;\n      background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--a1) 14%, transparent), transparent);\n      transition: 0.5s;\n    }\n\n    .gun-card:hover .card-shine::before {\n      left: 100%;\n    }\n\n    .profile-header {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      text-align: center;\n      position: relative;\n      transform-style: preserve-3d;\n    }\n\n    .avatar-wrapper {\n      position: relative;\n      width: 116px;\n      height: 116px;\n      margin-bottom: 18px;\n      transform: translateZ(50px);\n      will-change: transform;\n    }\n\n    .avatar-glow-behind {\n      position: absolute;\n      inset: -18px;\n      border-radius: 50px;\n      background: radial-gradient(circle,\n        color-mix(in srgb, var(--name) 26%, transparent) 0%,\n        color-mix(in srgb, var(--a1) 38%, transparent) 36%,\n        color-mix(in srgb, var(--a3) 16%, transparent) 56%,\n        transparent 74%);\n      transform: translateZ(-30px);\n      will-change: opacity;\n      animation: glowBreathe 3.5s ease-in-out infinite;\n      pointer-events: none;\n    }\n\n    .avatar-ring {\n      position: absolute;\n      inset: -5px;\n      border-radius: 40px;\n      background: conic-gradient(from var(--ring-angle), var(--name), color-mix(in srgb, var(--name) 8%, transparent) 25%, var(--name) 50%, color-mix(in srgb, var(--name) 8%, transparent) 75%, var(--name));\n      animation: ringSpin 5s linear infinite;\n      box-shadow:\n        0 0 14px color-mix(in srgb, var(--name) 50%, transparent),\n        0 0 36px color-mix(in srgb, var(--a1) 45%, transparent);\n    }\n\n    @keyframes ringSpin {\n      to { --ring-angle: 360deg; }\n    }\n\n    .avatar-img {\n      position: relative;\n      width: 100%;\n      height: 100%;\n      object-fit: cover;\n      border-radius: 36px;\n      border: 3px solid var(--bg);\n      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.7);\n      background-color: #171233;\n    }\n\n    .profile-name {\n      font-size: 24px;\n      font-weight: 800;\n      color: var(--name);\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      margin-bottom: 4px;\n      letter-spacing: -0.5px;\n      text-shadow: 0 2px 16px color-mix(in srgb, var(--a1) 65%, transparent);\n      transform: translateZ(32px);\n    }\n\n    .verified-icon {\n      width: 20px;\n      height: 20px;\n      color: var(--a2);\n    }\n\n    .profile-tag {\n      font-size: 13px;\n      font-weight: 700;\n      color: var(--text);\n      background: color-mix(in srgb, var(--a1) 14%, transparent);\n      padding: 4px 14px;\n      border-radius: 20px;\n      display: inline-flex;\n      align-items: center;\n      gap: 6px;\n      margin-bottom: 12px;\n      border: 1px solid color-mix(in srgb, var(--a1) 25%, transparent);\n      transform: translateZ(26px);\n    }\n\n    .typewriter-text {\n      font-size: 15px;\n      font-weight: 800;\n      min-height: 22px;\n      margin-bottom: 16px;\n      line-height: 1.5;\n      transform: translateZ(22px);\n      letter-spacing: 0.3px;\n    }\n\n    .tw-words {\n      background: linear-gradient(90deg, var(--a1), var(--a2), var(--a3));\n      -webkit-background-clip: text;\n      background-clip: text;\n      -webkit-text-fill-color: transparent;\n      color: transparent;\n      text-shadow: 0 0 14px color-mix(in srgb, var(--a1) 50%, transparent);\n    }\n\n    .tw-words .px-in {\n      display: inline-block;\n      animation: pxIn 0.22s steps(3) both;\n    }\n\n    @keyframes pxIn {\n      from { opacity: 0; transform: scale(1.9); }\n      to { opacity: 1; transform: scale(1); }\n    }\n\n    .tw-words .wv-in {\n      display: inline-block;\n      animation: wvIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;\n    }\n\n    @keyframes wvIn {\n      from { opacity: 0; transform: translateY(10px) scale(0.7); }\n      60% { opacity: 1; transform: translateY(-3px) scale(1.08); }\n      to { opacity: 1; transform: translateY(0) scale(1); }\n    }\n\n    .tw-words.fade-mode {\n      transition: opacity 0.45s ease, filter 0.45s ease;\n    }\n\n    .tw-words.fade-mode.out {\n      opacity: 0;\n      filter: blur(6px);\n    }\n\n    .tw-caret {\n      display: inline-block;\n      width: 2px;\n      height: 15px;\n      margin-left: 2px;\n      vertical-align: -2px;\n      background: var(--a1);\n      border-radius: 2px;\n      box-shadow: 0 0 8px var(--a1);\n      animation: caretBlink 0.9s ease-in-out infinite;\n    }\n\n    body.fxtext-wave .tw-caret,\n    body.fxtext-fade .tw-caret {\n      display: none;\n    }\n\n    @keyframes caretBlink {\n      0%, 100% { opacity: 1; }\n      50% { opacity: 0.15; }\n    }\n\n    .stats-row {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      gap: 16px;\n      width: 100%;\n      padding-top: 16px;\n      border-top: 1px solid color-mix(in srgb, var(--a1) 14%, transparent);\n      transform: translateZ(20px);\n    }\n\n    .stat-item {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 12px;\n      font-weight: 800;\n      color: var(--text);\n      background: color-mix(in srgb, var(--a1) 12%, transparent);\n      padding: 6px 14px;\n      border-radius: 14px;\n      border: 1px solid color-mix(in srgb, var(--a1) 20%, transparent);\n    }\n\n    .stat-icon {\n      width: 14px;\n      height: 14px;\n      color: var(--a1);\n    }\n\n    .music-player-card {\n      position: fixed;\n      bottom: 16px;\n      left: 50%;\n      transform: translateX(-50%);\n      z-index: 60;\n      width: min(420px, calc(100vw - 28px));\n      background: color-mix(in srgb, var(--bg) 78%, transparent);\n      border-radius: 20px;\n      padding: 10px 16px;\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      border: 1px solid color-mix(in srgb, var(--a1) 22%, transparent);\n      box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.75), 0 0 24px color-mix(in srgb, var(--a1) 25%, transparent);\n    }\n\n    .music-disc {\n      width: 38px;\n      height: 38px;\n      border-radius: 50%;\n      background: conic-gradient(from 0deg, var(--bg), color-mix(in srgb, var(--a1) 55%, var(--bg)), var(--bg), color-mix(in srgb, var(--a2) 40%, var(--bg)), var(--bg));\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: var(--a1);\n      flex-shrink: 0;\n      border: 1px solid color-mix(in srgb, var(--a1) 35%, transparent);\n      animation: spinDisc 8s linear infinite;\n      animation-play-state: paused;\n      will-change: transform;\n    }\n\n    .music-disc.playing {\n      animation-play-state: running;\n    }\n\n    @keyframes spinDisc {\n      100% { transform: rotate(360deg); }\n    }\n\n    .music-info {\n      flex: 1;\n      overflow: hidden;\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n    }\n\n    .music-title {\n      font-size: 13px;\n      font-weight: 700;\n      color: var(--name);\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n\n    .music-artist {\n      font-size: 11px;\n      color: var(--sub);\n      font-weight: 600;\n    }\n\n    .music-controls {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .music-btn {\n      width: 32px;\n      height: 32px;\n      border-radius: 50%;\n      background: linear-gradient(135deg, var(--a1), var(--a3));\n      border: none;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: #0b0716;\n      cursor: pointer;\n      transition: transform 0.2s ease;\n      box-shadow: 0 0 16px color-mix(in srgb, var(--a1) 55%, transparent);\n    }\n\n    .music-btn:active {\n      transform: scale(0.9);\n    }\n\n    .audio-visualizer {\n      display: flex;\n      align-items: flex-end;\n      gap: 2px;\n      height: 14px;\n      padding: 0 4px;\n    }\n\n    .v-bar {\n      width: 3px;\n      background: var(--a1);\n      border-radius: 2px;\n      height: 4px;\n    }\n\n    .playing .v-bar:nth-child(1) { animation: barPulse 0.6s ease-in-out infinite alternate; }\n    .playing .v-bar:nth-child(2) { animation: barPulse 0.8s ease-in-out infinite alternate 0.2s; }\n    .playing .v-bar:nth-child(3) { animation: barPulse 0.5s ease-in-out infinite alternate 0.4s; }\n    .playing .v-bar:nth-child(4) { animation: barPulse 0.7s ease-in-out infinite alternate 0.1s; }\n\n    @keyframes barPulse {\n      0% { height: 3px; }\n      100% { height: 14px; }\n    }\n\n    .links-section {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n      width: 100%;\n      transform-style: preserve-3d;\n    }\n\n    .link-card {\n      background: var(--glass);\n      border: 1px solid color-mix(in srgb, var(--a1) 16%, transparent);\n      border-radius: 20px;\n      padding: 14px 18px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      text-decoration: none;\n      color: var(--name);\n      box-shadow:\n        0 18px 35px -10px rgba(0, 0, 0, 0.65),\n        inset 0 1px 0 color-mix(in srgb, var(--a1) 10%, transparent);\n      will-change: transform;\n      transform-style: preserve-3d;\n      backface-visibility: hidden;\n      -webkit-backface-visibility: hidden;\n      position: relative;\n    }\n\n    .glow-behind-sm {\n      position: absolute;\n      inset: -10px;\n      border-radius: 28px;\n      transform: translateZ(-45px) scale(1.06);\n      pointer-events: none;\n      will-change: opacity;\n      animation: glowBreathe 4.5s ease-in-out infinite;\n      background: radial-gradient(ellipse at 50% 60%, var(--lc, rgba(139, 92, 246, 0.4)) 0%, transparent 74%);\n    }\n\n    .link-left {\n      display: flex;\n      align-items: center;\n      gap: 14px;\n      transform: translateZ(26px);\n    }\n\n    .link-icon-box {\n      width: 44px;\n      height: 44px;\n      border-radius: 14px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      box-shadow: 0 6px 16px rgba(0,0,0,0.5);\n      flex-shrink: 0;\n      border: 1px solid color-mix(in srgb, var(--a1) 15%, transparent);\n      background: var(--ic, #8b5cf6);\n      color: #ffffff;\n    }\n\n    .link-details {\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n    }\n\n    .link-title {\n      font-size: 15px;\n      font-weight: 800;\n      color: var(--name);\n    }\n\n    .link-sub {\n      font-size: 12px;\n      font-weight: 600;\n      color: var(--sub);\n    }\n\n    .link-actions {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      transform: translateZ(22px);\n    }\n\n    .action-btn {\n      width: 32px;\n      height: 32px;\n      border-radius: 10px;\n      background: color-mix(in srgb, var(--a1) 15%, transparent);\n      border: 1px solid color-mix(in srgb, var(--a1) 25%, transparent);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: var(--text);\n      cursor: pointer;\n    }\n\n    .arrow-icon {\n      width: 16px;\n      height: 16px;\n      color: var(--sub);\n    }\n\n    .footer-text {\n      text-align: center;\n      font-size: 12px;\n      font-weight: 700;\n      color: var(--text);\n      text-shadow: 0 1px 10px color-mix(in srgb, var(--a1) 50%, transparent);\n      margin-top: 8px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 6px;\n    }\n\n    .star-sparkle {\n      width: 14px;\n      height: 14px;\n      color: var(--a1);\n      animation: spinStar 4s linear infinite;\n    }\n\n    @keyframes spinStar {\n      0% { transform: rotate(0deg) scale(1); }\n      50% { transform: rotate(180deg) scale(1.2); }\n      100% { transform: rotate(360deg) scale(1); }\n    }\n\n    .toast {\n      position: fixed;\n      bottom: 84px;\n      left: 50%;\n      transform: translateX(-50%) translateY(60px);\n      background: color-mix(in srgb, var(--bg) 95%, transparent);\n      color: var(--name);\n      padding: 10px 20px;\n      border-radius: 30px;\n      font-size: 13px;\n      font-weight: 600;\n      border: 1px solid color-mix(in srgb, var(--a1) 40%, transparent);\n      box-shadow: 0 10px 25px rgba(0,0,0,0.5);\n      z-index: 999;\n      opacity: 0;\n      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);\n      pointer-events: none;\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .toast.show {\n      transform: translateX(-50%) translateY(0);\n      opacity: 1;\n    }\n\n    .click-star {\n      position: fixed;\n      pointer-events: none;\n      z-index: 9999;\n      animation: explodeStar 0.8s ease-out forwards;\n    }\n\n    @keyframes explodeStar {\n      0% {\n        transform: translate(-50%, -50%) scale(0) rotate(0deg);\n        opacity: 1;\n      }\n      50% { opacity: 0.8; }\n      100% {\n        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.5) rotate(180deg);\n        opacity: 0;\n      }\n    }\n\n    .click-dot {\n      position: fixed;\n      width: 6px;\n      height: 6px;\n      border-radius: 50%;\n      pointer-events: none;\n      z-index: 9999;\n      box-shadow: 0 0 10px currentColor;\n      animation: explodeStar 0.7s ease-out forwards;\n    }\n\n    .click-px {\n      position: fixed;\n      pointer-events: none;\n      z-index: 9999;\n      animation: explodePx 0.7s steps(6) forwards;\n    }\n\n    @keyframes explodePx {\n      0% {\n        transform: translate(-50%, -50%) rotate(0deg);\n        opacity: 1;\n      }\n      100% {\n        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(220deg);\n        opacity: 0;\n      }\n    }\n\n    .click-ripple {\n      position: fixed;\n      width: 150px;\n      height: 150px;\n      border: 2px solid var(--a1);\n      border-radius: 50%;\n      pointer-events: none;\n      z-index: 9999;\n      transform: translate(-50%, -50%) scale(0);\n      animation: ripGo 0.7s ease-out forwards;\n      box-shadow: 0 0 20px color-mix(in srgb, var(--a1) 40%, transparent);\n    }\n\n    @keyframes ripGo {\n      to {\n        transform: translate(-50%, -50%) scale(1);\n        opacity: 0;\n      }\n    }\n  </style>\n</head>\n<body>\n\n  <div id=\"entry-overlay\" class=\"entry-overlay\">\n    <svg class=\"entry-star-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n      <path d=\"M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z\"/>\n    </svg>\n    <span class=\"entry-text\">Click anywhere to enter...</span>\n  </div>\n\n  <audio id=\"bg-audio\" loop preload=\"auto\"></audio>\n\n  <video id=\"bg-video\" class=\"bg-video\" autoplay loop muted playsinline webkit-playsinline preload=\"auto\" disablepictureinpicture disableremoteplayback></video>\n  <div class=\"video-overlay\"></div>\n\n  <div class=\"fx-layer fx-crt\"></div>\n  <div class=\"fx-layer fx-grid\"></div>\n  <div class=\"fx-layer fx-aurora\"></div>\n\n  <div class=\"nebula nebula-1\"></div>\n  <div class=\"nebula nebula-2\"></div>\n  <div class=\"nebula nebula-3\"></div>\n\n  <canvas id=\"star-canvas\"></canvas>\n\n  <div class=\"main-container\">\n    <div class=\"gun-card\" data-depth=\"1\">\n      <div class=\"glow-behind\"></div>\n      <div class=\"card-shine\"></div>\n      <div class=\"profile-header\">\n        <div class=\"avatar-wrapper\">\n          <div class=\"avatar-glow-behind\"></div>\n          <div class=\"avatar-ring\"></div>\n          <img class=\"avatar-img\" id=\"avatar-img\" src=\"\" alt=\"Avatar\">\n        </div>\n\n        <h1 class=\"profile-name\">\n          <span id=\"profile-name\">Trieu</span>\n          <svg class=\"verified-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n            <path d=\"M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.79-4-4-4-.495 0-.965.084-1.4.238C14.55 2.475 13.18 1.6 11.6 1.6c-1.58 0-2.95.875-3.6 2.148-.435-.154-.905-.238-1.4-.238-2.21 0-4 1.79-4 4 0 .495.084.965.238 1.4C1.575 9.55.7 10.92.7 12.5c0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.79 4 4 4 .495 0 .965-.084 1.4-.238 1.435 1.273 2.805 2.148 4.385 2.148 1.58 0 2.95-.875 3.6-2.148.435.154.905.238 1.4.238 2.21 0 4-1.79 4-4 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.71 4.29l-4.29-4.29 1.41-1.41 2.88 2.88 6.88-6.88 1.41 1.41-8.29 8.29z\"/>\n          </svg>\n        </h1>\n\n        <div class=\"profile-tag\">\n          <svg class=\"star-sparkle\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n            <path d=\"M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z\"/>\n          </svg>\n          <span id=\"profile-tag\">@trieu1082</span>\n        </div>\n\n        <div class=\"typewriter-text\"><span class=\"tw-words\" id=\"typewriter\"></span><span class=\"tw-caret\"></span></div>\n\n        <div class=\"stats-row\">\n          <div class=\"stat-item\">\n            <svg class=\"stat-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n              <path d=\"M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z\"/>\n            </svg>\n            <span id=\"view-count\">1,842</span> lượt xem\n          </div>\n          <div class=\"stat-item\">\n            <svg class=\"stat-icon\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n              <path d=\"M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\"/>\n            </svg>\n            <span>Verified</span>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"links-section\" id=\"links-section\"></div>\n\n    <div class=\"footer-text\">\n      <svg class=\"star-sparkle\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n        <path d=\"M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z\"/>\n      </svg>\n      <span id=\"footer-text\">@Trieu1082🥀</span>\n    </div>\n  </div>\n\n  <div class=\"music-player-card\">\n    <div class=\"music-disc\" id=\"music-disc\">\n      <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n        <path d=\"M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z\"/>\n      </svg>\n    </div>\n    <div class=\"music-info\">\n      <span class=\"music-title\" id=\"music-title\">My Prime Is Coming</span>\n      <span class=\"music-artist\">Background Audio</span>\n    </div>\n    <div class=\"audio-visualizer\" id=\"visualizer\">\n      <div class=\"v-bar\"></div>\n      <div class=\"v-bar\"></div>\n      <div class=\"v-bar\"></div>\n      <div class=\"v-bar\"></div>\n    </div>\n    <div class=\"music-controls\">\n      <button class=\"music-btn\" id=\"play-btn\" title=\"Phát nhạc\">\n        <svg id=\"play-icon\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n          <path d=\"M8 5v14l11-7z\"/>\n        </svg>\n      </button>\n    </div>\n  </div>\n\n  <div class=\"toast\" id=\"toast\">\n    <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" style=\"color: var(--a1)\">\n      <path d=\"M20 6L9 17l-5-5\"/>\n    </svg>\n    <span id=\"toast-msg\">Copy</span>\n  </div>\n\n  <script>\n    const CFG = {\"name\":\"Trieu\",\"tag\":\"@trieu1082\",\"footer\":\"@Trieu1082🥀\",\"musicTitle\":\"My Prime Is Coming\",\"avatar\":\"https://i.ibb.co/jkrrqVjM/IMG-8575.png\",\"avatarFallback\":\"https://ibb.co/60WWGvqP\",\"music\":\"snaptik.vn_7679666520871472405.mp3\",\"video\":\"snaptik.vn_7607607974311333142.mp4\",\"views\":\"1,842\",\"phrases\":[\"Hi!\",\"Bo To Lop 9/6\",\"My Prime Is Coming.\",\"Dev\"],\"links\":[{\"icon\":\"tiktok\",\"title\":\"TikTok\",\"sub\":\"@trieu1082\",\"url\":\"https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy\",\"color\":\"#22d3ee\"},{\"icon\":\"discord\",\"title\":\"Discord Community\",\"sub\":\"Join Plz\",\"url\":\"https://discord.gg/ZCxWqy6gM\",\"color\":\"#5865F2\"},{\"icon\":\"facebook\",\"title\":\"Facebook\",\"sub\":\"My facebook\",\"url\":\"https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr\",\"color\":\"#3b82f6\"}],\"colors\":{\"a1\":\"#c4b5fd\",\"a2\":\"#7dd3fc\",\"a3\":\"#f0abfc\",\"bg\":\"#05030f\",\"name\":\"#ffffff\",\"text\":\"#ece9fb\",\"sub\":\"#9d96c8\",\"glass\":\"rgba(16,12,38,0.55)\"},\"fx\":{\"click\":\"stars\",\"text\":\"type\",\"bg\":\"galaxy\",\"enter\":\"fadeup\",\"gyro\":true,\"sway\":true,\"stars\":34}};\n\n    const root = document.documentElement;\n    root.style.setProperty('--a1', CFG.colors.a1);\n    root.style.setProperty('--a2', CFG.colors.a2);\n    root.style.setProperty('--a3', CFG.colors.a3);\n    root.style.setProperty('--bg', CFG.colors.bg);\n    root.style.setProperty('--name', CFG.colors.name);\n    root.style.setProperty('--text', CFG.colors.text);\n    root.style.setProperty('--sub', CFG.colors.sub);\n    root.style.setProperty('--glass', CFG.colors.glass);\n\n    document.body.classList.add('bg-' + CFG.fx.bg);\n    document.body.classList.add('enter-' + CFG.fx.enter);\n    document.body.classList.add('fxtext-' + CFG.fx.text);\n\n    document.title = CFG.name;\n    document.getElementById('profile-name').textContent = CFG.name;\n    document.getElementById('profile-tag').textContent = CFG.tag;\n    document.getElementById('footer-text').textContent = CFG.footer;\n    document.getElementById('music-title').textContent = CFG.musicTitle;\n    document.getElementById('view-count').textContent = CFG.views;\n\n    const avatarImg = document.getElementById('avatar-img');\n    avatarImg.src = CFG.avatar;\n    if (CFG.avatarFallback) {\n      avatarImg.onerror = () => { avatarImg.onerror = null; avatarImg.src = CFG.avatarFallback; };\n    }\n\n    const bgAudio = document.getElementById('bg-audio');\n    const bgVideo = document.getElementById('bg-video');\n    if (CFG.video) bgVideo.src = CFG.video;\n    else bgVideo.style.display = 'none';\n    if (CFG.music) bgAudio.src = CFG.music;\n    else document.querySelector('.music-player-card').style.display = 'none';\n\n    if (!CFG.avatar) {\n      document.querySelector('.avatar-wrapper').style.display = 'none';\n    }\n    if (!CFG.tag) document.querySelector('.profile-tag').style.display = 'none';\n    if (!CFG.footer) document.querySelector('.footer-text').style.display = 'none';\n    if (!CFG.views) document.querySelectorAll('.stat-item')[0].style.display = 'none';\n\n    const enterItems = document.querySelectorAll('.avatar-wrapper, .profile-name, .profile-tag, .typewriter-text, .stats-row, .footer-text, .music-player-card');\n    enterItems.forEach((el, i) => {\n      el.classList.add('enter-item');\n      el.style.animationDelay = (0.12 + i * 0.09).toFixed(2) + 's';\n    });\n\n    const ICONS = {\n      tiktok: '<path d=\"M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64c.29 0 .56.04.82.11V9.32a6.32 6.32 0 00-.82-.05A6.34 6.34 0 003.15 15.6a6.34 6.34 0 0010.83 4.47V11.5a8.28 8.28 0 005.28 1.88v-3.46a4.85 4.85 0 01-3.67-3.23z\"/>',\n      discord: '<path d=\"M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z\"/>',\n      facebook: '<path d=\"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z\"/>',\n      youtube: '<path d=\"M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31.3 31.3 0 000 12a31.3 31.3 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31.3 31.3 0 0024 12a31.3 31.3 0 00-.5-5.8zM9.5 15.5v-7l6.3 3.5z\"/>',\n      instagram: '<path d=\"M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zm0 4.9a4.9 4.9 0 100 9.8 4.9 4.9 0 000-9.8zm0 8.1a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zm6.2-8.3a1.15 1.15 0 11-2.3 0 1.15 1.15 0 012.3 0z\"/>',\n      github: '<path d=\"M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 015.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6a11.5 11.5 0 007.9-10.9C23.5 5.7 18.3.5 12 .5z\"/>',\n      star: '<path d=\"M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z\"/>'\n    };\n\n    const ICON_BG = {\n      tiktok: '#000000',\n      discord: '#5865F2',\n      facebook: '#1877F2',\n      youtube: '#FF0000',\n      instagram: '#E1306C',\n      github: '#24292f',\n      star: CFG.colors.a1\n    };\n\n    const linksSection = document.getElementById('links-section');\n    const depths = [1.35, 1.6, 1.85, 2.05, 2.2, 2.35];\n\n    CFG.links.forEach((lk, i) => {\n      const a = document.createElement('a');\n      a.href = lk.url;\n      a.target = '_blank';\n      a.className = 'link-card';\n      a.setAttribute('data-depth', depths[i % depths.length]);\n      a.classList.add('enter-item');\n      a.style.animationDelay = (0.3 + i * 0.1).toFixed(2) + 's';\n\n      const glow = document.createElement('div');\n      glow.className = 'glow-behind-sm';\n      glow.style.setProperty('--lc', (lk.color || '#8b5cf6') + '66');\n\n      const left = document.createElement('div');\n      left.className = 'link-left';\n\n      const box = document.createElement('div');\n      box.className = 'link-icon-box';\n      box.style.setProperty('--ic', ICON_BG[lk.icon] || lk.color || '#8b5cf6');\n      box.innerHTML = '<svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"currentColor\">' + (ICONS[lk.icon] || ICONS.star) + '</svg>';\n\n      const det = document.createElement('div');\n      det.className = 'link-details';\n      const tt = document.createElement('span');\n      tt.className = 'link-title';\n      tt.textContent = lk.title;\n      const ss = document.createElement('span');\n      ss.className = 'link-sub';\n      ss.textContent = lk.sub;\n      det.appendChild(tt);\n      det.appendChild(ss);\n      left.appendChild(box);\n      left.appendChild(det);\n\n      const acts = document.createElement('div');\n      acts.className = 'link-actions';\n      const cp = document.createElement('button');\n      cp.className = 'action-btn copy-btn';\n      cp.setAttribute('data-url', lk.url);\n      cp.title = 'Copy';\n      cp.innerHTML = '<svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>';\n      const ar = document.createElementNS('http://www.w3.org/2000/svg', 'svg');\n      ar.setAttribute('class', 'arrow-icon');\n      ar.setAttribute('viewBox', '0 0 24 24');\n      ar.setAttribute('fill', 'none');\n      ar.setAttribute('stroke', 'currentColor');\n      ar.setAttribute('stroke-width', '2.5');\n      ar.innerHTML = '<path d=\"M5 12h14M12 5l7 7-7 7\"/>';\n      acts.appendChild(cp);\n      acts.appendChild(ar);\n\n      a.appendChild(glow);\n      a.appendChild(left);\n      a.appendChild(acts);\n      linksSection.appendChild(a);\n    });\n\n    const playBtn = document.getElementById('play-btn');\n    const playIcon = document.getElementById('play-icon');\n    const musicDisc = document.getElementById('music-disc');\n    const visualizer = document.getElementById('visualizer');\n    const entryOverlay = document.getElementById('entry-overlay');\n\n    let isAudioPlaying = false;\n\n    function playAudio() {\n      const p = bgAudio.play();\n      if (!p || !p.then) return;\n      p.then(() => {\n        isAudioPlaying = true;\n        musicDisc.classList.add('playing');\n        visualizer.classList.add('playing');\n        playIcon.innerHTML = '<path d=\"M6 19h4V5H6v14zm8-14v14h4V5h-4z\"/>';\n      }).catch(() => {});\n    }\n\n    function pauseAudio() {\n      bgAudio.pause();\n      isAudioPlaying = false;\n      musicDisc.classList.remove('playing');\n      visualizer.classList.remove('playing');\n      playIcon.innerHTML = '<path d=\"M8 5v14l11-7z\"/>';\n    }\n\n    function startMedia() {\n      bgVideo.muted = true;\n      const pv = bgVideo.play();\n      if (pv && pv.catch) pv.catch(() => {});\n      playAudio();\n      entryOverlay.classList.add('hidden');\n    }\n\n    entryOverlay.addEventListener('pointerdown', startMedia);\n\n    if (window.self !== window.top) {\n      startMedia();\n    }\n\n    playBtn.addEventListener('click', (e) => {\n      e.stopPropagation();\n      if (isAudioPlaying) pauseAudio();\n      else playAudio();\n    });\n\n    const canvas = document.getElementById('star-canvas');\n    const ctx = canvas.getContext('2d', { alpha: true });\n    let width, height;\n    const stars = [];\n    const dpr = Math.min(window.devicePixelRatio || 1, 2);\n\n    function resizeCanvas() {\n      width = Math.floor(window.innerWidth);\n      height = Math.floor(window.innerHeight);\n      canvas.width = Math.floor(width * dpr);\n      canvas.height = Math.floor(height * dpr);\n      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n    }\n\n    window.addEventListener('resize', resizeCanvas);\n    resizeCanvas();\n\n    function makeStar() {\n      return {\n        x: Math.random() * width,\n        y: Math.random() * height,\n        s: Math.random() * 2 + 1,\n        m: Math.random() * 0.6 + 0.25,\n        o: 0,\n        sp: Math.random() * 0.02 + 0.005,\n        ph: Math.random() * Math.PI * 2,\n        c: Math.random() > 0.4 ? CFG.colors.a1 : (Math.random() > 0.5 ? CFG.colors.a2 : CFG.colors.name)\n      };\n    }\n\n    if (CFG.fx.bg === 'galaxy') {\n      for (let i = 0; i < CFG.fx.stars; i++) stars.push(makeStar());\n    }\n\n    const rainCols = [];\n    if (CFG.fx.bg === 'matrix') {\n      const cols = Math.floor(width / 22);\n      for (let i = 0; i < cols; i++) {\n        rainCols.push({ x: i * 22 + 6, y: Math.random() * height, sp: 2 + Math.random() * 4 });\n      }\n    }\n\n    let targetRotX = 0;\n    let targetRotY = 0;\n    let curRotX = 0;\n    let curRotY = 0;\n    let idlePhase = Math.random() * 100;\n\n    const tiltCards = document.querySelectorAll('[data-depth]');\n    const MAX_TILT = 9;\n\n    function clampTilt(v) {\n      return v > MAX_TILT ? MAX_TILT : (v < -MAX_TILT ? -MAX_TILT : v);\n    }\n\n    const GLYPHS = '01アイウエオカキクケコサシスセソ+*';\n\n    function tick() {\n      ctx.clearRect(0, 0, width, height);\n\n      if (CFG.fx.bg === 'matrix') {\n        ctx.font = '13px monospace';\n        ctx.fillStyle = CFG.colors.a1;\n        for (let i = 0; i < rainCols.length; i++) {\n          const c = rainCols[i];\n          ctx.globalAlpha = 0.75;\n          ctx.fillText(GLYPHS[Math.floor(Math.random() * GLYPHS.length)], c.x, c.y);\n          ctx.globalAlpha = 0.25;\n          ctx.fillText(GLYPHS[Math.floor(Math.random() * GLYPHS.length)], c.x, c.y - 16);\n          c.y += c.sp;\n          if (c.y > height + 20) {\n            c.y = -20;\n            c.sp = 2 + Math.random() * 4;\n          }\n        }\n      } else {\n        for (let i = 0; i < stars.length; i++) {\n          const st = stars[i];\n          st.ph += st.sp;\n          st.o = (Math.sin(st.ph) + 1) * 0.5 * st.m;\n          st.y -= 0.1;\n          if (st.y < -4) st.y = height + 4;\n          ctx.globalAlpha = st.o;\n          ctx.fillStyle = st.c;\n          ctx.fillRect(st.x, st.y, st.s, st.s);\n        }\n      }\n\n      idlePhase += 0.014;\n      let tx = targetRotX;\n      let ty = targetRotY;\n      let idleZ = 0;\n      if (CFG.fx.sway) {\n        tx += Math.sin(idlePhase * 0.7) * 1.6;\n        ty += Math.cos(idlePhase * 0.5) * 1.9;\n        idleZ = Math.sin(idlePhase * 0.9) * 2;\n      }\n\n      curRotX += (tx - curRotX) * 0.085;\n      curRotY += (ty - curRotY) * 0.085;\n\n      const rx = clampTilt(curRotX);\n      const ry = clampTilt(curRotY);\n\n      for (let i = 0; i < tiltCards.length; i++) {\n        const depth = parseFloat(tiltCards[i].getAttribute('data-depth')) || 1;\n        tiltCards[i].style.transform =\n          'translateZ(' + ((depth - 1) * 30 + idleZ * depth).toFixed(1) + 'px) rotateX(' +\n          (rx * depth).toFixed(2) + 'deg) rotateY(' + (ry * depth).toFixed(2) + 'deg)';\n      }\n\n      requestAnimationFrame(tick);\n    }\n    tick();\n\n    window.addEventListener('pointerdown', (e) => {\n      clickFx(e.clientX, e.clientY);\n    });\n\n    const FX_COLORS = () => [CFG.colors.a1, CFG.colors.a2, CFG.colors.a3, CFG.colors.name];\n\n    function clickFx(x, y) {\n      const mode = CFG.fx.click;\n      const cols = FX_COLORS();\n\n      if (mode === 'stars') {\n        for (let i = 0; i < 6; i++) {\n          spawnFly(x, y, i, 6, 'click-star', cols, (size, color) =>\n            '<svg width=\"' + size + '\" height=\"' + size + '\" viewBox=\"0 0 24 24\" fill=\"' + color + '\"><path d=\"M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z\"/></svg>');\n        }\n      } else if (mode === 'dots') {\n        for (let i = 0; i < 10; i++) {\n          const d = document.createElement('div');\n          d.className = 'click-dot';\n          const angle = (Math.PI * 2 / 10) * i + Math.random() * 0.4;\n          const dist = Math.random() * 60 + 25;\n          d.style.setProperty('--dx', Math.cos(angle) * dist + 'px');\n          d.style.setProperty('--dy', Math.sin(angle) * dist + 'px');\n          d.style.left = x + 'px';\n          d.style.top = y + 'px';\n          d.style.color = cols[i % 4];\n          d.style.background = cols[i % 4];\n          document.body.appendChild(d);\n          setTimeout(() => d.remove(), 700);\n        }\n      } else if (mode === 'pixel') {\n        for (let i = 0; i < 8; i++) {\n          const p = document.createElement('div');\n          p.className = 'click-px';\n          const angle = (Math.PI * 2 / 8) * i + Math.random() * 0.5;\n          const dist = Math.random() * 55 + 20;\n          p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');\n          p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');\n          p.style.left = x + 'px';\n          p.style.top = y + 'px';\n          const size = Math.random() * 6 + 5;\n          p.style.width = size + 'px';\n          p.style.height = size + 'px';\n          p.style.background = cols[i % 4];\n          p.style.boxShadow = '0 0 8px ' + cols[i % 4];\n          document.body.appendChild(p);\n          setTimeout(() => p.remove(), 700);\n        }\n      } else if (mode === 'ripple') {\n        const r = document.createElement('div');\n        r.className = 'click-ripple';\n        r.style.left = x + 'px';\n        r.style.top = y + 'px';\n        document.body.appendChild(r);\n        setTimeout(() => r.remove(), 700);\n      } else if (mode === 'rings') {\n        for (let i = 0; i < 3; i++) {\n          const r = document.createElement('div');\n          r.className = 'click-ripple';\n          r.style.left = x + 'px';\n          r.style.top = y + 'px';\n          r.style.borderColor = cols[i % 4];\n          r.style.animationDelay = (i * 0.12) + 's';\n          document.body.appendChild(r);\n          setTimeout(() => r.remove(), 900);\n        }\n      }\n    }\n\n    function spawnFly(x, y, i, n, cls, cols, htmlFn) {\n      const star = document.createElement('div');\n      star.className = cls;\n      const angle = (Math.PI * 2 / n) * i + Math.random() * 0.5;\n      const dist = Math.random() * 45 + 22;\n      star.style.setProperty('--dx', Math.cos(angle) * dist + 'px');\n      star.style.setProperty('--dy', Math.sin(angle) * dist + 'px');\n      star.style.left = x + 'px';\n      star.style.top = y + 'px';\n      const size = Math.random() * 8 + 7;\n      star.innerHTML = htmlFn(size, cols[i % 4]);\n      document.body.appendChild(star);\n      setTimeout(() => star.remove(), 800);\n    }\n\n    if (CFG.fx.gyro && window.DeviceOrientationEvent) {\n      let baseBeta = null;\n      let baseGamma = null;\n      window.addEventListener('deviceorientation', (e) => {\n        if (e.beta === null || e.gamma === null) return;\n        if (baseBeta === null) {\n          baseBeta = e.beta;\n          baseGamma = e.gamma;\n        }\n        let beta = e.beta - baseBeta;\n        let gamma = e.gamma - baseGamma;\n        beta = beta > 25 ? 25 : (beta < -25 ? -25 : beta);\n        gamma = gamma > 25 ? 25 : (gamma < -25 ? -25 : gamma);\n        targetRotX = -beta * 0.5;\n        targetRotY = gamma * 0.5;\n      }, true);\n    }\n\n    window.addEventListener('mousemove', (e) => {\n      const centerX = window.innerWidth / 2;\n      const centerY = window.innerHeight / 2;\n      targetRotX = (e.clientY - centerY) / 26;\n      targetRotY = -(e.clientX - centerX) / 26;\n    });\n\n    window.addEventListener('mouseleave', () => {\n      targetRotX = 0;\n      targetRotY = 0;\n    });\n\n    const phrases = CFG.phrases.length ? CFG.phrases : ['Hello'];\n    const combo = [\n      'linear-gradient(90deg, ' + CFG.colors.a2 + ', ' + CFG.colors.a1 + ')',\n      'linear-gradient(90deg, ' + CFG.colors.a1 + ', ' + CFG.colors.a3 + ')',\n      'linear-gradient(90deg, ' + CFG.colors.a3 + ', ' + CFG.colors.a2 + ')',\n      'linear-gradient(90deg, ' + CFG.colors.a1 + ', ' + CFG.colors.a2 + ', ' + CFG.colors.a3 + ')'\n    ];\n    const typewriterEl = document.getElementById('typewriter');\n    let phraseIdx = 0;\n\n    function setGrad(idx) {\n      typewriterEl.style.background = combo[idx % combo.length];\n      typewriterEl.style.webkitBackgroundClip = 'text';\n      typewriterEl.style.backgroundClip = 'text';\n    }\n    setGrad(0);\n\n    const SCRAMBLE = '!<>-_/[]{}=+*^?#';\n\n    function runType() {\n      let charIdx = 0;\n      let isDeleting = false;\n      (function step() {\n        const p = phrases[phraseIdx];\n        if (isDeleting) {\n          typewriterEl.textContent = p.substring(0, charIdx - 1);\n          charIdx--;\n        } else {\n          typewriterEl.textContent = p.substring(0, charIdx + 1);\n          charIdx++;\n        }\n        let speed = isDeleting ? 26 : 55;\n        if (!isDeleting && charIdx === p.length) {\n          speed = 2000;\n          isDeleting = true;\n        } else if (isDeleting && charIdx === 0) {\n          isDeleting = false;\n          phraseIdx = (phraseIdx + 1) % phrases.length;\n          setGrad(phraseIdx);\n          speed = 350;\n        }\n        setTimeout(step, speed);\n      })();\n    }\n\n    function runGlitch() {\n      (function cycle() {\n        const p = phrases[phraseIdx];\n        setGrad(phraseIdx);\n        let i = 0;\n        const iv = setInterval(() => {\n          i++;\n          let out = p.substring(0, i);\n          for (let k = i; k < p.length; k++) {\n            out += p[k] === ' ' ? ' ' : SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];\n          }\n          typewriterEl.textContent = out;\n          if (i >= p.length) {\n            clearInterval(iv);\n            setTimeout(() => {\n              phraseIdx = (phraseIdx + 1) % phrases.length;\n              cycle();\n            }, 2000);\n          }\n        }, 34);\n      })();\n    }\n\n    function runPixel() {\n      (function cycle() {\n        const p = phrases[phraseIdx];\n        setGrad(phraseIdx);\n        typewriterEl.innerHTML = '';\n        let i = 0;\n        const iv = setInterval(() => {\n          if (i >= p.length) {\n            clearInterval(iv);\n            setTimeout(() => {\n              typewriterEl.innerHTML = '';\n              phraseIdx = (phraseIdx + 1) % phrases.length;\n              cycle();\n            }, 2000);\n            return;\n          }\n          const sp = document.createElement('span');\n          sp.className = 'px-in';\n          sp.textContent = p[i] === ' ' ? ' ' : p[i];\n          typewriterEl.appendChild(sp);\n          i++;\n        }, 70);\n      })();\n    }\n\n    function runWave() {\n      (function cycle() {\n        const p = phrases[phraseIdx];\n        setGrad(phraseIdx);\n        typewriterEl.innerHTML = '';\n        for (let i = 0; i < p.length; i++) {\n          const sp = document.createElement('span');\n          sp.className = 'wv-in';\n          sp.style.animationDelay = (i * 0.045) + 's';\n          sp.textContent = p[i] === ' ' ? ' ' : p[i];\n          typewriterEl.appendChild(sp);\n        }\n        setTimeout(() => {\n          phraseIdx = (phraseIdx + 1) % phrases.length;\n          cycle();\n        }, 2400 + p.length * 45);\n      })();\n    }\n\n    function runFade() {\n      typewriterEl.classList.add('fade-mode');\n      (function cycle() {\n        const p = phrases[phraseIdx];\n        setGrad(phraseIdx);\n        typewriterEl.classList.remove('out');\n        typewriterEl.textContent = p;\n        setTimeout(() => {\n          typewriterEl.classList.add('out');\n          setTimeout(() => {\n            phraseIdx = (phraseIdx + 1) % phrases.length;\n            cycle();\n          }, 500);\n        }, 2100);\n      })();\n    }\n\n    if (CFG.fx.text === 'type') runType();\n    else if (CFG.fx.text === 'glitch') runGlitch();\n    else if (CFG.fx.text === 'pixel') runPixel();\n    else if (CFG.fx.text === 'wave') runWave();\n    else runFade();\n\n    const toast = document.getElementById('toast');\n    const toastMsg = document.getElementById('toast-msg');\n    let toastTimer = null;\n\n    document.addEventListener('click', (e) => {\n      const btn = e.target.closest('.copy-btn');\n      if (!btn) return;\n      e.preventDefault();\n      e.stopPropagation();\n      navigator.clipboard.writeText(btn.getAttribute('data-url')).then(() => {\n        showToast('Copy');\n      }).catch(() => {\n        showToast('Error!');\n      });\n    });\n\n    function showToast(msg) {\n      toastMsg.textContent = msg;\n      toast.classList.add('show');\n      if (toastTimer) clearTimeout(toastTimer);\n      toastTimer = setTimeout(() => {\n        toast.classList.remove('show');\n      }, 2500);\n    }\n  <\/script>\n</body>\n</html>";
+
+    const DEFAULT_CFG = {
+      name: 'Trieu',
+      tag: '@trieu1082',
+      footer: '@Trieu1082🥀',
+      musicTitle: 'My Prime Is Coming',
+      avatar: 'https://i.ibb.co/jkrrqVjM/IMG-8575.png',
+      avatarFallback: 'https://ibb.co/60WWGvqP',
+      music: 'snaptik.vn_7679666520871472405.mp3',
+      video: 'snaptik.vn_7607607974311333142.mp4',
+      views: '1,842',
+      phrases: ['Hi!', 'Bo To Lop 9/6', 'My Prime Is Coming.', 'Dev'],
+      links: [
+        { icon: 'tiktok', title: 'TikTok', sub: '@trieu1082', url: 'https://www.tiktok.com/@trieu1082?_r=1&_t=ZP-9A9oD7pQLvy', color: '#22d3ee' },
+        { icon: 'discord', title: 'Discord Community', sub: 'Join Plz', url: 'https://discord.gg/ZCxWqy6gM', color: '#5865F2' },
+        { icon: 'facebook', title: 'Facebook', sub: 'My facebook', url: 'https://www.facebook.com/share/1F2MnkK9W6/?mibextid=wwXIfr', color: '#3b82f6' }
+      ],
+      colors: { a1: '#c4b5fd', a2: '#7dd3fc', a3: '#f0abfc', bg: '#05030f', name: '#ffffff', text: '#ece9fb', sub: '#9d96c8', glass: 'rgba(16,12,38,0.55)' },
+      fx: { click: 'stars', text: 'type', bg: 'galaxy', enter: 'fadeup', gyro: true, sway: true, stars: 34 }
+    };
+
+    let cfg = JSON.parse(JSON.stringify(DEFAULT_CFG));
+    let glassColor = '#100c26';
+    let glassOpacity = 55;
+
+    const preview = document.getElementById('preview');
+
+    function hexToRgb(hex) {
+      const m = hex.replace('#', '');
+      const n = parseInt(m.length === 3 ? m.split('').map(c => c + c).join('') : m, 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    }
+
+    function buildGlass() {
+      const rgb = hexToRgb(glassColor);
+      cfg.colors.glass = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + (glassOpacity / 100).toFixed(2) + ')';
+    }
+
+    function buildFinal() {
+      buildGlass();
+      const line = 'const CFG = ' + JSON.stringify(cfg) + ';';
+      return TEMPLATE.replace(/^[ \t]*const CFG = .*$/m, () => line);
+    }
+
+    let pvTimer = null;
+    function refreshPreview() {
+      if (pvTimer) clearTimeout(pvTimer);
+      pvTimer = setTimeout(() => {
+        preview.srcdoc = buildFinal();
+      }, 350);
+    }
+
+    function setPath(obj, path, val) {
+      const parts = path.split('.');
+      let cur = obj;
+      for (let i = 0; i < parts.length - 1; i++) cur = cur[parts[i]];
+      cur[parts[parts.length - 1]] = val;
+    }
+
+    function getPath(obj, path) {
+      const parts = path.split('.');
+      let cur = obj;
+      for (let i = 0; i < parts.length; i++) cur = cur[parts[i]];
+      return cur;
+    }
+
+    document.querySelectorAll('[data-bind]').forEach(el => {
+      const path = el.getAttribute('data-bind');
+
+      if (path === 'phrases') {
+        el.value = cfg.phrases.join('\n');
+        el.addEventListener('input', () => {
+          cfg.phrases = el.value.split('\n').map(s => s.trim()).filter(Boolean);
+          refreshPreview();
+        });
+        return;
+      }
+
+      if (path === 'glassOpacity') {
+        el.value = glassOpacity;
+        el.addEventListener('input', () => {
+          glassOpacity = parseInt(el.value, 10);
+          document.getElementById('glass-val').textContent = glassOpacity + '%';
+          refreshPreview();
+        });
+        return;
+      }
+
+      if (path === 'glassColor') {
+        el.value = glassColor;
+        el.addEventListener('input', () => {
+          glassColor = el.value;
+          refreshPreview();
+        });
+        return;
+      }
+
+      const val = getPath(cfg, path);
+      el.value = val;
+
+      el.addEventListener('input', () => {
+        let v = el.value;
+        if (path === 'fx.stars') {
+          v = parseInt(v, 10) || 0;
+          document.getElementById('stars-val').textContent = v;
+        }
+        setPath(cfg, path, v);
+        refreshPreview();
+      });
+    });
+
+    document.querySelectorAll('.switch').forEach(sw => {
+      const key = sw.getAttribute('data-toggle');
+      if (cfg.fx[key]) sw.classList.add('on');
+      sw.addEventListener('click', () => {
+        cfg.fx[key] = !cfg.fx[key];
+        sw.classList.toggle('on', cfg.fx[key]);
+        refreshPreview();
+      });
+    });
+
+    const ICON_OPTIONS = ['tiktok', 'discord', 'facebook', 'youtube', 'instagram', 'github', 'star'];
+    const linksBox = document.getElementById('links-box');
+
+    function renderLinks() {
+      linksBox.innerHTML = '';
+      cfg.links.forEach((lk, i) => {
+        const row = document.createElement('div');
+        row.className = 'link-row';
+
+        const head = document.createElement('div');
+        head.className = 'link-row-head';
+        const num = document.createElement('span');
+        num.className = 'link-num';
+        num.textContent = 'Link ' + (i + 1);
+        const del = document.createElement('button');
+        del.className = 'link-del';
+        del.textContent = 'Xoa';
+        del.addEventListener('click', () => {
+          cfg.links.splice(i, 1);
+          renderLinks();
+          refreshPreview();
+        });
+        head.appendChild(num);
+        head.appendChild(del);
+        row.appendChild(head);
+
+        const mk = (labelText, field, isSelect) => {
+          const f = document.createElement('div');
+          f.className = 'field';
+          const lb = document.createElement('label');
+          lb.textContent = labelText;
+          f.appendChild(lb);
+          let input;
+          if (isSelect) {
+            input = document.createElement('select');
+            ICON_OPTIONS.forEach(o => {
+              const op = document.createElement('option');
+              op.value = o;
+              op.textContent = o;
+              input.appendChild(op);
+            });
+            input.value = lk.icon;
+          } else if (field === 'color') {
+            input = document.createElement('input');
+            input.type = 'color';
+            input.value = lk.color || '#8b5cf6';
+          } else {
+            input = document.createElement('input');
+            input.type = 'text';
+            input.value = lk[field] || '';
+          }
+          input.addEventListener('input', () => {
+            cfg.links[i][field] = input.value;
+            refreshPreview();
+          });
+          f.appendChild(input);
+          return f;
+        };
+
+        const grid = document.createElement('div');
+        grid.className = 'row2';
+        grid.appendChild(mk('Icon', 'icon', true));
+        grid.appendChild(mk('Mau glow', 'color', false));
+        row.appendChild(grid);
+        row.appendChild(mk('Tieu de', 'title', false));
+        row.appendChild(mk('Dong phu', 'sub', false));
+        row.appendChild(mk('URL', 'url', false));
+
+        linksBox.appendChild(row);
+      });
+    }
+
+    document.getElementById('btn-add-link').addEventListener('click', () => {
+      if (cfg.links.length >= 6) return;
+      cfg.links.push({ icon: 'star', title: 'Link mới', sub: '', url: 'https://', color: '#8b5cf6' });
+      renderLinks();
+      refreshPreview();
+    });
+
+    renderLinks();
+
+    function download() {
+      const blob = new Blob([buildFinal()], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 400);
+    }
+
+    document.getElementById('btn-export').addEventListener('click', download);
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      navigator.clipboard.writeText(buildFinal()).then(() => {
+        const b = document.getElementById('btn-copy');
+        b.textContent = 'Da copy';
+        setTimeout(() => { b.textContent = 'Copy code'; }, 2000);
+      });
+    });
+
+    refreshPreview();
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a44c364a5a9c93d2',t:'MTc5MTAzMzI4OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
